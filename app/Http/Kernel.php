@@ -1,5 +1,6 @@
 <?php
 
+//테스트 주석
 namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
