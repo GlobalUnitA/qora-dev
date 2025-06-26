@@ -7,7 +7,7 @@ return array (
   'login' => 'Log In',
   'sign_up' => 'Sign Up',
   'find_id' => 'Find ID',
-  'find_password' => 'Find Password',
+  'find_password' => 'Find Password...',
   'email' => 'Email',
   'email_verification_guide_1' => 'Please verify your identity.',
   'email_verification_guide_2' => 'Please enter the verification code sent to your email.',
