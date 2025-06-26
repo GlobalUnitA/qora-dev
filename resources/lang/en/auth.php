@@ -4,7 +4,7 @@ return array (
   'login_id' => 'ID',
   'password' => 'Password',
   'keep_login' => 'Keep me logged in',
-  'login' => 'Log In?',
+  'login' => 'Log In',
   'sign_up' => 'Sign Up',
   'find_id' => 'Find ID',
   'find_password' => 'Find Password',
