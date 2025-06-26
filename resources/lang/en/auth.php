@@ -6,7 +6,7 @@ return array (
   'keep_login' => 'Keep me logged in',
   'login' => 'Log In',
   'sign_up' => 'Sign Up',
-  'find_id' => 'find id',
+  'find_id' => 'Find ID',
   'find_password' => 'Find Password',
   'email' => 'Email',
   'email_verification_guide_1' => 'Please verify your identity.',
