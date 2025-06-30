@@ -26,8 +26,7 @@ class TestController extends Controller
     }
     public function index()
     {
-        echo "test hahahahahaha";
-        echo "test aaaaaaaaaaaa";
+
     }
 
 }
