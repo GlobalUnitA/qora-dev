@@ -42,7 +42,7 @@
                                 <div class="d-flex align-items-center justify-content-center mb-4">
                                     <a class="text-white fw-normal pe-3" href="{{ route('register') }}">{{ __('auth.sign_up') }}</a>
                                     <a class="text-white fw-normal position-relative divider px-3" href="{{ route('account.request') }}">{{ __('auth.find_id') }}</a>
-                                    <a class="text-white fw-normal position-relative divider ps-3" href="{{ route('password.request') }}">{{ __('auth.find_password') }} (test 24)</a>
+                                    <a class="text-white fw-normal position-relative divider ps-3" href="{{ route('password.request') }}">{{ __('auth.find_password') }} (test 25)</a>
                                 </div>
                             </form>
                         </div>
