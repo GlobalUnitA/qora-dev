@@ -26,7 +26,7 @@ class TestController extends Controller
     }
     public function index()
     {
-        echo "테스트 20250707";
+
     }
 
 }
