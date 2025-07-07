@@ -14,7 +14,7 @@
                 <tbody>
                     <tr>
                         <th width="30%" class="text-center text-body align-middle">{{ __('user.name') }}</th>
-                        <td width="70%" class="align-middle text-body">{{ $view->name }}</td>
+                        <td width="70%" class="align-middle text-body">{{ $view->name }}1</td>
                     </tr>
                     <tr>
                         <th class="text-center text-body align-middle">{{ __('UID') }}</th>
