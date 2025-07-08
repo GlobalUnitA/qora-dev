@@ -19,11 +19,14 @@
                         <li class="nav-item" role="presentation">
                             <a href="{{ route('admin.income.list', array_merge(request()->query(), ['type' => 'subscription_bonus'])) }}" class="nav-link {{ Request('type') == 'subscription_bonus' ? 'active' : '' }}">DAO</a>
                         </li>
+                        <li class="nav-item" role="presentation">
+                            <a href="{{ route('admin.income.list', array_merge(request()->query(), ['type' => 'staking_reward'])) }}" class="nav-link {{ Request('type') == 'staking_reward' ? 'active' : '' }}">스테이킹</a>
+                        </li>
                     </ul>
                 </div>
                 <div class="card">
                     <div class="card-body">
-                        <form action="{{ route('admin.asset.list') }}" method="GET">
+                        <form action="{{ route('admin.income.list') }}" method="GET">
                             @foreach(request()->query() as $key => $value)
                                 @if($key !== 'start_date' && $key !== 'end_date')
                                     <input type="hidden" name="{{ $key }}" value="{{ $value }}">

@@ -71,7 +71,7 @@
                 </div>                
                 <div class="text-center">
                     <img src="{{ asset('images/robot.png') }}" width="300" alt="" class="img-fluid rounded-2">
-                    <p>{{ __('asset.trading_count') }}: ( {{ $data['current_count'] }} / {{ $data['max_count'] }} )</p>
+                    <!--p>{{ __('asset.trading_count') }}: ( {{ $data['current_count'] }} / {{ $data['max_count'] }} )</p>
                     <form method="GET" action="{{ route('trading.wait') }}" id="tradingForm">
                         <input type="hidden" name="coin" value="{{ $selected_asset->coin_id }}">
                         <input type="hidden" id="maxCount" value="{{ $data['max_count'] }}">
@@ -85,7 +85,7 @@
                         @endif
                         <button type="submit" class="btn btn-primary w-100 py-3 fs-4 my-3">{{ __('asset.trading_participate') }}</button>
                     </form>
-                    <p>{{ __('asset.trading_policy_guide') }}</p>
+                    <p>{{ __('asset.trading_policy_guide') }}</p-->
                 </div>
             </div>
             <div class="tab-pane fade show @if(request()->has('team')) active @endif" id="trading-myteam" role="tabpanel" aria-labelledby="trading-myteam-tab" tabindex="0">

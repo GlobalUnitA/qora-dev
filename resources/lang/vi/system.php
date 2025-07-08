@@ -41,4 +41,7 @@ return array (
   'request_date' => 'Ngày đăng ký',
   'waiting_period' => 'Thời gian chờ',
   'unit_day' => 'Ngày',
+  'period' => 'Thời gian',
+  'started_at' => 'Ngày bắt đầu',
+  'ended_at' => 'Ngày kết thúc',
 );

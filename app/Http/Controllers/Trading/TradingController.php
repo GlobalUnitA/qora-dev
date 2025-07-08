@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Trading;
 use App\Models\User;
 use App\Models\Coin;
 use App\Models\Asset;
-use App\Models\AssetTransfer;
-use App\Models\AssetPolicy;
 use App\Models\Income;
 use App\Models\IncomeTransfer;
 use App\Models\Trading;
@@ -122,6 +120,10 @@ class TradingController extends Controller
                 $trading->increment('current_count');
         
             } else {
+
+                if (0 >= $trading->max_count) {
+                    throw new \Exception( __('asset.trading_limit_notice'));
+                }
     
                 $balance = $asset->balance;
 
@@ -137,13 +139,10 @@ class TradingController extends Controller
                     'profit_rate' => $trading_policy->profit_rate,
                 ]);
 
-                $asset_policy = AssetPolicy::first();
-                $trading_count = Trading::where('user_id', $user->id)->count();
             }
 
             $trading_profit = $trading->daily / $trading->max_count;
 
-            
             $incomeTransfer = IncomeTransfer::create([
                 'user_id'   => $user->id,
                 'income_id'  => $income->id,

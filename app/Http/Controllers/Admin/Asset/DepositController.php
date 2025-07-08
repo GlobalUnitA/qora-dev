@@ -105,6 +105,7 @@ class DepositController extends Controller
             $deposit->update([
                 'status' => $request->status ?? $deposit->status,
                 'amount' => $request->amount ?? $deposit->amount,
+                'actual_amount' => $request->amount ?? $deposit->actual_amount,
                 'memo' => $request->memo
             ]);
             

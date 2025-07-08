@@ -40,8 +40,10 @@ class AssetTransfer extends Model
         'image_urls' => 'array',
     ];
 
-    protected $appends = [
+    protected $appends = 
+    [
         'status_text',
+        'type_text',
         'waiting_period',
     ];
 
@@ -63,6 +65,27 @@ class AssetTransfer extends Model
 
         return $amount_in_usdt;
        
+    }
+
+    public function getTypeTextAttribute()
+    {
+        switch ($this->type) {
+            case 'deposit' :
+                return __('asset.deposit');
+            break;
+            case 'withdrawal' :
+                return __('asset.withdrawal');
+            break;
+            case 'internal' :
+                return __('asset.internal');
+            break;
+            case 'manual_deposit' :
+                return __('asset.manual_deposit');
+            break;
+            case 'staking_refund' :
+                return __('asset.staking_refund');
+            break;
+        }
     }
 
     public function getStatusTextAttribute()

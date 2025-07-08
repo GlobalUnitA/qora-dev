@@ -51,11 +51,11 @@ class WithdrawalController extends Controller
 
             $user = UserProfile::where('user_id', auth()->id())->first();
 
-            if($user->is_frozen === 'y') {
+            if ($user->is_frozen === 'y') {
                 throw new \Exception(__('asset.withdrawal_frozen_account_notice'));
             }
 
-            if($validated['amount'] < $asset_policy->min_withdrawal) {
+            if ($validated['amount'] < $asset_policy->min_withdrawal) {
                 throw new \Exception(__('asset.withdrawal_min_notice'));
             }
 
@@ -67,12 +67,14 @@ class WithdrawalController extends Controller
 
             $asset = Asset::findOrFail($asset_id[0]);
             
-            if($asset->balance < $validated['amount']) {
+            if ($asset->balance < $validated['amount']) {
                 throw new \Exception(__('asset.lack_balance_notice'));
             }
 
             $amount = $validated['amount'];
+            
             $tax = $validated['tax'] ?? 0;
+            $fee = 0;
             //$fee = $validated['fee'] ?? 0;
             //$actual_amount = $amount - $tax - $fee; 
             $actual_amount = $amount - $tax; 
@@ -112,8 +114,8 @@ class WithdrawalController extends Controller
     public function complete($id)
     {
         $assetTransfer = AssetTransfer::find($id);
-
-        $amount = $assetTransfer->amount - $assetTransfer->tax - $assetTransfer->fee;
+        
+        $amount = $assetTransfer->amount;
 
         return view('asset.withdrawal-complete', compact('amount'));
     }
@@ -133,7 +135,6 @@ class WithdrawalController extends Controller
             ->count();
 
         $has_more = $total_count > $limit;
-
 
         return view('asset.withdrawal-list', compact('list', 'has_more', 'limit'));
     }

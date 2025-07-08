@@ -17,9 +17,7 @@
                 <div class="col-11">
                     <div class="card mb-0">
                         <div class="card-body px-0">
-                            <div class="mb-4">
-                                <h3 class="mb-4"> {{ __('auth.identity_verification') }}</h3>
-                            </div>
+                            <h3 class="mb-4"> {{ __('auth.identity_verification') }}</h3>
                             <div class="pb-3">
                                 <h5 class="mb-3" >{{ __('auth.email_verification') }}</h5>
                                 <form method="POST" action="{{ route('verify.code.send') }}" id="ajaxForm">

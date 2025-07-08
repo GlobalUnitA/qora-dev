@@ -30,8 +30,9 @@ class PolicyObserver
             $table_name = $model->getTable();
 
             if ($table_name === 'staking_policies') {
-                $coin_code = optional(Coin::find($model->coin_id))->code;
-                $table_name .= $coin_code ? "_{$coin_code}" : '';
+                continue;
+                //$coin_code = optional(Coin::find($model->coin_id))->code;
+                //$table_name .= $coin_code ? "_{$coin_code}" : '';
             }
 
             PolicyModifyLog::create([

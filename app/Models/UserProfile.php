@@ -145,10 +145,7 @@ class UserProfile extends Model
                 continue;
             }
 
-            $type = '';
-
             $income = Income::where('user_id', $parent_profile->user_id)->where('coin_id', $withdrawal->income->coin_id)->first();
-            $type = 'income';
             
             $transfer = IncomeTransfer::create([
                 'user_id'   => $parent_profile->user_id,
@@ -165,12 +162,13 @@ class UserProfile extends Model
                 'user_id'   => $parent_profile->user_id,
                 'referrer_id'   => $this->user_id,
                 'transfer_id'  => $transfer->id,
-                'type' => $type,
+                'withdrawal_id' => $withdrawal->id,
                 'bonus' => $bonus,
             ]);
             
             $income->increment('balance', $bonus);
-         
+            
+            Log::channel('bonus')->info('Success bonus', ['user_id' => $this->user_id, 'bonus' => $bonus]);
         }
 
     }
@@ -189,9 +187,9 @@ class UserProfile extends Model
 
         if ($asset_policy && $asset_policy->min_valid <= $max_amount_in_usdt) {
             $this->update(['is_valid' => 'y']);
-            \Log::info('Success to change is_valid', ['user_id' => $this->user_id]);
+            Log::channel('user')->info('Success to change is_valid', ['user_id' => $this->user_id]);
         } else {
-            \Log::info('Failed to change is_valid', ['user_id' => $this->user_id, 'max_amount' => $max_amount_in_usdt]);
+            Log::channel('user')->info('Failed to change is_valid', ['user_id' => $this->user_id, 'max_amount' => $max_amount_in_usdt]);
         }
     }
 
@@ -261,7 +259,7 @@ class UserProfile extends Model
                 throw new \Exception("Failed to update grade_id for user_id {$this->user_id}");
             }
     
-            Log::info("User ID {$this->user_id} level up: {$current_level} → {$next_level}, self_sales : {$self_sales}, group_sales : {$group_sales}");
+            Log::channel('user')->info("User ID {$this->user_id} level up: {$current_level} → {$next_level}, self_sales : {$self_sales}, group_sales : {$group_sales}");
     
             $this->checkLevelUp($next_level, $self_sales, $group_sales);
         }

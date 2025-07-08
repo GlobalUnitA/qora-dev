@@ -87,9 +87,9 @@
                                         <td scope="col" class="text-center">{{ $list->firstItem() + $key }}</td>
                                         <td scope="col" class="text-center">C{{ $value->user_id }}</td>
                                         <td scope="col" class="text-center">{{ $value->user->name }}</td>
-                                        <td scope="col" class="text-center">{{ $value->wallet->coin->name }}</td>
+                                        <td scope="col" class="text-center">{{ $value->asset->coin->name }}</td>
                                         <td scope="col" class="text-center">{{ $value->amount }}</td>
-                                        <td scope="col" class="text-center">{{ $value->policy->staking_name }}</td>
+                                        <td scope="col" class="text-center">{{ $value->policy->staking_locale_name }}</td>
                                         <td scope="col" class="text-center">{{ $value->policy->daily }}</td>
                                         <td scope="col" class="text-center">{{ $value->period }}</td>
                                         <td scope="col" class="text-center">

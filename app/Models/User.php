@@ -59,16 +59,6 @@ class User extends Authenticatable
         return $this->hasMany(IncomeTransfer::class, 'user_id', 'id');
     }
 
-    public function wallets()
-    {
-        return $this->hasMany(Wallet::class, 'user_id', 'id');        
-    }
-
-    public function walletTransfers()
-    {
-        return $this->hasMany(WalletTransfer::class, 'user_id', 'id');
-    }
-
     public function bonuses()
     {
         return $this->hasMany(Bonus::class, 'user_id', 'id');

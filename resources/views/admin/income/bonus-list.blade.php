@@ -19,11 +19,14 @@
                         <li class="nav-item" role="presentation">
                             <a href="{{ route('admin.income.list', array_merge(request()->query(), ['type' => 'subscription_bonus'])) }}" class="nav-link {{ Request('type') == 'subscription_bonus' ? 'active' : '' }}">DAO</a>
                         </li>
+                        <li class="nav-item" role="presentation">
+                            <a href="{{ route('admin.income.list', array_merge(request()->query(), ['type' => 'staking_reward'])) }}" class="nav-link {{ Request('type') == 'staking_reward' ? 'active' : '' }}">스테이킹</a>
+                        </li>
                     </ul>
                 </div>
                 <div class="card">
                     <div class="card-body">
-                        <form action="{{ route('admin.asset.list') }}" method="GET">
+                        <form action="{{ route('admin.income.list') }}" method="GET">
                             @foreach(request()->query() as $key => $value)
                                 @if($key !== 'start_date' && $key !== 'end_date')
                                     <input type="hidden" name="{{ $key }}" value="{{ $value }}">
@@ -80,11 +83,12 @@
                                         <th scope="col" class="text-center">번호</th>
                                         <th scope="col" class="text-center">UID</th>
                                         <th scope="col" class="text-center">이름</th>
+                                        <th scope="col" class="text-center">등급</th>
                                         <th scope="col" class="text-center">종류</th>
                                         <th scope="col" class="text-center">인센티브</th>
-                                        <th scope="col" class="text-center">분류</th>
                                         <th scope="col" class="text-center">상태</th>
                                         <th scope="col" class="text-center">산하ID</th>
+                                        <th scope="col" class="text-center">출금금액</th>
                                         <th scope="col" class="text-center">일자</th>
                                     </tr>
                                 </thead>
@@ -95,9 +99,9 @@
                                         <td scope="col" class="text-center">{{ $list->firstItem() + $key }}</td>
                                         <td scope="col" class="text-center">C{{ $value->user_id }}</td>
                                         <td scope="col" class="text-center">{{ $value->user->name }}</td>
+                                        <td scope="col" class="text-center">{{ $value->user->profile->grade->name }}</td>
                                         <td scope="col" class="text-center">{{ $value->income->coin->name }}</td>
                                         <td scope="col" class="text-center">{{ $value->amount }}</td>
-                                        <td scope="col" class="text-center">{{ $value->bonus->type_text }}</td>
                                         <td scope="col" class="text-center">
                                             @switch($value->status)
                                                 @case('pending')
@@ -117,6 +121,7 @@
                                             @endswitch
                                         </td>
                                         <td scope="col" class="text-center">C{{ $value->bonus->referrer_id }}</td>
+                                        <td scope="col" class="text-center">{{ $value->bonus->withdrawal->amount }}</td>
                                         <td scope="col" class="text-center">{{ $value->created_at }}</td>
                                     </tr>
                                     @endforeach

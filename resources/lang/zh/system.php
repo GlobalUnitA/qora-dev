@@ -42,4 +42,7 @@ return array (
   'request_date' => '申请日期',
   'waiting_period' => '等待期',
   'unit_day' => '天',
+  'period' => '期间',
+  'started_at' => '开始日',
+  'ended_at' => '截止日',
 );

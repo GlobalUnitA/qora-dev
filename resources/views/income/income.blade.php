@@ -18,17 +18,23 @@
                     <h3 class="text-primary fs-6 mb-1">{{ $data['bonus'] }}</h3>
                 </div>
             </div>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <p class="text-body fs-4 m-0">{{ __('staking.total_staking_profit') }}</p>
+                    <h3 class="text-primary fs-6 mb-1">{{ $data['reward'] }}</h3>
+                </div>
+            </div>
             <div class="mb-4">
                 <div class="d-flex justify-content-between align-items-start">
                     <p class="text-body fs-4 m-0">{{ __('asset.total_external_withdrawal') }}</p>
-                    <a href="{{ route('income.withdrawal') }}" class="btn btn-outline-inverse btn-sm py-1 px-3 ms-5">{{ __('asset.withdrawal') }}</a>
+                    <a href="{{ route('income.withdrawal') }}" class="btn btn-primary fs-4 py-1 px-3">{{ __('asset.withdrawal') }}</a>
                 </div>
                 <h3 class="text-primary fs-6 mb-1">{{ $data['withdrawal_total'] }}</h3>
             </div>
             <!--div class="mb-4">
-                <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex justify-content-between align-items-start">
                     <p class="text-body fs-4 m-0">{{ __('asset.total_internal_transfer') }}</p>
-                    <a href="{{ route('income.deposit') }}" class="btn btn-outline-inverse btn-sm py-1 px-3 ms-5">{{ __('asset.deposit') }}</a>
+                    <a href="{{ route('income.deposit') }}" class="btn btn-primary fs-4 py-1 px-3">{{ __('asset.deposit') }}</a>
                 </div>
                 <h3 class="text-primary fs-6 mb-1">{{ $data['deposit_total'] }}</h3>
             </div-->
@@ -57,7 +63,13 @@
                 <tr>
                     <td>{{ date_format($val->created_at, 'Y-m-d') }}</td>
                     <td>{{ $val->amount }}</td>
-                    <td>{{ $val->profit->trading->profit_rate }}%</td>
+                    <td>  
+                        @if ($val->profit)
+                            {{ $val->profit->trading->profit_rate }}%
+                        @elseif ($val->reward)
+                            {{ $val->reward->staking->policy->daily }}%
+                        @endif
+                    </td>
                     <td>{{ $val->bonus? 'C' . $val->bonus->referrer_id : '' }}</td>
                     <td>{{ $val->type_text }}</td>
                 </tr>

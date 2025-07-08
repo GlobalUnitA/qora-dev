@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\StakingProfit;
+use App\Models\Staking;
 use Illuminate\Console\Command;
 
 class GenerateStakingProfit extends Command
@@ -26,7 +26,7 @@ class GenerateStakingProfit extends Command
      */
     public function handle()
     {
-        StakingProfit::distributeDaily();
-        StakingProfit::finalizePayout();
+        Staking::distributeDaily();
+        Staking::finalizePayout();
     }
 }

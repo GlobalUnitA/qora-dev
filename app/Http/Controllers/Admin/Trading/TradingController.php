@@ -52,6 +52,7 @@ class TradingController extends Controller
             $query->whereBetween('trading.created_at', [$start, $end]);
         })
         ->latest()
+        ->orderBy('id', 'desc')
         ->paginate(10);
 
         return view('admin.trading.list', compact('list'));

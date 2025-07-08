@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers\Admin\Income;
 
-use App\Exports\IncomeExport;
+use App\Exports\Income\IncomeDepositExport;
+use App\Exports\Income\IncomeWithdrawalExport;
+use App\Exports\Income\IncomeTradingProfitExport;
+use App\Exports\Income\IncomeSubscriptionBonusExport;
+use App\Exports\Income\IncomeStakingRewardExport;
 use App\Models\UserProfile;
 use App\Models\Income;
 use App\Models\IncomeTransfer;
@@ -66,6 +70,7 @@ class IncomeController extends Controller
             $query->whereBetween('income_transfers.created_at', [$start, $end]);
         })
         ->latest()
+        ->orderBy('id', 'desc')
         ->paginate(10);
     
         switch ($request->type) {
@@ -81,6 +86,10 @@ class IncomeController extends Controller
                 return view('admin.income.bonus-list', compact('list'));
             break;
 
+            case 'staking_reward' :
+                return view('admin.income.reward-list', compact('list'));
+            break;
+        
             default :
                 return view('admin.income.deposit-list', compact('list'));
             break;
@@ -133,19 +142,23 @@ class IncomeController extends Controller
 
         switch ($request->type) {
             case 'deposit' :
-                return Excel::download(new IncomeExport($request->all()), '회원 내부이체 내역 '.$current.'.xlsx');
+                return Excel::download(new IncomeDepositExport($request->all()), '회원 내부이체 내역 '.$current.'.xlsx');
             break;
 
             case 'withdrawal' :
-                return Excel::download(new IncomeExport($request->all()), '회원 외부출금 내역 '.$current.'.xlsx');
+                return Excel::download(new IncomeWithdrawalExport($request->all()), '회원 외부출금 내역 '.$current.'.xlsx');
             break;
 
             case 'trading_profit' :
-                return Excel::download(new IncomeExport($request->all()), '회원 트레이딩 수익 내역 '.$current.'.xlsx');
+                return Excel::download(new IncomeTradingProfitExport($request->all()), '회원 트레이딩 수익 내역 '.$current.'.xlsx');
             break;
 
             case 'subscription_bonus' :
-                return Excel::download(new IncomeExport($request->all()), '회원 DAO 인센티브 내역 '.$current.'.xlsx');
+                return Excel::download(new IncomeSubscriptionBonusExport($request->all()), '회원 DAO 인센티브 내역 '.$current.'.xlsx');
+            break;
+
+            case 'staking_reward' :
+                return Excel::download(new IncomeStakingRewardExport($request->all()), '회원 스테이킹 수익 내역 '.$current.'.xlsx');
             break;
         }
     }

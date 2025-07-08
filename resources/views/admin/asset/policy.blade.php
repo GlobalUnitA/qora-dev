@@ -21,18 +21,11 @@
                                         <span>일</span>
                                     </div>
                                 </td>
+                            </tr>
+                            <tr>
                                 <th class="text-center align-middle">최소 보유금액</th>
                                 <td class="align-middle">
                                     <input type="text" name="min_valid" value="{{ $policy->min_valid }}" class="form-control w-25">
-                                </td>
-                            </tr>
-                            <tr>
-                                <th class="text-center align-middle">출금 공제 기간</th>
-                                <td class="align-middle">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <input type="text" name="withdrawal_period" value="{{ $policy->withdrawal_period }}" class="form-control w-25">
-                                        <span>일</span>
-                                    </div>
                                 </td>
                                 <th class="text-center align-middle">최소 출금금액</th>
                                 <td class="align-middle">
@@ -40,10 +33,10 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th class="text-center align-middle">기간 이후 공제 비율</th>
+                                <th class="text-center align-middle">DAO 수수료 비율</th>
                                 <td class="align-middle">
                                     <div class="d-flex align-items-center gap-2">
-                                        <input type="text" name="after_total_rate" value="{{ $policy->after_total_rate }}" class="form-control w-25">
+                                        <input type="text" name="fee_rate" value="{{ $policy->fee_rate }}" class="form-control w-25">
                                         <span>%</span>
                                     </div>
                                 </td>
@@ -51,22 +44,6 @@
                                 <td class="align-middle">
                                     <div class="d-flex align-items-center gap-2">
                                         <input type="text" name="tax_rate" value="{{ $policy->tax_rate }}" class="form-control w-25">
-                                        <span>%</span>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th class="text-center align-middle">수수료 비율</th>
-                                <td class="align-middle">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <input type="text" name="fee_rate" value="{{ $policy->fee_rate }}" class="form-control w-25">
-                                        <span>%</span>
-                                    </div>
-                                </td>
-                                <th class="text-center align-middle">총 공제 비율</th>
-                                <td class="align-middle">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <input type="text" name="total_rate" value="{{ $policy->total_rate }}" class="form-control w-25">
                                         <span>%</span>
                                     </div>
                                 </td>

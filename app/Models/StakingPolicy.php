@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\TruncatesDecimals;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cookie;
 
 class StakingPolicy extends Model
 {
@@ -17,13 +18,45 @@ class StakingPolicy extends Model
         'max_quantity',
         'daily',
         'period',
+        'memo'
     ];
 
     protected $casts = [
+        'staking_name' => 'array',
         'daily' => 'decimal:9',
         'updated_at' => 'datetime:Y-m-d H:i:s',
     ];
 
+    protected $appends = [
+        'staking_locale_name',
+        'staking_locale_memo',
+    ];
+    
+    public function translations()
+    {
+        return $this->hasMany(StakingPolicyTranslation::class, 'policy_id', 'id');
+    }
+
+    public function getStakingLocaleNameAttribute()
+    {
+        return optional($this->translationForLocale())->name;
+    }
+
+    public function getStakingLocaleMemoAttribute()
+    {
+        return optional($this->translationForLocale())->memo;
+    }
+
+    public function translationForLocale($locale = null)
+    {
+        $locale = $locale ?? Cookie::get('app_locale', 'en');
+
+        if (!$this->relationLoaded('translations')) {
+            $this->load('translations');
+        }
+
+        return $this->translations->firstWhere('locale', $locale);
+    }
     protected function serializeDate(\DateTimeInterface $date)
     {
         return $date->format('Y-m-d H:i:s');

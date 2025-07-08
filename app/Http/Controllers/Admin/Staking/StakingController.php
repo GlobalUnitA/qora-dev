@@ -55,6 +55,7 @@ class StakingController extends Controller
         })
         ->where('status', $request->status)
         ->latest()
+        ->orderBy('id', 'desc')
         ->paginate(10);
 
         return view('admin.staking.list', compact('list'));

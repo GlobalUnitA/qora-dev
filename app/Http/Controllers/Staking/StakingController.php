@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Staking;
 
-use App\Models\Wallet;
+use App\Models\Asset;
+use App\Models\Income;
 use App\Models\Staking;
 use App\Models\StakingPolicy;
-use App\Models\StakingProfit;
+use App\Models\StakingReward;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -21,13 +22,13 @@ class StakingController extends Controller
 
     public function index()
     {
-        $wallets = Wallet::where('user_id', auth()->id())
+        $assets = Asset::where('user_id', auth()->id())
             ->whereHas('coin', function ($query) {
             $query->where('is_active', 'y');
         })
         ->get();
         
-        return view('staking.staking', compact('wallets'));
+        return view('staking.staking', compact('assets'));
     }
 
     public function detail()
@@ -40,7 +41,7 @@ class StakingController extends Controller
     public function profit(Request $request)
     {
         $staking = Staking::find($request->id);
-        $profits = StakingProfit::where('staking_id', $staking->id)->get();
+        $profits = StakingReward::where('staking_id', $staking->id)->get();
 
         return view('staking.profit', compact('staking', 'profits'));
     }
@@ -49,9 +50,14 @@ class StakingController extends Controller
     {
         $staking = StakingPolicy::find($id);
 
+        $asset = Asset::where('user_id', auth()->id())
+            ->where('coin_id', $staking->coin_id)
+            ->first();
+        $balance = $asset->balance;
+
         $date = $this->getStakingDate($staking->period);
 
-        return view('staking.confirm', compact('staking', 'date'));
+        return view('staking.confirm', compact('staking', 'date', 'balance'));
     }
 
     
@@ -59,67 +65,59 @@ class StakingController extends Controller
     {
         $staking = StakingPolicy::where('coin_id', $request->coin)->get();
 
-        return response()->json($staking);
+        return response()->json($staking->toArray());
     }
     public function store(Request $request)
     {
         $startDate = Carbon::now()->subDays(30);
         $endDate = Carbon::now(); 
-
-        $last_staking = Staking::where('user_id', auth()->id())->whereBetween('created_at', [$startDate, $endDate])->first();
         
-        if ($last_staking) {
-            return response()->json([
-                'status' => 'error',
-                'message' =>  '이미 스테이킹에 참여하셨습니다.',
-            ]);
-        } 
-
         $staking = StakingPolicy::find($request->staking);
 
         $min = $staking->min_quantity;
         $max = $staking->max_quantity;
 
-        $validated = $request->validate([
-            'amount' => "required|numeric|min:$min|max:$max",
-        ], [
-            'amount.required' => '금액을 입력해주세요.',
-            'amount.numeric' => '숫자만 입력할 수 있습니다.',
-            'amount.min' => "최소 수량은 {$min} 입니다.",
-            'amount.max' => "최대 수량은 {$max} 입니다.",
-        ]);
+        if ($request->amount < $min || $request->amount > $max) {
+
+            return response()->json([
+                'status' => 'error',
+                'message' =>  __('staking.participation_quantity_notice', ['min' => $min, 'max' => $max]),
+            ]);
+        }
 
         DB::beginTransaction();
 
         try {
 
-            $wallet = Wallet::where('user_id', auth()->id())->where('coin_id', $staking->coin_id)->first();
+            $asset = Asset::where('user_id', auth()->id())->where('coin_id', $staking->coin_id)->first();
+            $income = Income::where('user_id', auth()->id())->where('coin_id', $staking->coin_id)->first();
 
-            if ($wallet->balance < $validated['amount']) {
-                throw new \Exception('스테이킹에 실패하였습니다. 월렛의 잔액을 확인하시길 바랍니다.');
+            if ($asset->balance < $request->amount) {
+                throw new \Exception(__('asset.lack_balance_notice'));
             }
     
             $date = $this->getStakingDate($staking->period);
 
             Staking::create([
                 'user_id' => auth()->id(),
-                'wallet_id' => $wallet->id,
+                'asset_id' => $asset->id,
+                'income_id' => $income->id,
                 'staking_id' => $staking->id,
-                'amount' => $validated['amount'],
+                'amount' => $request->amount,
                 'period' => $staking->period,
                 'started_at' => $date['start'],
                 'ended_at' => $date['end'],
             ]);
 
-            $wallet->update([
-                'balance' => $wallet->balance - $validated['amount']
+            $asset->update([
+                'balance' => $asset->balance - $request->amount
             ]);
 
             DB::commit();
         
             return response()->json([
                 'status' => 'success',
-                'message' => '스테이킹에 성공하였습니다.',
+                'message' => __('staking.staking_success_notice'),
                 'url' => route('home'),
             ]);
             

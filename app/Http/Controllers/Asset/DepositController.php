@@ -92,7 +92,6 @@ class DepositController extends Controller
             ]);
 
             DepositToast::create([
-                'user_id' => auth()->id(),
                 'deposit_id' => $deposit->id,
             ]);
 

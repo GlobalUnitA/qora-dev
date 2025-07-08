@@ -17,7 +17,6 @@ $(document).ready(function() {
             processData: false,
             contentType: false,
             success: function(response) {
-                console.log(response);
                 alertModal(response.message);
                 if(response.status !== 'success') {
                     $('#inputAccount').val('');

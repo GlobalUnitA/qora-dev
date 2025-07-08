@@ -112,7 +112,7 @@ class WithdrawalController extends Controller
     {
         $incomeTransfer = IncomeTransfer::find($id);
 
-        $amount = $incomeTransfer->amount - $incomeTransfer->tax - $incomeTransfer->fee;
+        $amount = $incomeTransfer->amount;
 
         return view('income.withdrawal-complete', compact('amount'));
     }

@@ -21,6 +21,8 @@ class UserExport implements FromCollection, WithHeadings
         $query = DB::table('users')
             ->leftJoin('user_profiles', 'users.id', '=', 'user_profiles.user_id')
             ->leftJoin('user_grades', 'user_profiles.grade_id', '=', 'user_grades.id')
+            ->leftJoin('user_profiles as parent_profiles', 'user_profiles.parent_id', '=', 'parent_profiles.user_id')
+            ->leftJoin('users as parents', 'parent_profiles.user_id', '=', 'parents.id')
             ->select(
                 'users.account',
                 'users.id',
@@ -31,6 +33,8 @@ class UserExport implements FromCollection, WithHeadings
                 'user_profiles.email',
                 'user_profiles.meta_uid',
                 'users.created_at',
+                'parent_profiles.user_id',
+                'parents.name as parent_name',
             );
 
       
@@ -48,12 +52,18 @@ class UserExport implements FromCollection, WithHeadings
             $query->whereBetween('users.created_at', [$start, $end]);
         }
 
-        return $query->get();
+        $results = $query->get();
+
+        return $results->map(function ($item, $index) {
+            return collect([
+                '번호' => $index + 1,
+            ])->merge((array) $item);
+        });
     }
 
   
     public function headings(): array
     {
-        return ['아이디', 'MID', '회원명', '노드 레벨', '등급', '연락처', '이메일', 'USDT 주소', '가입일자'];
+        return ['번호', '아이디', 'MID', '회원명', '노드 레벨', '등급', '연락처', '이메일', 'USDT 주소', '가입일자', '추천인UID', '추천인 이름'];
     }
 }

@@ -24,10 +24,6 @@ use App\Http\Controllers\Income\IncomeController;
 use App\Http\Controllers\Income\DepositController as IncomeDepositController;
 use App\Http\Controllers\Income\WithdrawalController as IncomeWithdrawalController;
 
-use App\Http\Controllers\Wallet\WalletController;
-use App\Http\Controllers\Wallet\DepositController as WalletDepositController;
-use App\Http\Controllers\Wallet\WithdrawalController as WalletWithdrawalController;
-
 use App\Http\Controllers\Trading\TradingController;
 
 use App\Http\Controllers\Staking\StakingController;
@@ -75,6 +71,7 @@ Route::middleware(['auth', 'session.timeout'])->group(function () {
 
     
     Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
 
     Route::prefix('verify-otp')->group(function () {
         Route::get('/', [OtpController::class, 'index'])->name('otp');
@@ -99,9 +96,9 @@ Route::middleware(['auth', 'session.timeout'])->group(function () {
 
     Route::prefix('asset')->group(function () {
         Route::get('/', [AssetController::class, 'index'])->name('asset');
-        Route::prefix('detail')->group(function () {
-            Route::get('/', [AssetController::class, 'detail'])->name('asset.detail');
-            Route::post('load-more', [AssetController::class, 'loadMore'])->name('asset.detail.loadMore');
+        Route::prefix('list')->group(function () {
+            Route::get('/', [AssetController::class, 'list'])->name('asset.list');
+            Route::post('load-more', [AssetController::class, 'loadMore'])->name('asset.list.loadMore');
         });
         
         Route::prefix('deposit')->group(function () {
@@ -150,27 +147,6 @@ Route::middleware(['auth', 'session.timeout'])->group(function () {
             Route::prefix('list')->group(function () {
                 Route::get('/', [IncomeWithdrawalController::class, 'list'])->name('income.withdrawal.list');    
                 Route::post('load-more', [IncomeWithdrawalController::class, 'loadMore'])->name('income.withdrawal.list.loadMore');
-            });
-            
-        });
-    });
-
-    Route::prefix('wallet')->group(function () {
-        Route::get('/', [WalletController::class, 'index'])->name('wallet');
-        Route::prefix('deposit')->group(function () {
-            Route::get('/', [WalletDepositController::class, 'index'])->name('wallet.deposit');
-            Route::post('store', [WalletDepositController::class, 'store'])->name('wallet.deposit.store');
-            Route::prefix('list')->group(function () {
-                Route::get('/', [WalletDepositController::class, 'list'])->name('wallet.deposit.list');
-                Route::post('load-more', [WalletDepositController::class, 'loadMore'])->name('wallet.deposit.list.loadMore');
-            });
-        });
-        Route::prefix('withdrawal')->group(function () {
-            Route::get('/', [WalletWithdrawalController::class, 'index'])->name('wallet.withdrawal');
-            Route::post('store', [WalletWithdrawalController::class, 'store'])->name('wallet.withdrawal.store');
-            Route::prefix('list')->group(function () {
-                Route::get('/', [WalletWithdrawalController::class, 'list'])->name('wallet.withdrawal.list');
-                Route::post('load-more', [WalletWithdrawalController::class, 'loadMore'])->name('wallet.withdrawal.list.loadMore');
             });
         });
     });

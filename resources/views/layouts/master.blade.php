@@ -14,7 +14,7 @@
 </head>
 <body>
 
-    <div class="layoutContainer container min-vh-100 overflow-hidden px-0 bg-body border border-sm-0" style="padding-top: 71px; ">
+    <div class="layoutContainer container min-vh-100 overflow-hidden px-0 bg-body border border-sm-0 layout-padding">
         @if(Auth::check() && !Request::is('register*'))
             @include('layouts.header')
         @endif

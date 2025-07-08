@@ -59,6 +59,11 @@ class IncomeTransfer extends Model
     {
         return $this->hasOne(Bonus::class, 'transfer_id', 'id');
     }
+
+    public function reward()
+    {
+        return $this->hasOne(StakingReward::class, 'transfer_id', 'id');
+    }
     
     public function getTypeTextAttribute()
     {
@@ -70,10 +75,13 @@ class IncomeTransfer extends Model
                 return __('asset.external_withdrawal');
             break;
             case 'trading_profit' :
-                return __('asset.profit');
+                return __('asset.trading_profit');
             break;
             case 'subscription_bonus' :
                 return __('asset.subscription_bonus');
+            break;
+            case 'staking_reward' :
+                return __('asset.staking_profit');
             break;
         }
     }

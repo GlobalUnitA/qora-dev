@@ -148,19 +148,6 @@
                                 </div>
                                 @endforeach
                             </td>
-                            <th class="text-center align-middle">월렛</th>
-                            <td class="align-middle">
-                                @foreach($view->wallets as $wallet)
-                                <div class="row align-items-center mb-3">
-                                    <div class="col-3 text-end">
-                                        <label class="form-label mb-0">{{ $wallet->coin->name }} :</label>
-                                    </div>
-                                    <div class="col-3">
-                                        <input type="text" value="{{ $wallet->balance }}" class="form-control form-control-sm" readonly>
-                                    </div>
-                                </div>
-                                @endforeach
-                            </td>
                         </tr>
                     </tbody>
                 </table>

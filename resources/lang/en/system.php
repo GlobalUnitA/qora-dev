@@ -41,4 +41,7 @@ return array (
   'request_date' => 'Registration Date',
   'waiting_period' => 'Waiting',
   'unit_day' => 'Day',
+  'period' => 'Duration',
+  'started_at' => 'Start Date',
+  'ended_at' => 'Closing',
 );

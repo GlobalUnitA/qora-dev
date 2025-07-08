@@ -9,13 +9,13 @@ use App\Models\UserOtp;
 use App\Models\Coin;
 use App\Models\Asset;
 use App\Models\Income;
-use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Exception;
 
 class RegisterController extends Controller
@@ -179,14 +179,11 @@ class RegisterController extends Controller
                     'user_id' => $user->id,
                     'coin_id' => $id,
                 ]);
-
-                Wallet::create([
-                    'user_id' => $user->id,
-                    'coin_id' => $id,
-                ]);
             }
 
             DB::commit();
+
+            Log::channel('user')->info('Success to join', ['user_id' => $user->id]);
 
             return $user;
 

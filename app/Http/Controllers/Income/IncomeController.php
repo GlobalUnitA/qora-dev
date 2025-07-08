@@ -105,6 +105,4 @@ class IncomeController extends Controller
             'hasMore' => $hasMore,
         ]);
     }
-    
-
 }

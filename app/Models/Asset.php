@@ -175,6 +175,7 @@ class Asset extends Model
         $bonus_total = $bonuses->sum('amount');
 
         return [
+            'encrypted_id' => $this->encrypted_id,
             'coin_name' => $this->coin->name,
             'balance' => $this->balance,
             'grade' => $user_profile->grade->name,

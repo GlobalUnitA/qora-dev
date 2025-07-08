@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Asset;
 
-use App\Exports\AssetPolicyExport;
+use App\Exports\Asset\AssetPolicyExport;
 use App\Models\Asset;
 use App\Models\AssetPolicy;
 use App\Models\PolicyModifyLog;
@@ -68,10 +68,4 @@ class PolicyController extends Controller
             ]);
         }
     }
-
-    public function export()
-    {
-        return Excel::download(new AssetPolicyExport(), 'asset_policy.xlsx');
-    }
-
 }   

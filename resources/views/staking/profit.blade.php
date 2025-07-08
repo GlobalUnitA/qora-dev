@@ -10,7 +10,7 @@
             <thead class="mb-2">
                 <tr>
                     <th>일자</th>
-                    <th>수량</th>
+                    <th>참여수량</th>
                     <th>상태</th>
                 </tr>
             </thead>
@@ -37,7 +37,7 @@
                 @foreach($profits as $profit)            
                 <tr>
                     <td>{{ date_format($profit->created_at, 'Y-m-d h:i:s') }}</td>
-                    <td>{{ number_format($profit->profit) }}</td>
+                    <td>{{ rtrim(rtrim(number_format($profit->profit, 9, '.', ''), '0'), '.') }}</td>
                     <td>{{ $profit->status_text }}</td>
                 </tr>
                 @endforeach

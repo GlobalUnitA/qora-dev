@@ -14,6 +14,9 @@
                             <a href="{{ route('admin.asset.list', array_merge(request()->query(), ['type' => 'withdrawal'])) }}" class="nav-link {{ Request('type') == 'withdrawal' ? 'active' : '' }}">출금</a>
                         </li>
                         <li class="nav-item" role="presentation">
+                            <a href="{{ route('admin.asset.list', array_merge(request()->query(), ['type' => 'staking_refund'])) }}" class="nav-link {{ Request('type') == 'staking_refund' ? 'active' : '' }}">원금상환</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
                             <a href="{{ route('admin.asset.list', array_merge(request()->query(), ['type' => 'manual_deposit'])) }}" class="nav-link {{ Request('type') == 'manual_deposit' ? 'active' : '' }}">수동입금</a>
                         </li>
                     </ul>

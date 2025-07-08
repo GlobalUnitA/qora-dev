@@ -70,7 +70,7 @@ function calculateFinalAmount()
     const tax = ((amount * taxRate) / 100).toFixed(2);
     const fee = ((amount * feeRrate) / 100).toFixed(2);
 
-    const finalAmount = (amount - tax - fee).toFixed(2);
+    const finalAmount = (amount - tax).toFixed(2);
 
     $('#tax').html(tax);
     $('#fee').html(fee);

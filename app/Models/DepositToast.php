@@ -10,7 +10,6 @@ class DepositToast extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
         'deposit_id',
         'is_read',
     ];

@@ -5,7 +5,6 @@ namespace App\Providers;
 use App\Models\GradePolicy;
 use App\Models\SubscriptionPolicy;
 use App\Models\AssetPolicy;
-use App\Models\WalletPolicy;
 use App\Models\TradingPolicy;
 use App\Models\StakingPolicy;
 use App\Models\BonusPolicy;
@@ -28,9 +27,8 @@ class AppServiceProvider extends ServiceProvider
         GradePolicy::observe(PolicyObserver::class);
         SubscriptionPolicy::observe(PolicyObserver::class);
         AssetPolicy::observe(PolicyObserver::class);
-        WalletPolicy::observe(PolicyObserver::class);
         TradingPolicy::observe(PolicyObserver::class);
-        StakingPolicy::observe(PolicyObserver::class);
+        //StakingPolicy::observe(PolicyObserver::class);
 
         View::composer('*', function ($view) {
             $languages = LanguagePolicy::where('type', 'locale')->first()->content ?? [];

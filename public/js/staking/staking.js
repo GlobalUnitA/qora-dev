@@ -23,10 +23,10 @@ $(document).ready(function() {
                     const $template = $($('#stakingDataTemplate').html());
                     const url = `/staking/confirm/${item.id}`;
                 
-                    $template.find('.staking-name').text(item.staking_name);
+                    $template.find('.staking-name').text(item.staking_locale_name);
                     $template.find('.staking-amount').text(number_format(item.min_quantity)+' ~ '+number_format(item.max_quantity));
                     $template.find('.staking-rate').text(parseFloat(item.daily)+' %');
-                    $template.find('.staking-period').text(item.period+' 일');
+                    $template.find('.staking-period').text(item.period);
                     $template.find('.staking-btn').attr('onclick', `location.href='${url}'`);
                 
                     $('#stakingDataContainer').append($template);
@@ -36,44 +36,8 @@ $(document).ready(function() {
             },
             error: function(response) {
                 console.log(response);
-                alertModal('예기치 못한 오류가 발생했습니다.');
+                alertModal(errorNotice);
                 $('#stakingData').addClass('d-none');
-            }
-        });
-    });
-
-
-    $('#stakingForm').submit(function (event) {
-        event.preventDefault();
-      
-        const formData = new FormData(this);
-        
-        $.ajax({
-            url: $(this).attr('action'),
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                console.log(response);
-                alertModal(response.message, response.url);
-            },
-            error: function( xhr, status, error) {
-                console.log(error);
-                if (xhr.status === 422) {
-                    const errors = xhr.responseJSON.errors; 
-                    let errorMessage = '';
-        
-                    for (let field in errors) {
-                        if (errors.hasOwnProperty(field)) {
-                            errorMessage += errors[field].join('<br>');
-                        }
-                    }
-        
-                    alertModal(errorMessage.trim());
-                } else {
-                    alertModal('예기치 못한 오류가 발생했습니다.');
-                }
             }
         });
     });

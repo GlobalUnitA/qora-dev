@@ -24,9 +24,6 @@ use App\Http\Controllers\Admin\Income\IncomeController;
 use App\Http\Controllers\Admin\Income\DepositController as IncomeDepositController;
 use App\Http\Controllers\Admin\Income\WithdrawalController as IncomeWithdrawalController;
 
-use App\Http\Controllers\Admin\Wallet\WalletController;
-use App\Http\Controllers\Admin\Wallet\PolicyController as WalletPolicyController;
-
 use App\Http\Controllers\Admin\Trading\TradingController;
 use App\Http\Controllers\Admin\Trading\PolicyController as TradingPolicyController;
 
@@ -138,19 +135,6 @@ Route::middleware(['admin.auth', 'otp'])->group(function () {
         });
     });
 
-    Route::prefix('wallet')->group(function () {
-        Route::get('list', [WalletController::class, 'list'])->name('admin.wallet.list');
-        Route::get('view/{id}', [WalletController::class, 'view'])->name('admin.wallet.view');
-        Route::get('export', [WalletController::class, 'export'])->name('admin.wallet.export');
-        Route::middleware(['check_admin_level:3'])->group(function () {
-            Route::prefix('policy')->group(function () {
-                Route::get('/', [WalletPolicyController::class, 'index'])->name('admin.wallet.policy');
-                Route::post('update', [WalletPolicyController::class, 'update'])->name('admin.wallet.policy.update');
-                Route::get('export', [WalletPolicyController::class, 'export'])->name('admin.wallet.policy.export');
-            });
-        });
-    });
-
     Route::middleware(['check_admin_level:2'])->group(function () {
         Route::prefix('trading')->group(function () {
             Route::get('list', [TradingController::class, 'list'])->name('admin.trading.list');
@@ -170,9 +154,10 @@ Route::middleware(['admin.auth', 'otp'])->group(function () {
             Route::get('list', [StakingController::class, 'list'])->name('admin.staking.list');
             Route::prefix('policy')->group(function () {
                 Route::get('/', [StakingPolicyController::class, 'index'])->name('admin.staking.policy');
+                 Route::get('export', [StakingPolicyController::class, 'export'])->name('admin.staking.policy.export');
+                Route::get('{mode}/{id?}', [StakingPolicyController::class, 'view'])->name('admin.staking.policy.view');
                 Route::post('store', [StakingPolicyController::class, 'store'])->name('admin.staking.policy.store');
                 Route::post('update', [StakingPolicyController::class, 'update'])->name('admin.staking.policy.update');
-                Route::get('export', [StakingPolicyController::class, 'export'])->name('admin.staking.policy.export');
             });
         });
     });

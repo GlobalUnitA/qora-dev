@@ -38,10 +38,10 @@
                 <input type="hidden" name="fee">
                 <div>
                     <div class="text-center">
-                        <p class="mb-1">
+                        <!--p class="mb-1">
                         <span class="pe-1">{{ __('asset.fee') }}: <span id="fee">0.00</span></span>
                         <span class="divider position-relative ps-2">{{ __('asset.tax') }}: <span id="tax">0.00</span></span>
-                        </p>
+                        </p-->
                         <h4 class="pb-4 text-primary">{{ __('asset.withdrawal_actual_amount') }}: <span id="finalAmount">0.00</span></h4>
                     </div>
                     <div class="text-body mb-4">

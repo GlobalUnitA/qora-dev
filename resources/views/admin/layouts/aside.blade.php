@@ -95,16 +95,6 @@
                         <span class="hide-menu">수익</span>
                     </a>
                 </li>
-                @if (auth()->guard('admin')->user()->admin_level >= 3 )
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="{{ route('admin.wallet.list', ['type' => 'deposit']) }}" aria-expanded="false">
-                        <span>
-                            <i class="ti ti-wallet"></i>
-                        </span>
-                        <span class="hide-menu">월렛</span>
-                    </a>
-                </li>
-                @endif
                 @if (auth()->guard('admin')->user()->admin_level >= 2 )
                 <li class="sidebar-item">
                     <a class="sidebar-link" href="{{ route('admin.trading.list') }}" aria-expanded="false">
@@ -166,14 +156,6 @@
                             <i class="ti ti-cash-banknote-off"></i>
                         </span>
                         <span class="hide-menu">자산 정책</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="{{ route('admin.wallet.policy') }}" aria-expanded="false">
-                        <span>
-                            <i class="ti ti-wallet-off"></i>
-                        </span>
-                        <span class="hide-menu">월렛 정책</span>
                     </a>
                 </li>
                 <li class="sidebar-item">

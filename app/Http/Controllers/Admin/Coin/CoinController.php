@@ -7,7 +7,6 @@ use App\Models\Policy;
 use App\Models\Coin;
 use App\Models\User;
 use App\Models\Asset;
-use App\Models\Wallet;
 use App\Models\Income;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -80,12 +79,6 @@ class CoinController extends Controller
                     ]);
 
                     Income::create([
-                        'user_id' => $user->id,
-                        'coin_id' => $coin->id,
-                        'balance' => 0,
-                    ]);
-
-                    Wallet::create([
                         'user_id' => $user->id,
                         'coin_id' => $coin->id,
                         'balance' => 0,

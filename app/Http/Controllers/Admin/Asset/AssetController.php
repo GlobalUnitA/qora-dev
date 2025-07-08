@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Admin\Asset;
 
-use App\Exports\AssetExport;
+use App\Exports\Asset\AssetDepositExport;
+use App\Exports\Asset\AssetWithdrawalExport;
+use App\Exports\Asset\AssetStakingRefundExport;
+use App\Exports\Asset\AssetManualDepositExport;
 use App\Models\UserProfile;
 use App\Models\Asset;
 use App\Models\AssetTransfer;
@@ -66,6 +69,7 @@ class AssetController extends Controller
             $query->whereBetween('asset_transfers.created_at', [$start, $end]);
         })
         ->latest()
+        ->orderBy('id', 'desc')
         ->paginate(10);
   
         return view('admin.asset.list', compact('list'));
@@ -85,15 +89,19 @@ class AssetController extends Controller
 
         switch ($request->type) {
             case 'deposit' :
-                return Excel::download(new AssetExport($request->all()), '회원 입금 내역 '.$current.'.xlsx');
+                return Excel::download(new AssetDepositExport($request->all()), '회원 입금 내역 '.$current.'.xlsx');
             break;
 
             case 'withdrawal' :
-                return Excel::download(new AssetExport($request->all()), '회원 출금 내역 '.$current.'.xlsx');
+                return Excel::download(new AssetWithdrawalExport($request->all()), '회원 출금 내역 '.$current.'.xlsx');
+            break;
+
+            case 'staking_refund' :
+                return Excel::download(new AssetStakingRefundExport($request->all()), '회원 원금반환 내역 '.$current.'.xlsx');
             break;
 
             case 'manual_deposit' :
-                return Excel::download(new AssetExport($request->all()), '회원 수동입금 내역 '.$current.'.xlsx');
+                return Excel::download(new AssetManualDepositExport($request->all()), '회원 수동입금 내역 '.$current.'.xlsx');
             break;
         }
     }

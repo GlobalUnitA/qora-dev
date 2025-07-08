@@ -41,4 +41,7 @@ return array (
   'request_date' => '申請日',
   'waiting_period' => '待機期間',
   'unit_day' => '日',
+  'period' => '期間',
+  'started_at' => '開始日',
+  'ended_at' => '締め切り日',
 );

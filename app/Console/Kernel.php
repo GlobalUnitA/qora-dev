@@ -13,7 +13,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('generate:wallet-profit')->dailyAt('00:01');
         $schedule->command('generate:staking-profit')->dailyAt('00:06');
         $schedule->command('reflect:asset-deposit')->dailyAt('00:11');
 

@@ -130,7 +130,7 @@
                     @endphp
                         @foreach($firstTwo as $income)
                         <div class="d-flex justify-content-between align-items-center py-4 px-4">
-                            <h6 class="text-white fs-5 fw-normal lh-md m-0">{{ $income->coin->name }}</h6>
+                            <h6 class="text-white fs-4 fw-normal lh-md m-0">{{ $income->coin->name }}</h6>
                             <h4 class="fw-bold text-white fs-6 fs-md-6 text-end flex-grow-1 m-0 px-1">{{ number_format(floor( $income->balance * 10000) / 10000, 4) }}</h4>
                             <a href="{{ route('income', ['id' => $income->encrypted_id]) }}">
                                 <span class="btn btn-outline-light btn-sm py-1 px-3 ms-2">{{ __('system.detail') }}</span>
@@ -165,7 +165,7 @@
             @endphp
                 @foreach($firstTwo as $asset)
                 <div class="d-flex justify-content-between align-items-center py-4 px-4">
-                    <h6 class="text-white fs-5 fw-normal lh-md m-0">{{ $asset->coin->name }}</h6>
+                    <h6 class="text-white fs-4 fw-normal lh-md m-0">{{ $asset->coin->name }}</h6>
                     <h4 class="fw-bold text-white fs-6 fs-md-6 text-end flex-grow-1 m-0 px-1">{{ $asset->balance }}</h4>
                     <a href="{{ route('asset', ['id' => $asset->encrypted_id]) }}">
                         <span class="btn btn-outline-light btn-sm py-1 px-3 ms-2">{{ __('system.detail') }}</span>
@@ -207,18 +207,18 @@
                     <p class="m-0 fw-medium fs-3">{{ __('asset.withdrawal') }}</p>                    
                 </div>
             </a>
-            <a href="{{ route('trading') }}" class="link-body-emphasis w-100" style="max-width: 25%">
+            <!--a href="{{ route('trading') }}" class="link-body-emphasis w-100" style="max-width: 25%">
                 <div class="d-flex align-items-center flex-column">
                 <img src="{{ asset('/images/icon/icon_main_trading.png') }}" width="44" class="mb-1">
                     <p class="m-0 fw-medium fs-3">{{ __('asset.trading') }}</p>                    
                 </div>
-            </a>                
-            <a href="{{ route('wallet') }}" class="link-body-emphasis w-100" style="max-width: 25%">
+            </a-->           
+            <a href="{{ route('staking') }}" class="link-body-emphasis w-100" style="max-width: 25%">
                 <div class="d-flex align-items-center flex-column">
-                <img src="{{ asset('/images/icon/icon_main_wallet.svg') }}" width="44" class="mb-1">
-                    <p class="m-0 fw-medium fs-3">재테크</p>                    
+                <img src="{{ asset('/images/icon/icon_main_investment.png') }}" width="44" class="mb-1">
+                    <p class="m-0 fw-medium fs-3">{{ __('staking.staking') }}</p>                    
                 </div>
-            </a>
+            </a>                
         </div>
         <!--div class="d-flex justify-content-start align-items-center">
         <a href="#" class="link-body-emphasis w-100" style="max-width: 25%">
@@ -259,8 +259,8 @@
         <div class="card-body p-4 position-relative" style="background: url('images/mockup.png') center bottom no-repeat; background-size: 620px; height: 670px;">
             <h5 class="text-white pt-3 opacity-50">From Strategy to Yield</h5>
             <h3 class="text-white pb-4">CUBEAI Delivers<br>Real Results</</h3>
-            <a href="{{ route('trading') }}" class="position-absolute w-100 px-3" style="bottom: 0; left: 0;">
-                <button class="btn btn-primary w-100 py-3 my-5 fs-4">Trade Now</button>
+            <a href="{{ route('staking') }}" class="position-absolute w-100 px-3" style="bottom: 0; left: 0;">
+                <button class="btn btn-primary w-100 py-3 my-5 fs-4">Stake Now <span class="opacity-50">&</span> Earn Rewards!</button>
             </a>           
         </div>
     </div>

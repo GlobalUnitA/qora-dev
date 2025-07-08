@@ -13,24 +13,13 @@ class Bonus extends Model
         'user_id',
         'transfer_id',
         'referrer_id',
-        'type',
+        'withdrawal_id',
         'bonus',
     ];
     
     protected $casts = [
         'bonus' => 'decimal:9',
     ];
-
-    protected $appends = ['type_text'];
-
-    public function getTypeTextAttribute()
-    {
-        if ($this->type === 'asset') {
-            return '보유자산';
-        } else if ($this->type === 'income') {
-            return '수익지갑';
-        }
-    }
 
     public function user()
     {
@@ -40,5 +29,10 @@ class Bonus extends Model
     public function transfer()
     {
         return $this->belongsTo(IncomeTransfer::class, 'transfer_id', 'id');
+    }
+
+    public function withdrawal()
+    {
+        return $this->belongsTo(IncomeTransfer::class, 'withdrawal_id', 'id');
     }
 }

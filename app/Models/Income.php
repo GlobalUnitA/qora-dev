@@ -58,21 +58,7 @@ class Income extends Model
             return 0;
         }
         
-        $first_deposit = AssetTransfer::where('user_id', $this->user_id)
-            ->whereIn('type', ['deposit', 'manual_deposit'])
-            ->whereHas('asset', function ($query) {
-                $query->where('coin_id', $this->coin_id);
-            })
-            ->orderBy('created_at', 'asc')
-            ->first();
-
-        if (!$first_deposit) {
-            return 0; 
-        }
-
-        $days = now()->diffInDays($first_deposit->created_at);
-        
-        return ($days >= $policy->period) ? $policy->fee_rate : 0;
+        return $policy->fee_rate;
     }
     
     public function getTaxRateAttribute()
@@ -104,12 +90,16 @@ class Income extends Model
         $bonuses = $incomeTransfers->where('type', 'subscription_bonus')->where('status', 'completed');
         $bonus_total = $bonuses->sum('amount');
 
+        $rewards = $incomeTransfers->where('type', 'staking_reward')->where('status', 'completed');
+        $reward_total = $rewards->sum('amount');
+
         return [
             'encrypted_id' => $this->encrypted_id,
             'coin_name' => $this->coin->name,
             'balance' => $this->balance,
             'profit' => $self_total,
             'bonus' => $bonus_total,
+            'reward' => $reward_total,
             'deposit_total' => $deposit_total,
             'withdrawal_total' => $withdrawal_total,
         ];
