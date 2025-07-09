@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\KakaoApi;
+
 use App\Models\UserOtp;
 use App\Models\Admin;
 use App\Models\AdminOtp;
@@ -37,7 +38,6 @@ class TestController extends Controller
     }
    public function index()
     {
-        
-     
+        echo "test";
     }
-}       
+}
