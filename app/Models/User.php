@@ -11,24 +11,24 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-   
+
     protected $fillable = [
-        'name',      
-        'account',      
-        'password',  
+        'name',
+        'account',
+        'password',
     ];
 
-    
+
     protected $hidden = [
-        'password',   
-        'remember_token', 
+        'password',
+        'remember_token',
     ];
 
     public function username()
     {
         return 'account';
     }
-    
+
     public function getFullNameAttribute()
     {
         return $this->first_name . ' ' . $this->last_name;
@@ -41,7 +41,7 @@ class User extends Authenticatable
 
     public function assets()
     {
-        return $this->hasMany(Asset::class, 'user_id', 'id');        
+        return $this->hasMany(Asset::class, 'user_id', 'id');
     }
 
     public function assetTransfers()
@@ -51,7 +51,7 @@ class User extends Authenticatable
 
     public function incomes()
     {
-        return $this->hasMany(Income::class, 'user_id', 'id');        
+        return $this->hasMany(Income::class, 'user_id', 'id');
     }
 
     public function incomeTransfers()
@@ -61,7 +61,7 @@ class User extends Authenticatable
 
     public function bonuses()
     {
-        return $this->hasMany(Bonus::class, 'user_id', 'id');
+        return $this->hasMany(SubscriptionBonus::class, 'user_id', 'id');
     }
 
     public function posts()

@@ -10,7 +10,7 @@ use App\Models\IncomeTransfer;
 use App\Models\Trading;
 use App\Models\TradingProfit;
 use App\Models\TradingPolicy;
-use App\Models\Bonus;
+use App\Models\SubscriptionBonus;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -23,29 +23,29 @@ class TradingController extends Controller
 {
     public function __construct()
     {
-        
+
     }
 
     public function index(Request $request)
-    {  
+    {
 
         $user = User::find(auth()->id());
         $assets = Asset::where('user_id', $user->id)
-        ->whereHas('coin', function ($query) {
-            $query->where('is_active', 'y');
-        })
-        ->get();
+            ->whereHas('coin', function ($query) {
+                $query->where('is_active', 'y');
+            })
+            ->get();
 
         $trading_policy = TradingPolicy::first();
 
         $profit_rate = $trading_policy->profit_rate;
 
         $is_valid = false;
-        
+
         if ($user->profile->is_valid === 'y') {
             $is_valid = true;
         }
-        
+
         $available_day = $trading_policy->isTradingAvailableToday();
 
         $selected_asset = null;
@@ -63,15 +63,15 @@ class TradingController extends Controller
             $data = $selected_asset->getAssetInfo();
         }
 
-        $subscription_bonuses = Bonus::where('user_id', $user->id)->latest('created_at')->get();
-        
+        $subscription_bonuses = SubscriptionBonus::where('user_id', $user->id)->latest('created_at')->get();
+
         $tab = $request->has('team') ? 'team' : 'my';
 
         return view('trading.trading', compact('assets', 'selected_asset', 'data', 'tab', 'subscription_bonuses', 'available_day', 'is_valid', 'profit_rate'));
     }
 
     public function wait(Request $request)
-    {   
+    {
         $coin = $request->coin;
 
         return view('trading.wait', compact('coin'));
@@ -86,7 +86,7 @@ class TradingController extends Controller
 
     public function store(Request $request)
     {
-       
+
         DB::beginTransaction();
 
         try {
@@ -106,25 +106,25 @@ class TradingController extends Controller
 
             $today = Carbon::today();
             $tomorrow = Carbon::tomorrow();
-         
+
             $trading = Trading::where('user_id', $user->id)
                 ->where('coin_id', $coin->id)
                 ->whereBetween('created_at', [$today, $tomorrow->copy()->subSecond()])
                 ->first();
-            
+
             if ($trading) {
                 if ($trading->current_count >= $trading->max_count) {
                     throw new \Exception( __('asset.trading_limit_notice'));
                 }
 
                 $trading->increment('current_count');
-        
+
             } else {
 
                 if (0 >= $trading->max_count) {
                     throw new \Exception( __('asset.trading_limit_notice'));
                 }
-    
+
                 $balance = $asset->balance;
 
                 $daily = ($balance * $trading_policy->profit_rate) / 100;
@@ -160,33 +160,33 @@ class TradingController extends Controller
                 'transfer_id' => $incomeTransfer->id,
                 'profit' => $trading_profit,
             ]);
-            
+
             $income->increment('balance', $trading_profit);
 
             DB::commit();
 
             return redirect()->route('trading.done', ['asset' => $asset->encrypted_id]);
-    
+
         } catch (\Exception $e) {
 
             DB::rollBack();
 
             throw new \Exception( __('system.error_notice'). $e->getMessage());
-        
+
         }
-    
+
     }
 
     public function list()
     {
         $limit = 10;
 
-        $list = Bonus::where('user_id', auth()->id())
+        $list = SubscriptionBonus::where('user_id', auth()->id())
             ->latest()
             ->take($limit)
             ->get();
 
-        $total_count = Bonus::where('user_id', auth()->id())
+        $total_count = SubscriptionBonus::where('user_id', auth()->id())
             ->count();
 
         $has_more = $total_count > $limit;
@@ -199,12 +199,12 @@ class TradingController extends Controller
         $offset = $request->input('offset', 0);
         $limit = $request->input('limit', 10);
 
-        $query = Bonus::where('user_id', auth()->id())->latest();
+        $query = SubscriptionBonus::where('user_id', auth()->id())->latest();
 
         $items = $query->skip($offset)->take($limit + 1)->get();
 
         $hasMore = $items->count() > $limit;
-        
+
         $items = $items->take($limit)->map(function ($item) {
             return [
                 'created_at' => $item->created_at->format('Y-m-d H:i:s'),
