@@ -193,8 +193,7 @@ class Staking extends Model
     {
         $today = now()->toDateString();
 
-        $stakings = self::with(['asset', 'profits'])
-            ->whereDate('ended_at', '<', $today)
+        $stakings = self::whereDate('ended_at', '<', $today)
             ->where('status', 'pending')
             ->get();
 
