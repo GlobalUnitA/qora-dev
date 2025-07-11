@@ -69,7 +69,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th class="text-center align-middle">USDT 주소(TRC20)</th>
+                                <th class="text-center align-middle">USDT(BNB Smart Chain)</th>
                                 <td colspan="3">
                                     <div class="d-flex align-items-center justify-content-between me-3">
                                         @if($view->profile->meta_uid)
