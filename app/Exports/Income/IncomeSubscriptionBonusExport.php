@@ -13,14 +13,14 @@ class IncomeSubscriptionBonusExport extends BaseIncomeExport
             ->leftJoin('incomes', 'income_transfers.income_id', '=', 'incomes.id')
             ->leftJoin('coins', 'incomes.coin_id', '=', 'coins.id')
             ->leftJoin('users', 'income_transfers.user_id', '=', 'users.id')
-            ->leftJoin('bonuses', 'income_transfers.id', '=', 'bonuses.transfer_id')
+            ->leftJoin('subscription_bonuses', 'income_transfers.id', '=', 'subscription_bonuses.transfer_id')
             ->select(
                 'users.id', 
                 'users.name',
                 'coins.name as coin_name',
                 'income_transfers.amount',
                 'income_transfers.status',
-                'bonuses.referrer_id',
+                'subscription_bonuses.referrer_id',
                 'income_transfers.created_at'
             )
             ->orderBy('income_transfers.created_at', 'asc');

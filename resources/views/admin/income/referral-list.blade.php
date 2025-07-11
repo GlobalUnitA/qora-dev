@@ -108,7 +108,7 @@
                                         <td scope="col" class="text-center">C{{ $value->referralBonus->referrer_id }}</td>
                                         <td scope="col" class="text-center">{{ $value->referralBonus->staking->amount }}</td>
                                         <td scope="col" class="text-center">{{ $value->created_at }}</td>
-                                        <td scope="col" class="text-center">{{ $value->referralBonus->referrer->profile->level }}</td>
+                                        <td scope="col" class="text-center">{{ $value->referralBonus->referrer->profile->level - $value->user->profile->level }}</td>
                                     </tr>
                                     @endforeach
                                     @else
