@@ -168,9 +168,56 @@ class UserProfile extends Model
 
             $income->increment('balance', $bonus);
 
-            Log::channel('bonus')->info('Success bonus', ['user_id' => $this->user_id, 'bonus' => $bonus]);
+            Log::channel('bonus')->info('Success subscription bonus', ['user_id' => $this->user_id, 'bonus' => $bonus, 'transfer_id' => $transfer->id]);
         }
 
+    }
+
+    public function referralBonus($staking)
+    {
+        $parents = $this->getParentTree(21);
+
+        foreach ($parents as $level => $parent_profile) {
+
+            if ($parent_profile->is_valid === 'n') {
+                continue;
+            }
+
+            $policy = ReferralPolicy::where('grade_id', $parent_profile->grade->id)->first();
+
+            $rate_key = "level_{$level}_rate";
+
+            $bonus = $staking->amount * $policy->$rate_key / 100;
+
+            if ($bonus <= 0) {
+                continue;
+            }
+
+            $income = Income::where('user_id', $parent_profile->user_id)->where('coin_id', $staking->income->coin_id)->first();
+
+            $transfer = IncomeTransfer::create([
+                'user_id'   => $parent_profile->user_id,
+                'income_id'  => $income->id,
+                'type' => 'referral_bonus',
+                'status' => 'completed',
+                'amount'    => $bonus,
+                'actual_amount' => $bonus,
+                'before_balance' => $income->balance,
+                'after_balance' => $income->balance + $bonus,
+            ]);
+
+            ReferralBonus::create([
+                'user_id'   => $parent_profile->user_id,
+                'referrer_id' => $this->user_id,
+                'staking_id'   => $staking->id,
+                'transfer_id'  => $transfer->id,
+                'bonus' => $bonus,
+            ]);
+
+            $income->increment('balance', $bonus);
+
+            Log::channel('bonus')->info('Success referral bonus', ['user_id' => $this->user_id, 'bonus' => $bonus, 'transfer_id' => $transfer->id]);
+        }
     }
 
     public function checkUserValidity()

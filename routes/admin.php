@@ -30,11 +30,6 @@ use App\Http\Controllers\Admin\Trading\PolicyController as TradingPolicyControll
 use App\Http\Controllers\Admin\Staking\StakingController;
 use App\Http\Controllers\Admin\Staking\PolicyController as StakingPolicyController;
 
-use App\Http\Controllers\Admin\Bonus\BonusController;
-use App\Http\Controllers\Admin\Bonus\ReferralController;
-use App\Http\Controllers\Admin\Bonus\MatchingController;
-use App\Http\Controllers\Admin\Bonus\PolicyController as BonusPolicyController;
-
 use App\Http\Controllers\Admin\Board\BoardController;
 use App\Http\Controllers\Admin\Board\PostController;
 use App\Http\Controllers\Admin\Board\CommentController;

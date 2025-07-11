@@ -82,12 +82,16 @@ class IncomeController extends Controller
                 return view('admin.income.profit-list', compact('list'));
             break;
 
-            case 'subscription_bonus' :
-                return view('admin.income.bonus-list', compact('list'));
-            break;
-
             case 'staking_reward' :
                 return view('admin.income.reward-list', compact('list'));
+            break;
+
+            case 'subscription_bonus' :
+                return view('admin.income.subscription-list', compact('list'));
+            break;
+
+            case 'referral_bonus' :
+                return view('admin.income.referral-list', compact('list'));
             break;
         
             default :

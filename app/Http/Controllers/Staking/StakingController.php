@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Staking;
 
+use App\Models\User;
 use App\Models\Asset;
 use App\Models\Income;
 use App\Models\Staking;
@@ -98,7 +99,7 @@ class StakingController extends Controller
     
             $date = $this->getStakingDate($staking->period);
 
-            Staking::create([
+            $staking = Staking::create([
                 'user_id' => auth()->id(),
                 'asset_id' => $asset->id,
                 'income_id' => $income->id,
@@ -112,6 +113,8 @@ class StakingController extends Controller
             $asset->update([
                 'balance' => $asset->balance - $request->amount
             ]);
+
+            $income->user->profile->referralBonus($staking);
 
             DB::commit();
         

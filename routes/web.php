@@ -28,9 +28,6 @@ use App\Http\Controllers\Trading\TradingController;
 
 use App\Http\Controllers\Staking\StakingController;
 
-use App\Http\Controllers\Bonus\DeviceBonusController;
-use App\Http\Controllers\Bonus\StakingBonusController;
-
 use App\Http\Controllers\Chart\RefChartController;
 use App\Http\Controllers\Chart\AffChartController;
 

@@ -20,7 +20,7 @@
                 <div class="d-grid d-grid-col-2 mb-3">                    
                 @foreach ($assets as $asset)
                     <div class="selectedAsset">
-                        <input type="radio" class="btn-check" name="asset" value="{{ $asset->encrypted_id }}" id="{{ $asset->coin->code }}" autocomplete="off">
+                        <input type="radio" class="btn-check" name="asset" value="{{ $asset->encrypted_id }}" id="{{ $asset->coin->code }}" autocomplete="off" data-balance="{{ $asset->balance }}">
                         <label class="btn btn-light w-100 p-4 rounded text-center fs-5 d-flex flex-column align-items-center" for="{{ $asset->coin->code }}">
                             <img src="{{ $asset->coin->image_urls[0] }}" width="40" alt="{{ $asset->coin->code }}" class="img-fluid mb-2">
                             {{ $asset->coin->name }}
@@ -34,6 +34,7 @@
             <div class="my-4">
                 <label class="form-label fs-4 text-body">{{ __('asset.withdrawal_amount_guide') }}</label>
                 <input type="text" name="amount" class="form-control mb-3"  placeholder="0">
+                <p class="mb-5 opacity-50 fw-light fs-4 d-none" id="stock-label">{{ __('system.stock_amount') }}: <span id="stock" class="fw-bold"></span></p>
                 <input type="hidden" name="tax">
                 <input type="hidden" name="fee">
                 <div>

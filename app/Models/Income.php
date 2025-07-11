@@ -87,8 +87,11 @@ class Income extends Model
         $self_profits = $incomeTransfers->where('type', 'trading_profit')->where('status', 'completed');
         $self_total = $self_profits->sum('amount');
 
-        $bonuses = $incomeTransfers->where('type', 'subscription_bonus')->where('status', 'completed');
-        $bonus_total = $bonuses->sum('amount');
+        $subscription_bonus = $incomeTransfers->where('type', 'subscription_bonus')->where('status', 'completed');
+        $subscription_bonus_total = $subscription_bonus->sum('amount');
+
+        $referral_bonus = $incomeTransfers->where('type', 'referral_bonus')->where('status', 'completed');
+        $referral_bonus_total = $referral_bonus->sum('amount');
 
         $rewards = $incomeTransfers->where('type', 'staking_reward')->where('status', 'completed');
         $reward_total = $rewards->sum('amount');
@@ -98,7 +101,8 @@ class Income extends Model
             'coin_name' => $this->coin->name,
             'balance' => $this->balance,
             'profit' => $self_total,
-            'bonus' => $bonus_total,
+            'subscription_bonus' => $subscription_bonus_total,
+            'referral_bonus' => $referral_bonus_total,
             'reward' => $reward_total,
             'deposit_total' => $deposit_total,
             'withdrawal_total' => $withdrawal_total,

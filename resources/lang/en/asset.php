@@ -81,4 +81,6 @@ Please verify the network settings on the sending exchange before making a depos
   'manual_deposit' => 'Manual Deposit',
   'trading_profit' => 'Trading Profit',
   'staking_profit' => 'Staking Profit',
+  'referral_bonus' => '',
+  'total_referral_bonus' => '',
 );

@@ -44,7 +44,7 @@
                 <label class="form-label fs-4 text-body">{{ __('staking.participation_quantity_guide') }}</label>
                 <input type="text" name="amount" id="amount" class="form-control" placeholder=0 min="{{ $staking->min_quantity }}" max="{{ $staking->max_quantity }}">
             </div>
-            <p class="mb-5 opacity-50 fw-light fs-4">{{ __('asset.assets_held') }}: <span class="fw-bold">{{ $balance }}</span></p>
+            <p class="mb-5 opacity-50 fw-light fs-4">{{ __('system.stock_amount') }}: <span class="fw-bold">{{ $balance }}</span></p>
             <button type="submit" class="btn btn-primary w-100 py-3 mb-4 fs-4" >{{ __('staking.participate') }}</button>
         </form>
     </div>

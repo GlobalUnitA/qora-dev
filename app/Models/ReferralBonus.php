@@ -5,15 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SubscriptionBonus extends Model
+class ReferralBonus extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'user_id',
+        'staking_id',
         'transfer_id',
         'referrer_id',
-        'withdrawal_id',
         'bonus',
     ];
     
@@ -31,13 +31,14 @@ class SubscriptionBonus extends Model
         return $this->belongsTo(IncomeTransfer::class, 'transfer_id', 'id');
     }
 
-    public function withdrawal()
+    public function staking()
     {
-        return $this->belongsTo(IncomeTransfer::class, 'withdrawal_id', 'id');
+        return $this->belongsTo(Staking::class, 'staking_id', 'id');
     }
 
     public function referrer()
     {
         return $this->belongsTo(User::class, 'referrer_id', 'id');
     }
+
 }

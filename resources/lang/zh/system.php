@@ -45,4 +45,5 @@ return array (
   'period' => '期间',
   'started_at' => '开始日',
   'ended_at' => '截止日',
+  'stock_amount' => '',
 );

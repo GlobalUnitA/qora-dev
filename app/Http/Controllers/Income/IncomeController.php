@@ -6,7 +6,6 @@ use App\Models\UserProfile;
 use App\Models\Income;
 use App\Models\IncomeTransfer;
 use App\Models\TradingProfit;
-use App\Models\Bonus;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -91,11 +90,16 @@ class IncomeController extends Controller
         $hasMore = $items->count() > $limit;
         
         $items = $items->take($limit)->map(function ($item) {
+
             return [
                 'created_at' => $item->created_at->format('Y-m-d'),
                 'amount' => $item->amount,
                 'trading_profit' => optional($item->profit)->trading->profit_rate,
-                'referrer_id' => 'C'.optional($item->bonus)->referrer_id,
+                'referrer_id' => 'C' . match ($item->type) {
+                    'subscription_bonus' => optional($item->subscriptionBonus)->referrer_id,
+                    'referral_bonus' => optional($item->referralBonus)->referrer_id,
+                    default => null,
+                },
                 'type_text' => $item->type_text,
             ];
         });

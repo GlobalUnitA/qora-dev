@@ -44,4 +44,5 @@ return array (
   'period' => '기간',
   'started_at' => '시작일',
   'ended_at' => '마감일',
+  'stock_amount' => '보유수량',
 );

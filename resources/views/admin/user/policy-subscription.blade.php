@@ -14,6 +14,11 @@
                     DAO
                 </a>
             </li>
+            <li class="nav-item" role="presentation">
+                <a href="{{ route('admin.user.policy', ['mode' => 'referral']) }}" class="nav-link">
+                    추천보너스
+                </a>
+            </li>
         </ul>
         <div class="card full-card" style="margin-left: -300px; margin-right: -300px; width: calc(100% + 600px);">
             <div class="card-body">

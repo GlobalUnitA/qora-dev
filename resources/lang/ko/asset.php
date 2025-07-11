@@ -79,4 +79,6 @@ return array (
   'manual_deposit' => '수동입금',
   'trading_profit' => '트레이딩 수익',
   'staking_profit' => '스테이킹 수익',
+  'referral_bonus' => '추천 보너스',
+  'total_referral_bonus' => '추천 보너스 합계',
 );

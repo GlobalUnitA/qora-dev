@@ -81,4 +81,6 @@ Vui lòng kiểm tra kỹ thông tin mạng trên sàn giao dịch trước khi 
   'manual_deposit' => 'Nạp tiền thủ công',
   'trading_profit' => 'Lợi nhuận',
   'staking_profit' => 'Lợi nhuận Staking',
+  'referral_bonus' => '',
+  'total_referral_bonus' => '',
 );

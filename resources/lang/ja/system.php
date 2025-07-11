@@ -44,4 +44,5 @@ return array (
   'period' => '期間',
   'started_at' => '開始日',
   'ended_at' => '締め切り日',
+  'stock_amount' => '',
 );
