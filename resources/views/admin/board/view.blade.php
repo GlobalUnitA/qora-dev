@@ -68,7 +68,7 @@
                             <span class="badge bg-danger">관리자</span>
                         @endif
                         <div class="ms-4">
-                            <p>{!! $comment->content !!}</p>
+                            <p>{!! nl2br(e($comment->content)) !!}</p>
                             <small>{{ $comment->created_at->format('Y-m-d h:i:s') }}</small>
                         </div>
                     </div>

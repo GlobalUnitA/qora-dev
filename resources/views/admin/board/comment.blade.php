@@ -63,7 +63,7 @@
                             <span class="badge bg-danger">관리자</span>
                         @endif
                         <div id="comment_{{ $comment->id }}" class="mt-2 ms-4">
-                            <p class="comment-content">{!! $comment->content !!}</p>
+                            <p class="comment-content">{!! nl2br(e($comment->content)) !!}</p>
                             <textarea class="form-control comment-edit d-none">{!! $comment->content !!}</textarea>
                             <small class="comment-date">{{ $comment->created_at->format('Y-m-d h:i:s') }}</small>
                             @if($comment->admin && $comment->admin->id === Auth::guard('admin')->id())
