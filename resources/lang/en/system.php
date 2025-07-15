@@ -44,5 +44,5 @@ return array (
   'period' => 'Duration',
   'started_at' => 'Start Date',
   'ended_at' => 'Closing',
-  'stock_amount' => '',
+  'stock_amount' => 'Holdings',
 );

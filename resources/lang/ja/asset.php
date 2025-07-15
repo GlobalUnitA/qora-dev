@@ -80,6 +80,6 @@ return array (
   'manual_deposit' => '手動入金',
   'trading_profit' => 'トレーディング収益',
   'staking_profit' => 'ステーキング収益',
-  'referral_bonus' => '',
-  'total_referral_bonus' => '',
+  'referral_bonus' => '紹介ボーナス',
+  'total_referral_bonus' => '紹介ボーナス合計',
 );

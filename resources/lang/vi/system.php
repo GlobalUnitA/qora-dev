@@ -44,5 +44,5 @@ return array (
   'period' => 'Thời gian',
   'started_at' => 'Ngày bắt đầu',
   'ended_at' => 'Ngày kết thúc',
-  'stock_amount' => '',
+  'stock_amount' => 'Số lượng sở hữu',
 );
