@@ -16,10 +16,10 @@ class IncomeController extends Controller
 {
     public function __construct()
     {
-        
+
     }
 
-   
+
     public function index(Request $request)
     {
 
@@ -58,7 +58,7 @@ class IncomeController extends Controller
         if ($income->user_id != Auth()->id() ) {
              return redirect()->route('home');
         }
-        
+
         $limit = 10;
 
         $list = IncomeTransfer::where('user_id', Auth()->id())
@@ -88,13 +88,13 @@ class IncomeController extends Controller
         $items = $query->with('bonus')->skip($offset)->take($limit + 1)->get();
 
         $hasMore = $items->count() > $limit;
-        
+
         $items = $items->take($limit)->map(function ($item) {
 
             return [
                 'created_at' => $item->created_at->format('Y-m-d'),
                 'amount' => $item->amount,
-                'trading_profit' => optional($item->profit)->trading->profit_rate,
+                'trading_profit' => optional(optional($item->profit)->trading)->profit_rate,
                 'referrer_id' => 'C' . match ($item->type) {
                     'subscription_bonus' => optional($item->subscriptionBonus)->referrer_id,
                     'referral_bonus' => optional($item->referralBonus)->referrer_id,
