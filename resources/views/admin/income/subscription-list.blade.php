@@ -123,8 +123,8 @@
                                                     {{ __('환불') }}
                                             @endswitch
                                         </td>
-                                        <td scope="col" class="text-center">C{{ $value->bonus->referrer_id }}</td>
-                                        <td scope="col" class="text-center">{{ $value->bonus->withdrawal->amount }}</td>
+                                        <td scope="col" class="text-center">C{{ $value->subscriptionBonus->referrer_id }}</td>
+                                        <td scope="col" class="text-center">{{ $value->subscriptionBonus->withdrawal->amount }}</td>
                                         <td scope="col" class="text-center">{{ $value->created_at }}</td>
                                     </tr>
                                     @endforeach
