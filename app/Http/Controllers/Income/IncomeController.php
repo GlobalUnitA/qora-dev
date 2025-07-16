@@ -85,7 +85,7 @@ class IncomeController extends Controller
             ->where('status', 'completed')
             ->latest();
 
-        $items = $query->with('bonus')->skip($offset)->take($limit + 1)->get();
+        $items = $query->skip($offset)->take($limit + 1)->get();
 
         $hasMore = $items->count() > $limit;
 
