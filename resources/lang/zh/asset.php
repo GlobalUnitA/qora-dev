@@ -79,6 +79,6 @@ return array (
   'manual_deposit' => '手动充值',
   'trading_profit' => '交易收益',
   'staking_profit' => 'Staking收益',
-  'referral_bonus' => '',
-  'total_referral_bonus' => '',
+  'referral_bonus' => '推荐奖金',
+  'total_referral_bonus' => '推荐奖金总额',
 );
