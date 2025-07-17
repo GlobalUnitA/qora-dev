@@ -38,6 +38,6 @@ class TestController extends Controller
     }
    public function index()
     {
-        //테스트 주석
+
     }
 }
