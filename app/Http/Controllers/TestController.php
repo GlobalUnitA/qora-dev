@@ -39,5 +39,7 @@ class TestController extends Controller
    public function index()
     {
         echo "hello";
+        echo "hello 2";
+        echo "hello 3";
     }
 }
