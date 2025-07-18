@@ -121,9 +121,9 @@ class IncomeTransfer extends Model
     public static function reflectDeposit()
     {
 
-        $deposit_period = AssetPolicy::first()->deposit_period;
+        $internal_period = AssetPolicy::first()->internal_period;
 
-        $cutoff = now()->subDays($deposit_period)->endOfDay();
+        $cutoff = now()->subDays($internal_period)->endOfDay();
 
         $transfers = self::where('status', 'waiting')
             ->where('type', 'deposit')
@@ -161,7 +161,7 @@ class IncomeTransfer extends Model
                     'after_balance' => $after_balance,
                 ]);
 
-                Log::channel('asset')->info('Deposited amount reflected to user asset balance', [
+                Log::channel('asset')->info('Deposited amount reflected to user income balance', [
                     'user_id' => $asset->user_id,
                     'transfer_id' => $deposit->id,
                     'balance' => $amount,

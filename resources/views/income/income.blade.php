@@ -37,13 +37,13 @@
                 </div>
                 <h3 class="text-primary fs-6 mb-1">{{ $data['withdrawal_total'] }}</h3>
             </div>
-            <!--div class="mb-4">
+            <div class="mb-4">
                 <div class="d-flex justify-content-between align-items-start">
                     <p class="text-body fs-4 m-0">{{ __('asset.total_internal_transfer') }}</p>
                     <a href="{{ route('income.deposit') }}" class="btn btn-primary fs-4 py-1 px-3">{{ __('asset.deposit') }}</a>
                 </div>
                 <h3 class="text-primary fs-6 mb-1">{{ $data['deposit_total'] }}</h3>
-            </div-->
+            </div>
             <div class="d-flex justify-content-between align-items-center">
                 <div>
                     <p class="text-body fs-4 m-0">{{ __('asset.current_balance') }}</p>

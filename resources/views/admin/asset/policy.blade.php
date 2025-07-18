@@ -21,6 +21,13 @@
                                         <span>일</span>
                                     </div>
                                 </td>
+                                <th class="text-center align-middle">내부이체 반영 기간</th>
+                                <td class="align-middle">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <input type="text" name="internal_period" value="{{ $policy->internal_period }}" class="form-control w-25">
+                                        <span>일</span>
+                                    </div>
+                                </td>
                             </tr>
                             <tr>
                                 <th class="text-center align-middle">최소 보유금액</th>

@@ -12,6 +12,7 @@ class AssetPolicy extends Model
 
     protected $fillable = [
         'deposit_period',
+        'internal_period',
         'tax_rate',
         'fee_rate',
         'min_valid',
@@ -34,8 +35,9 @@ class AssetPolicy extends Model
 
     protected static $columnDescriptions = [
         'deposit_period' => '입금 반영 기간',
+        'internal_period' => '내부이체 반영 기간',
         'tax_rate' => '세금 비율',
-        'fee_rate' => '수수료 비율',
+        'fee_rate' => 'DAO 수수료 비율',
         'min_valid' => '최소 보유 금액',
         'min_withdrawal' => '최소 출금 금액',
         'withdrawal_days' => '출금 가능 요일',
