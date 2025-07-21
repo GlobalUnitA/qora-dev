@@ -55,6 +55,7 @@ class DepositController extends Controller
                 'user_id' => auth()->id(),
                 'income_id' => $income->id,
                 'type' => 'deposit',
+                'status' => 'waiting',
                 'amount' => $validated['amount'],
                 'actual_amount' => $validated['amount'],
                 'before_balance' => $income->balance,
