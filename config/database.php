@@ -42,13 +42,13 @@ return [
             'prefix' => '',
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
-        'mysql' => [
+        'cubeai' => [
             'driver' => 'mysql',
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+            'host' => env('CUBAI_DB_HOST', '127.0.0.1'),
+            'port' => env('CUBAI_DB_PORT', '3306'),
+            'database' => env('CUBAI_DB_DATABASE', 'cube_ai_dev'),
+            'username' => env('CUBAI_DB_USERNAME', 'cubeaidev'),
+            'password' => env('CUBAI_DB_PASSWORD', 'CubeDev8492!!'),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
@@ -140,7 +140,7 @@ return [
             'host' => env('REDIS_HOST', '127.0.0.1'),
             'username' => env('REDIS_USERNAME'),
             'password' => env('REDIS_PASSWORD'),
-            'port' => env('REDIS_PORT', '6379'),  
+            'port' => env('REDIS_PORT', '6379'),
             'database' => env('REDIS_CACHE_DB', '1'),
         ],
 
