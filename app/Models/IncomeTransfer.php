@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class IncomeTransfer extends Model
 {
@@ -38,6 +39,7 @@ class IncomeTransfer extends Model
     protected $appends = [
         'status_text',
         'type_text',
+        'waiting_period',
     ];
 
     public function user()
@@ -116,6 +118,26 @@ class IncomeTransfer extends Model
         } else if ($this->type === 'withdrawal') {
             return $withdrawal_status_map[$this->status];
         }
+    }
+
+    public function getWaitingPeriodAttribute()
+    {
+        $created_at = $this->created_at;
+        $internal_period = AssetPolicy::first()->internal_period;
+
+        $start_date = Carbon::parse($created_at)->startOfDay();
+        $end_date = $start_date->copy()->addDays($internal_period);
+
+        $now = Carbon::now()->startOfDay();
+
+        if ($now->gte($end_date) || $this->status == 'canceled' || $this->status == 'refunded') {
+            return 0;
+        }
+
+        $waiting_period = $now->diffInDays($end_date);
+
+        return $waiting_period;
+
     }
 
     public static function reflectDeposit()

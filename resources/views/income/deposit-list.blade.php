@@ -9,6 +9,7 @@
             <thead class="mb-2">
                 <tr>
                     <th>{{ __('system.date') }}</th>
+                    <th>{{ __('system.waiting_period') }}</th>
                     <th>{{ __('asset.assets') }}</th>
                     <th>{{ __('system.status') }}</th>
                     <th>{{ __('system.amount') }}</th>
@@ -18,6 +19,7 @@
                 @foreach($list as $key => $value)
                 <tr>
                     <td>{{ $value->created_at->format('Y-m-d') }}</td>
+                    <td>{{ $value->waiting_period }}{{ __('system.unit_day') }}</td>
                     <td>{{ $value->income->coin->code }}</td>
                     <td>{{ $value->status_text }}</td>
                     <td>{{ $value->amount }}</td>
