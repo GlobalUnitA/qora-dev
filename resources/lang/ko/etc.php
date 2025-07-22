@@ -1,0 +1,35 @@
+<?php
+
+return array (
+  'image_upload' => '이미지 업로드',
+  'upload_extension_guide' => '파일 형식은 jpg, jpeg, png만 가능합니다.',
+  'upload_size_guide' => '최대 5MB까지만 업로드 가능합니다.',
+  'iamge_upload_notice' => '이미지를 첨부해주세요.',
+  'crypto_price' => '가상자산 시세',
+  'trade_pair' => '거래페어',
+  'current_price' => '현재가',
+  'change_rate' => '변동률',
+  'upload' => '업로드',
+  'passport' => '여권',
+  'psssport_verify' => '여권 인증',
+  'passport_number' => '여권 번호',
+  'passport_front_upload' => '여권 정면 사진 업로드',
+  'verification_photo_upload_notice' => '인증사진 업로드 시 주의사항',
+  'verification_photo_upload_guide1' => '종이에 “CUBE AI 실명인증, 인증당일 날짜” 손글씨로 작성',
+  'verification_photo_upload_guide2' => ':id과 작성한 종이를 들고 얼굴 정면 나오게 사진 찍어서 업로드',
+  'id_card_verify' => '신분증 인증',
+  'id_card_number' => '신분증 번호',
+  'id_card_front_upload' => '신분증 정면 사진 업로드',
+  'id_card' => '신분증',
+  'driver_license' => '운전면허증',
+  'driver_license_verify' => '운전면허증 인증',
+  'driver_license_front_upload' => '운전면허증 정면 사진 업로드',
+  'verification_upload' => '인증 사진 업로드',
+  'driver_license_number' => '운전면허증 번호',
+  'id' => 
+  array (
+    'passport' => '여권',
+    'id_card' => '신분증',
+    'driver_license' => '운전면허증',
+  ),
+);
