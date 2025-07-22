@@ -83,6 +83,7 @@ class UserController extends Controller
                 ]);
 
                 $user_profile->update([
+                    'email' => $request->email,
                     'phone' => $request->phone,
                     'pcc' => $request->pcc,
                     'post_code' => $request->post_code,

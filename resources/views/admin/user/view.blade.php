@@ -41,7 +41,9 @@
                             </tr>
                             <tr>
                                 <th class="text-center align-middle">이메일</th>
-                                <td class="align-middle">{{ $view->profile->email }}</td>
+                                <td class="align-middle">
+                                    <input type="text" name="email" value="{{ $view->profile->email }}" class="form-control">
+                                </td>
                                 <th class="text-center align-middle">비밀번호</th>
                                 <td class="align-middle">
                                     <input type="password" name="password" value="" placeholder="변경을 희망하지 않으면 빈칸으로 두세요." class="form-control">
@@ -107,7 +109,9 @@
                     <hr>
                     <div class="d-flex justify-content-between align-items-center">
                         <a href="{{ route('admin.user.list') }}" class="btn btn-secondary">목록</a>
+                        @if (auth()->guard('admin')->user()->admin_level > 3 )
                         <button type="submit" class="btn btn-danger">수정</button>
+                        @endif
                     </div>
                 </form>
             </div>
