@@ -77,7 +77,6 @@ Please verify the network settings on the sending exchange before making a depos
   'profit_rate' => 'Return Rate',
   'today_profit_rate' => 'Today\'s Return Rate',
   'staking_refund' => 'Staking Principal Return',
-  'internal' => 'Internal Transfer',
   'manual_deposit' => 'Manual Deposit',
   'trading_profit' => 'Trading Profit',
   'staking_profit' => 'Staking Profit',
