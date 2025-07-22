@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container py-5">
-    <h2 class="mb-3 text-center">{{ __('asset.deposit_list') }}</h2>
+    <h2 class="mb-3 text-center">{{ __('asset.transfer_list') }}</h2>
     <hr>
     <div class="table-responsive">
         <table class="table table-striped table-bordered m-0">

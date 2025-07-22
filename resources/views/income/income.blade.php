@@ -6,7 +6,7 @@
     <hr>
     <div class="g-3 py-5">
         <div class="px-4 py-5 rounded bg-light text-body">
-            <div class="d-flex justify-content-between align-items-center mb-4">
+            <!--div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
                     <p class="text-body fs-4 m-0">{{ __('asset.total_trading_profit') }}</p>
                     <h3 class="text-primary fs-6 mb-1">{{ $data['profit'] }}</h3>
@@ -17,7 +17,7 @@
                     <p class="text-body fs-4 m-0">{{ __('asset.total_subscription_bonus') }}</p>
                     <h3 class="text-primary fs-6 mb-1">{{ $data['subscription_bonus'] }}</h3>
                 </div>
-            </div>
+            </div-->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
                     <p class="text-body fs-4 m-0">{{ __('staking.total_staking_profit') }}</p>
@@ -40,7 +40,7 @@
             <div class="mb-4">
                 <div class="d-flex justify-content-between align-items-start">
                     <p class="text-body fs-4 m-0">{{ __('asset.total_internal_transfer') }}</p>
-                    <a href="{{ route('income.deposit') }}" class="btn btn-primary fs-4 py-1 px-3">{{ __('asset.deposit') }}</a>
+                    <a href="{{ route('income.deposit') }}" class="btn btn-primary fs-4 py-1 px-3">{{ __('asset.internal_transfer') }}</a>
                 </div>
                 <h3 class="text-primary fs-6 mb-1">{{ $data['deposit_total'] }}</h3>
             </div>

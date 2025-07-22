@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Income;
 
 use App\Models\Income;
 use App\Models\IncomeTransfer;
+use App\Models\AssetPolicy;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -25,7 +26,9 @@ class DepositController extends Controller
         })
         ->get();
 
-        return view('income.deposit', compact('incomes'));
+        $internal_period = AssetPolicy::first()->internal_period;
+
+        return view('income.deposit', compact('incomes', 'internal_period'));
     }
 
 
