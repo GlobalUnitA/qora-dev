@@ -82,4 +82,12 @@ return array (
   'staking_profit' => 'ステーキング収益',
   'referral_bonus' => '紹介ボーナス',
   'total_referral_bonus' => '紹介ボーナス合計',
+  'transfer' => '振込',
+  'transfer_list' => '振込履歴',
+  'select_transfer_asset_guide' => '送金する仮想資産を選択してください。',
+  'transfer_amount_guide' => '送金数量を入力してください。',
+  'internal_transfer_notice' => '内部送金の注意事項',
+  'internal_transfer_guide_1' => '内部送金時、収益ウォレットの収益は保有資産に反映されます。',
+  'internal_transfer_guide_2' => '振込申請日から:day日後に保有資産に反映されます。',
+  'internal_transfer_guide_3' => '振込後、:day日後からステーキングが可能です。',
 );

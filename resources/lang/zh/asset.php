@@ -81,4 +81,12 @@ return array (
   'staking_profit' => 'Staking收益',
   'referral_bonus' => '推荐奖金',
   'total_referral_bonus' => '推荐奖金总额',
+  'transfer' => '转账',
+  'transfer_list' => '转账记录',
+  'select_transfer_asset_guide' => '请选择需转账的虚拟货币。',
+  'transfer_amount_guide' => '请输入需转账的数量。',
+  'internal_transfer_notice' => '内部转账温馨提示',
+  'internal_transfer_guide_1' => '内部转账时收益钱包里的收益转至持有资产里。',
+  'internal_transfer_guide_2' => '申请转账之日起 :day天之后转至持有资产里。',
+  'internal_transfer_guide_3' => '转账之后 :day天之后，可参与staking产品。',
 );

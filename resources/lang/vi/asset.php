@@ -83,4 +83,12 @@ Vui lòng kiểm tra kỹ thông tin mạng trên sàn giao dịch trước khi 
   'staking_profit' => 'Lợi nhuận Staking',
   'referral_bonus' => 'Thưởng giới thiệu',
   'total_referral_bonus' => 'Tổng thưởng giới thiệu',
+  'transfer' => 'Chuyển tiền',
+  'transfer_list' => 'Lịch sử chuyển tiền',
+  'select_transfer_asset_guide' => 'Vui lòng chọn tài sản điện tử để chuyển tiền.',
+  'transfer_amount_guide' => 'Vui lòng nhập số lượng cần chuyển.',
+  'internal_transfer_notice' => 'Lưu ý khi chuyển tiền nội bộ',
+  'internal_transfer_guide_1' => 'Khi thực hiện chuyển tiền nội bộ, lợi nhuận trong Ví lợi nhuận sẽ hiện trong Tài sản sở hữu.',
+  'internal_transfer_guide_2' => 'Hiện trong Tài sản sở hữu sau :day ngày kể từ ngày đăng ký chuyển tiền.',
+  'internal_transfer_guide_3' => 'Có thể staking từ :day ngày sau ngày chuyển tiền.',
 );

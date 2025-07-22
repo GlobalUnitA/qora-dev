@@ -83,4 +83,12 @@ Please verify the network settings on the sending exchange before making a depos
   'staking_profit' => 'Staking Profit',
   'referral_bonus' => 'Referral Bonus',
   'total_referral_bonus' => 'Total Referral Bonus',
+  'transfer' => 'Transfer',
+  'transfer_list' => 'Transfer History',
+  'select_transfer_asset_guide' => 'Please select the digital asset to transfer.',
+  'transfer_amount_guide' => 'Please enter the transfer amount.',
+  'internal_transfer_notice' => 'Internal Transfer',
+  'internal_transfer_guide_1' => 'When making an internal transfer, the earnings in the Earnings Wallet will be reflected in your Holding Assets.',
+  'internal_transfer_guide_2' => 'Reflected in your Holding Assets :day days after the transfer application date.',
+  'internal_transfer_guide_3' => 'Staking is available from :day days after the transfer.',
 );

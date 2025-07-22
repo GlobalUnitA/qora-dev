@@ -81,4 +81,12 @@ return array (
   'staking_profit' => '스테이킹 수익',
   'referral_bonus' => '추천 보너스',
   'total_referral_bonus' => '추천 보너스 합계',
+  'transfer' => '이체',
+  'transfer_list' => '이체내역',
+  'select_transfer_asset_guide' => '이체할 가상자산을 선택하세요.',
+  'transfer_amount_guide' => '이체 수량을 입력하세요.',
+  'internal_transfer_notice' => '내부이체 주의사항',
+  'internal_transfer_guide_1' => '내부이체 시 수익지갑의 수익은 보유자산에 반영',
+  'internal_transfer_guide_2' => '이체 신청일로부터 :day일 후 보유자산에 반영',
+  'internal_transfer_guide_3' => '이체 후 :day일 후부터 스테이킹 가능',
 );

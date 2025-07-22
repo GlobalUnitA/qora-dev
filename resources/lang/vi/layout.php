@@ -18,5 +18,5 @@ return array (
   'submit_request' => 'Hỏi đáp',
   'input_title_notice' => 'Vui lòng nhập tiêu đề.',
   'input_contents_notice' => 'Vui lòng nhập nội dung.',
-  'write_success_notice' => 'Đã hoàn tất việc điền thông tin.',
+  'write_success_notice' => 'Điền thành công.',
 );
