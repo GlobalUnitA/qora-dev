@@ -44,6 +44,7 @@
 <template id="loadMoreTemplate">
     <tr>
         <td>{{created_at}}</td>
+        <td>{{waiting_period}}</td>
         <td>{{coin_code}}</td>
         <td>{{status_text}}</td>
         <td>{{amount}}</td>

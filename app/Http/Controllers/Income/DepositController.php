@@ -122,6 +122,7 @@ class DepositController extends Controller
         $items = $items->take($limit)->map(function ($item) {
             return [
                 'created_at' => $item->created_at->format('Y-m-d'),
+                'waiting_period' => $item->waiting_period,
                 'coin_code' => $item->asset->coin->code,
                 'status_text' => $item->status_text,
                 'amount' => $item->amount,
