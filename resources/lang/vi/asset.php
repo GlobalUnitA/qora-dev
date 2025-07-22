@@ -77,7 +77,6 @@ Vui lòng kiểm tra kỹ thông tin mạng trên sàn giao dịch trước khi 
   'profit_rate' => 'Tỷ lệ lợi nhuận',
   'today_profit_rate' => 'Tỷ lệ lợi nhuận hôm nay',
   'staking_refund' => 'Trả gốc Staking',
-  'internal' => 'Chuyển khoản nội bộ',
   'manual_deposit' => 'Nạp tiền thủ công',
   'trading_profit' => 'Lợi nhuận',
   'staking_profit' => 'Lợi nhuận Staking',

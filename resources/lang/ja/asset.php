@@ -76,7 +76,6 @@ return array (
   'profit_rate' => '収益率',
   'today_profit_rate' => '本日の収益率',
   'staking_refund' => 'Staking元本返還',
-  'internal' => '内部送金',
   'manual_deposit' => '手動入金',
   'trading_profit' => 'トレーディング収益',
   'staking_profit' => 'ステーキング収益',
