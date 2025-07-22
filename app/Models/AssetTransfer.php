@@ -77,7 +77,7 @@ class AssetTransfer extends Model
                 return __('asset.withdrawal');
             break;
             case 'internal' :
-                return __('asset.internal');
+                return __('asset.internal_transfer');
             break;
             case 'manual_deposit' :
                 return __('asset.manual_deposit');
