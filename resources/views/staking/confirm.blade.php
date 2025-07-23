@@ -36,7 +36,7 @@
                 </div>                        
             </div>                                          
         </div>
-        <p class="mb-5">{{ $staking->staking_locale_memo }}</p>
+        <p class="mb-5">{!! nl2br(e($staking->staking_locale_memo)) !!}</p>
         <form method="post" action="{{ route('staking.store') }}" id="ajaxForm">
             @csrf
             <input type="hidden" name="staking" value="{{ $staking->id }}">
