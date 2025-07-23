@@ -66,7 +66,7 @@ class IncomeController extends Controller
             ->latest()
             ->take($limit)
             ->get();
-
+        
         $total_count = IncomeTransfer::where('user_id', auth()->id())
             ->where('status', 'completed')
             ->count();
@@ -94,10 +94,12 @@ class IncomeController extends Controller
             return [
                 'created_at' => $item->created_at->format('Y-m-d'),
                 'amount' => $item->amount,
-                'trading_profit' => optional(optional($item->profit)->trading)->profit_rate,
-                'referrer_id' => 'C' . match ($item->type) {
-                    'subscription_bonus' => optional($item->subscriptionBonus)->referrer_id,
-                    'referral_bonus' => optional($item->referralBonus)->referrer_id,
+                 'trading_profit' => optional(optional($item->profit)->trading)->profit_rate !== null
+                    ? optional(optional($item->profit)->trading)->profit_rate.'%'
+                    : null,
+                'referrer_id' => match ($item->type) {
+                    'subscription_bonus' => 'C'.optional($item->subscriptionBonus)->referrer_id,
+                    'referral_bonus' => 'C'.optional($item->referralBonus)->referrer_id,
                     default => null,
                 },
                 'type_text' => $item->type_text,
