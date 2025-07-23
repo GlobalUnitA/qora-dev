@@ -33,31 +33,10 @@ class HomeController extends Controller
             $query->where('is_active', 'y');
         })
         ->get();
+
+        $popups = Post::where('is_popup', 'y')->get();
         
-        return view('home', compact('notice', 'assets', 'incomes'));
+        return view('home', compact('notice', 'assets', 'incomes', 'popups'));
     }
 
-
-    protected function getPopup()
-    {
-        $popup = DB::table('policies')   
-            ->select('*')
-            ->where('type', 'popup_policy')
-            ->first();
-        
-        $data = json_decode($popup->content);
-
-        $today = Carbon::today();
-
-        if (isset($data->start_date, $data->end_date)) {
-            $startDate = Carbon::parse($data->start_date);
-            $endDate = Carbon::parse($data->end_date);
-    
-            if ($today->between($startDate, $endDate)) {
-                return $data;
-            }
-        }
-
-        return null;
-    }
 }

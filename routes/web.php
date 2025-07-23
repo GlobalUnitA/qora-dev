@@ -38,6 +38,7 @@ use App\Http\Controllers\Board\CommentController;
 use App\Http\Controllers\About\AboutController;
 
 use App\Http\Controllers\Proc\LanguageController;
+use App\Http\Controllers\Proc\PopupController;
 
 Route::get('test', [TestController::class, 'index'])->name('test');
 
@@ -181,4 +182,4 @@ Route::middleware(['auth', 'session.timeout'])->group(function () {
 });
 
 Route::get('/change-language/{locale}', [LanguageController::class, 'changeLanguage'])->name('change.language');
-
+Route::post('/popup/hide', [PopupController::class, 'hide'])->name('popup.hide');

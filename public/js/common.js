@@ -241,17 +241,30 @@ $(document).ready(function() {
         });
     });
 
-   
-    if (!document.cookie.includes('popupDismissed=true')) {
-        $('#popupModal').modal('show');
-    }
+    $('.dismissPopup').on('change', function () {
+        if ($(this).prop('checked')) {
+            const popupId = $(this).data('popup');
 
-    $('#closePopup').on('click', function () {
-        if ($('#dismissPopup').prop('checked')) {
-            const now = new Date();
-            now.setHours(23, 59, 59, 999);
-            document.cookie = 'popupDismissed=true; expires=' + now.toUTCString() + '; path=/';
-        } 
-        $('#popupModal').modal('hide');
+            $.ajax({
+                url: '/popup/hide',
+                method: 'POST',
+                data: {
+                    id: popupId
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function () {
+                    $(`#popupModal-${popupId}`).modal('hide');
+                },
+                error: function (xhr) {
+                    console.error('Error:', xhr.responseText);
+                }
+            });
+        }
+    });
+
+    $('[id^="popupModal-"]').each(function () {
+        $(this).modal('show');
     });
 });

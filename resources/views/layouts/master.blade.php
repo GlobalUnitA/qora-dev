@@ -31,6 +31,24 @@
     @include('components.alert-form')
     @include('components.confirm-form')
 
+    @if(!empty($popups))
+    @foreach($popups as $popup)
+        @php
+            $popup_data = json_decode($popup->content);
+            $cookie_name = 'popup_hidden_' . $popup->id;
+            logger('Checking cookie: ' . $cookie_name . ' = ' . request()->cookie($cookie_name));
+        @endphp
+
+        @if(!request()->cookie($cookie_name))
+            @include('components.popup-form', [
+                'popup' => $popup,
+                'popup_data' => $popup_data,
+                'cookie_name' => $cookie_name,
+            ])
+        @endif
+    @endforeach
+@endif
+
 <div id="msg_error" data-label="{{ __('system.error_notice') }}"></div>
 <div id="msg_session_expried" data-label="{{ __('auth.session_expired_notice') }}"></div>
 <div id="msg_logout" data-label="{{ __('user.logout_confirm') }}"></div>
