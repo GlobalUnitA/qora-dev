@@ -104,8 +104,6 @@
                         <span class="hide-menu">트레이딩</span>
                     </a>
                 </li>
-                @endif
-                @if (auth()->guard('admin')->user()->admin_level >= 3 )
                 <li class="sidebar-item">
                     <a class="sidebar-link" href="{{ route('admin.staking.list', ['status' => 'pending']) }}" aria-expanded="false">
                         <span>
