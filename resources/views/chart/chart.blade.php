@@ -93,6 +93,7 @@
     <div class="card border-0 p-3 m-0">
         <div class="card-body p-0">
             <form action="" method="GET">
+                <input type="hidden" name="admin" value="1">
                 <div class="row align-items-center">
                     <div class="col-8 col-md-4">
                         <input type="text" name="search" id="search" class="form-control" placeholder="id" value="{{ request()->get('search') }}">
