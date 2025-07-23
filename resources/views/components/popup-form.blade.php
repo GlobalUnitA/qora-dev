@@ -7,11 +7,12 @@
             <div class="modal-body py-5 px-4">
                 <p class="m-0"> {!! $popup->content !!} </p>
             </div>
-            <div class="modal-footer d-flex justify-content-end align-items-center border-top">
+            <div class="modal-footer d-flex justify-content-between align-items-center border-top">
                 <div class="form-check">
-                    <input type="checkbox" class="form-check-input dismissPopup" data-cookie="{{ $cookie_name }}" data-popup="{{ $popup->id }}">
+                    <input type="checkbox" id="dismissPopup-{{ $popup->id }}" class="form-check-input" data-cookie="{{ $cookie_name }}">
                     <label for="dismissPopup" class="ps-1 lh-base_v2">{{ __('system.dismiss_today') }}</label>
                 </div>
+                <button type="button" class="btn btn-dark closePopup" data-dismiss="modal" data-popup="{{ $popup->id }}">{{ __('system.close') }}</button>
             </div>
         </div>
     </div>

@@ -241,9 +241,11 @@ $(document).ready(function() {
         });
     });
 
-    $('.dismissPopup').on('change', function () {
-        if ($(this).prop('checked')) {
-            const popupId = $(this).data('popup');
+    $('.closePopup').on('click', function () {
+
+        const popupId = $(this).data('popup');
+
+        if ($(`#dismissPopup-${popupId}`).prop('checked')) {
 
             $.ajax({
                 url: '/popup/hide',
@@ -254,14 +256,13 @@ $(document).ready(function() {
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                success: function () {
-                    $(`#popupModal-${popupId}`).modal('hide');
-                },
                 error: function (xhr) {
                     console.error('Error:', xhr.responseText);
                 }
             });
         }
+
+        $(`#popupModal-${popupId}`).modal('hide');
     });
 
     $('[id^="popupModal-"]').each(function () {
