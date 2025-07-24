@@ -14,6 +14,7 @@ class Board extends Model
         'board_name',
         'board_level',
         'is_comment',
+        'is_popup',
     ];
 
     protected $appends = [

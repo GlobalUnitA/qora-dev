@@ -72,7 +72,7 @@ class PostController extends Controller
                 'comments' => $comments,
             ];
        
-            return view('admin.board.view', $data);
+            return view('admin.board.post-view', $data);
         } else if($mode == 'comment') {
             $user = User::find($view->user_id);
             $comments = Comment::where('board_id', $board->id)
