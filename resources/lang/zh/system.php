@@ -46,4 +46,6 @@ return array (
   'started_at' => '开始日',
   'ended_at' => '截止日',
   'stock_amount' => '持有数量',
+  'dismiss_today' => '今日不再提醒',
+  'close' => '关闭',
 );
