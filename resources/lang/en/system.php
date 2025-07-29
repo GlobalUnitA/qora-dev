@@ -45,4 +45,6 @@ return array (
   'started_at' => 'Start Date',
   'ended_at' => 'Closing',
   'stock_amount' => 'Holdings',
+  'dismiss_today' => 'Don\'t show again today',
+  'close' => 'Close',
 );

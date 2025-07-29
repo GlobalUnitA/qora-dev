@@ -45,4 +45,6 @@ return array (
   'started_at' => '開始日',
   'ended_at' => '締め切り日',
   'stock_amount' => '保有数量',
+  'dismiss_today' => '今日は表示しない',
+  'close' => '閉じる',
 );

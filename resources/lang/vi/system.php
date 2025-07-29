@@ -45,4 +45,6 @@ return array (
   'started_at' => 'Ngày bắt đầu',
   'ended_at' => 'Ngày kết thúc',
   'stock_amount' => 'Số lượng sở hữu',
+  'dismiss_today' => 'Không hiển thị hôm nay',
+  'close' => 'Đóng',
 );
