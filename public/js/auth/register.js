@@ -2,7 +2,6 @@ $(document).ready(function() {
     const passwordGuide = $('#msg_password_guide').html();
 
     $('#accountCheck').click(function() {
-        const self = this;
         const account = $('#inputAccount').val();
 
         $('#inputAccountCheck').val(account);
@@ -30,8 +29,18 @@ $(document).ready(function() {
         });
     });
 
+    $('#inputName').focusout(function () {
+        let self = this;
+        const value = $(this).val().trim();
+        const isValid = /^[가-힣a-zA-Z]+$/.test(value);
+
+        if (!isValid) {
+            $(self).val('');
+        } 
+    });
+
     $('#inputPassword1').focusout(function() {
-        const self = this;
+        let self = this;
         const password1 = $(self).val();
 
         const validate = validatePassword(password1);
@@ -43,7 +52,7 @@ $(document).ready(function() {
     });
 
     $('#inputPassword2').focusout(function() {
-        const self = this;
+        let self = this;
         const password1 = $('#inputPassword1').val();
         const password2 = $(self).val();
 
@@ -62,7 +71,7 @@ $(document).ready(function() {
 
 
     $('#inputEmail').focusout(function() {
-        const self = this;
+        let self = this;
         const email = $(self).val();
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
@@ -97,7 +106,7 @@ $(document).ready(function() {
     });
 
     $('#inputParentId').focusout(function() {
-        const self = this;
+        let self = this;
         const parentId = $(self).val();
 
         $('#inputParentCheck').val(parentId);
