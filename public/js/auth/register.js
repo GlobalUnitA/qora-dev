@@ -32,7 +32,7 @@ $(document).ready(function() {
     $('#inputName').focusout(function () {
         let self = this;
         const value = $(this).val().trim();
-        const isValid = /^[가-힣a-zA-Z]+$/.test(value);
+        const isValid = /^[가-힣a-zA-Z\s]+$/.test(value);
 
         if (!isValid) {
             $(self).val('');
