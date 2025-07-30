@@ -59,7 +59,7 @@
                                 <td class="text-center" id="input_condition_{{ $key+1 }}">
                                     @if(!is_null($val->conditions))
                                     @foreach($val->conditions as $k => $v)
-                                    <div class="row gx-3 align-items-center mb-2 add_condition_{{ $key+1 }}">
+                                    <div class="row gx-3 align-items-center mb-2 add_condition_{{ $k }}">
                                         <div class="col-auto">
                                             <label class="form-label mb-0">최소 레벨:</label>
                                         </div>
@@ -88,7 +88,7 @@
                                     </div>
                                     @endforeach
                                     @else
-                                    <div class="row gx-3 align-items-center mb-2 add_condition_{{ $key+1 }}">
+                                    <div class="row gx-3 align-items-center mb-2 add_condition_0">
                                         <div class="col-auto">
                                             <label class="form-label mb-0">최소 레벨:</label>
                                         </div>
@@ -137,10 +137,10 @@
                 <div class="mb-3 d-flex justify-content-between">
                     <h5 class="card-title">정책 추가</h5>
                 </div>
-                <form method="POST" action="{{ route('admin.income.policy.store') }}" id="ajaxForm" data-confirm-message="정책을 추가하시겠습니까?" >
+                <form method="POST" action="{{ route('admin.income.policy.store') }}" data-confirm-message="정책을 추가하시겠습니까?" >
                     @csrf    
                     <hr>
-                    <table class="table table-bordered mt-5 mb-2">
+                    <table class="table table-bordered mt-5 mb-5">
                         <tbody>
                             <tr>
                                 <th class="text-center align-middle">레벨</th>
@@ -190,19 +190,6 @@
                             </tr>
                         </tbody>
                     </table>
-                    <div class="tet-body mb-4">
-                        <h6 class="text-body mt-4">ex) 5,6,7 중 2명 달성, 8 이상 1명 달성, 9이상 1명 달성</h6>
-                        <h6 class="text-body mt-4">잘못된 조건</h6>
-                        <p class="ms-3 mb-1">조건 A : 최소 레벨 5, 최대 레벨 7, 인원 수 2 {5,7}</p>
-                        <p class="ms-3 mb-1">조건 B : 최소 레벨 8, 최대 레벨 15, 인원 수 1 {8,15}</p>
-                        <p class="ms-3 mb-1">조건 C : 최소 레벨 9, 최대 레벨 15, 인원 수 1 {9,15}</p>
-                        <h6 class="text-body mt-4">정확한 조건</h6>
-                        <p class="ms-3 mb-1">조건 A : 최소 레벨 5, 최대 레벨 7, 인원 수 2 {5,7}</p>
-                        <p class="ms-3 mb-1">조건 B : 최소 레벨 8, 최대 레벨 8, 인원 수 1 {8,8}</p>
-                        <p class="ms-3 mb-1">조건 C : 최소 레벨 9, 최대 레벨 15, 인원 수 1 {9,15}</p>
-                        <p class="mt-4 mb-1">위의 예시의 잘못된 조건처럼 최소,최대 레벨 구간이 겹칠 경우, 조건 A와 B만 일치하면 되므로, 3명만 달성되도 지급됩니다.</p>
-                    </div>
-                    
                     <hr>
                     <div class="d-flex justify-content-end align-items-center">
                         <button type="submit" class="btn btn-danger">추가</button>
