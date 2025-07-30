@@ -36,7 +36,6 @@
         @php
             $popup_data = json_decode($popup->content);
             $cookie_name = 'popup_hidden_' . $popup->id;
-            logger('Checking cookie: ' . $cookie_name . ' = ' . request()->cookie($cookie_name));
         @endphp
 
         @if(!request()->cookie($cookie_name))
