@@ -127,6 +127,13 @@ return [
             'path' => storage_path('logs/laravel.log'),
         ],
 
+        'user' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/user/user.log'),
+            'level' => 'info',
+            'permission' => 0664,
+        ],
+
         'asset' => [
             'driver' => 'daily',
             'path' => storage_path('logs/asset/asset.log'),
@@ -146,6 +153,15 @@ return [
         'staking' => [
             'driver' => 'daily',
             'path' => storage_path('logs/staking/staking.log'),
+            'level' => 'info',
+            'days' => 14,
+            'permission' => 0664,
+        ],
+
+        
+        'bonus' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/bonus/bonus.log'),
             'level' => 'info',
             'days' => 14,
             'permission' => 0664,
