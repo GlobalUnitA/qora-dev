@@ -91,4 +91,6 @@ Please verify the network settings on the sending exchange before making a depos
   'internal_transfer_guide_1' => 'When making an internal transfer, the earnings in the Earnings Wallet will be reflected in your Holding Assets.',
   'internal_transfer_guide_2' => 'Reflected in your Holding Assets :day days after the transfer application date.',
   'internal_transfer_guide_3' => 'Staking is available from :day days after the transfer.',
+  'rank_bonus' => 'Ranking bonus',
+  'total_rank_bonus' => 'Total Ranking Bonus',
 );

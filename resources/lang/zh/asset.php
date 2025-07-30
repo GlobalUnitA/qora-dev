@@ -89,4 +89,6 @@ return array (
   'internal_transfer_guide_1' => '内部转账时收益钱包里的收益转至持有资产里。',
   'internal_transfer_guide_2' => '申请转账之日起 :day天之后转至持有资产里。',
   'internal_transfer_guide_3' => '转账之后 :day天之后，可参与staking产品。',
+  'rank_bonus' => '等级奖金',
+  'total_rank_bonus' => '等级奖金合计',
 );

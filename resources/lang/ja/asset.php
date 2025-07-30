@@ -90,4 +90,6 @@ return array (
   'internal_transfer_guide_1' => '内部送金時、収益ウォレットの収益は保有資産に反映されます。',
   'internal_transfer_guide_2' => '振込申請日から:day日後に保有資産に反映されます。',
   'internal_transfer_guide_3' => '振込後、:day日後からステーキングが可能です。',
+  'rank_bonus' => 'ランクボーナス',
+  'total_rank_bonus' => 'ランクボーナス合計',
 );

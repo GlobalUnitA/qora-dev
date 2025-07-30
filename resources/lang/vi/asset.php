@@ -91,4 +91,6 @@ Vui lòng kiểm tra kỹ thông tin mạng trên sàn giao dịch trước khi 
   'internal_transfer_guide_1' => 'Khi thực hiện chuyển tiền nội bộ, lợi nhuận trong Ví lợi nhuận sẽ hiện trong Tài sản sở hữu.',
   'internal_transfer_guide_2' => 'Hiện trong Tài sản sở hữu sau :day ngày kể từ ngày đăng ký chuyển tiền.',
   'internal_transfer_guide_3' => 'Có thể staking từ :day ngày sau ngày chuyển tiền.',
+  'rank_bonus' => 'Thưởng cấp bậc',
+  'total_rank_bonus' => 'Tổng thưởng cấp bậc',
 );

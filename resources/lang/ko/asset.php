@@ -89,4 +89,6 @@ return array (
   'internal_transfer_guide_1' => '내부이체 시 수익지갑의 수익은 보유자산에 반영',
   'internal_transfer_guide_2' => '이체 신청일로부터 :day일 후 보유자산에 반영',
   'internal_transfer_guide_3' => '이체 후 :day일 후부터 스테이킹 가능',
+  'rank_bonus' => '직급 보너스',
+  'total_rank_bonus' => '직급 보너스 합계',
 );
