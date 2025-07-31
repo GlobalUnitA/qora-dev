@@ -93,6 +93,9 @@ class Income extends Model
         $referral_bonus = $incomeTransfers->where('type', 'referral_bonus')->where('status', 'completed');
         $referral_bonus_total = $referral_bonus->sum('amount');
 
+        $rank_bonus = $incomeTransfers->where('type', 'rank_bonus')->where('status', 'completed');
+        $rank_bonus_total = $rank_bonus->sum('amount');
+
         $rewards = $incomeTransfers->where('type', 'staking_reward')->where('status', 'completed');
         $reward_total = $rewards->sum('amount');
 
@@ -103,6 +106,7 @@ class Income extends Model
             'profit' => $self_total,
             'subscription_bonus' => $subscription_bonus_total,
             'referral_bonus' => $referral_bonus_total,
+            'rank_bonus' => $rank_bonus_total,
             'reward' => $reward_total,
             'deposit_total' => $deposit_total,
             'withdrawal_total' => $withdrawal_total,

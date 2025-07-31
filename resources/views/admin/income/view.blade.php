@@ -12,7 +12,11 @@
                         @elseif($view->type == 'withdrawal')
                             {{ __('외부출금 정보') }}
                         @elseif($view->type == 'subcripion_bonus')
-                            {{ __('보너스 정보') }}
+                            {{ __('DAO 정보') }}
+                        @elseif($view->type == 'referral_bonus')
+                            {{ __('추천보너스 정보') }}
+                        @elseif($view->type == 'rank_bonus')
+                            {{ __('직급보너스 정보') }}
                         @else
                             {{ __('수익 정보') }}
                         @endif
@@ -90,6 +94,36 @@
                         </tbody>
                     </table>
                     <hr>
+                    @if($view->type == 'rank_bonus')
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table text-nowrap align-middle mb-0 table-striped table-hover">
+                                    <thead>
+                                        <tr class="border-2 border-bottom border-primary border-0"> 
+                                            <th scope="col" class="text-center">UID</th>
+                                            <th scope="col" class="text-center">이름</th>
+                                            <th scope="col" class="text-center">등급</th>
+                                            <th scope="col" class="text-center">개인매출</th>
+                                            <th scope="col" class="text-center">그룹매출</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="table-group-divider">
+                                        @foreach($view->rankBonus->referrals as $referral)
+                                        <tr>
+                                            <td scope="col" class="text-center">{{ $referral->user->id }}</td>
+                                            <td scope="col" class="text-center">{{ $referral->user->name }}</td>
+                                            <td scope="col" class="text-center">{{ $referral->user->profile->grade->name }}</td>
+                                            <td scope="col" class="text-center">{{ $referral->self_sales }}</td>
+                                            <td scope="col" class="text-center">{{ $referral->group_sales }}</td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <a href="{{ route('admin.asset.list') }}" class="btn btn-secondary">목록</a>

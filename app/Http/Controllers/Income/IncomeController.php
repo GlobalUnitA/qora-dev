@@ -26,7 +26,7 @@ class IncomeController extends Controller
         $income_id = Hashids::decode($request->id);
         $income = Income::findOrFail($income_id[0]);
 
-        if ($income->user_id != Auth()->id() ) {
+        if ($income->user_id != Auth()->id()) {
              return redirect()->route('home');
         }
 
@@ -35,6 +35,9 @@ class IncomeController extends Controller
         $limit = 5;
         $list = IncomeTransfer::where('user_id', Auth()->id())
             ->where('income_id', $income->id)
+            ->when($request->filled('type'), function ($query) use ($request) {
+                return $query->where('type', $request->type);
+            })
             ->where('status', 'completed')
             ->latest()
             ->take($limit)
@@ -42,6 +45,9 @@ class IncomeController extends Controller
 
         $total_count = IncomeTransfer::where('user_id', auth()->id())
             ->where('income_id', $income->id)
+            ->when($request->filled('type'), function ($query) use ($request) {
+                return $query->where('type', $request->type);
+            })
             ->where('status', 'completed')
             ->count();
 
@@ -50,24 +56,30 @@ class IncomeController extends Controller
         return view('income.income', compact('data', 'list', 'has_more', 'limit'));
     }
 
-    public function list($id)
+    public function list(Request $request)
     {
-        $income_id = Hashids::decode($id);
+        $income_id = Hashids::decode($request->id);
         $income = Income::findOrFail($income_id[0]);
 
-        if ($income->user_id != Auth()->id() ) {
+        if ($income->user_id != Auth()->id()) {
              return redirect()->route('home');
         }
 
         $limit = 10;
 
         $list = IncomeTransfer::where('user_id', Auth()->id())
+            ->when($request->filled('type'), function ($query) use ($request) {
+                return $query->where('type', $request->type);
+            })
             ->where('status', 'completed')
             ->latest()
             ->take($limit)
             ->get();
         
         $total_count = IncomeTransfer::where('user_id', auth()->id())
+            ->when($request->filled('type'), function ($query) use ($request) {
+                return $query->where('type', $request->type);
+            })
             ->where('status', 'completed')
             ->count();
 
@@ -82,6 +94,9 @@ class IncomeController extends Controller
         $limit = $request->input('limit', 10);
 
         $query = IncomeTransfer::where('user_id', auth()->id())
+            ->when($request->filled('type'), function ($query) use ($request) {
+                return $query->where('type', $request->type);
+            })
             ->where('status', 'completed')
             ->latest();
 

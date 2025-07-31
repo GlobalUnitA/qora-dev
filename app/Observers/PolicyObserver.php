@@ -40,8 +40,8 @@ class PolicyObserver
                 'policy_id' => $model->id,
                 'column_name' => $column,
                 'column_description' => $description,
-                'old_value' => $old_value,
-                'new_value' => $new_value,
+                'old_value' => is_array($old_value) ? json_encode($old_value, JSON_UNESCAPED_UNICODE) : $old_value,
+                'new_value' => is_array($new_value) ? json_encode($new_value, JSON_UNESCAPED_UNICODE) : $new_value,
                 'admin_id' => Auth::guard('admin')->id() ?? null,
             ]);
         }

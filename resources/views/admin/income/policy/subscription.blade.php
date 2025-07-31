@@ -2,28 +2,28 @@
 
 @section('content')
 <div class="body-wrapper">
-    <div class="container-fluid">
-        <ul class="nav nav-tabs mt-3" id="tableTabs" role="tablist" >
+    <div class="container-fluid" >
+        <ul class="nav nav-tabs mt-3" id="tableTabs" role="tablist" style="margin-left: -300px; margin-right: -300px; width: calc(100% + 600px);">
             <li class="nav-item" role="presentation">
-                <a href="{{ route('admin.user.policy', ['mode' => 'grade']) }}" class="nav-link active">
-                    등급
-                </a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a href="{{ route('admin.user.policy', ['mode' => 'subscription']) }}" class="nav-link">
+                <a href="{{ route('admin.income.policy', ['mode' => 'subscription']) }}" class="nav-link active">
                     DAO
                 </a>
             </li>
             <li class="nav-item" role="presentation">
-                <a href="{{ route('admin.user.policy', ['mode' => 'referral']) }}" class="nav-link">
+                <a href="{{ route('admin.income.policy', ['mode' => 'referral']) }}" class="nav-link">
                     추천보너스
                 </a>
             </li>
+            <li class="nav-item" role="presentation">
+                <a href="{{ route('admin.income.policy', ['mode' => 'rank']) }}" class="nav-link">
+                    직급보너스
+                </a>
+            </li>
         </ul>
-        <div class="card">
+        <div class="card full-card" style="margin-left: -300px; margin-right: -300px; width: calc(100% + 600px);">
             <div class="card-body">
                 <div class="mb-3 d-flex justify-content-between">
-                    <h5 class="card-title">등급 정책</h5>
+                    <h5 class="card-title">DAO 정책</h5>
                     <!--a href="" class="btn btn-primary">Excel</a-->
                 </div>
                 <hr>
@@ -32,23 +32,21 @@
                         <thead>
                             <tr class="border-2 border-bottom border-primary border-0"> 
                                 <th scope="col" class="ps-0 text-center">이름</th>
-                                <th scope="col" class="text-center">레벨</th>
-                                <th scope="col" class="text-center">기본 매출</th>
-                                <th scope="col" class="text-center">개인 매출</th>
-                                <th scope="col" class="text-center">그룹 매출</th>
+                                @for($i =1; $i <= 21; $i++)
+                                <th scope="col" class="text-center" >{{ $i }}</th>
+                                @endfor
                                 <th scope="col" class="text-center" >수정일자</th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody class="table-group-divider">
                             @foreach($policies as $key => $val)
-                            <tr class="user_policy">
-                                <input type="hidden" name="id" value="{{ $val['id'] }}" >
+                            <tr class="income_policy">
+                                <input type="hidden" name="id" value="{{ $val->id }}" >
                                 <td class="text-center">{{ $val->grade->name }}</td>
-                                <td class="text-center">{{ $val->grade->level }}</td>
-                                <td class="text-center"><input type="text" name="base_sales" value="{{ $val->base_sales }}" class="form-control"></td>
-                                <td class="text-center"><input type="text" name="self_sales" value="{{ $val->self_sales }}" class="form-control"></td>
-                                <td class="text-center"><input type="text" name="group_sales" value="{{ $val->group_sales }}" class="form-control"></td>
+                                @for($i =1; $i <= 21; $i++)
+                                    <td class="text-center" ><input type="text" name="level_{{ $i }}_rate" value="{{ $val->{'level_'.$i.'_rate'} }}" class="form-control form-control-sm" style="min-width: 50px;"></td>
+                                @endfor
                                 <td class="text-center">{{ $val->updated_at }}</td>
                                 <td class="text-center">
                                     <button class="btn btn-sm btn-danger updateBtn">수정</button>
@@ -101,13 +99,13 @@
     </div>
 </div>
 
-<form method="POST" id="updateForm" action="{{ route('admin.user.policy.update') }}" >
+<form method="POST" id="updateForm" action="{{ route('admin.income.policy.update') }}" >
     @csrf
-    <input type="hidden" name="mode" value="grade">
+    <input type="hidden" name="mode" value="subscription">
 </form>
 
 @endsection
 
 @push('script')
-<script src="{{ asset('js/admin/user/policy.js') }}"></script>
+<script src="{{ asset('js/admin/income/policy.js') }}"></script>
 @endpush

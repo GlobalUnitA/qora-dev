@@ -5,18 +5,18 @@
     <div class="container-fluid">
             <ul class="nav nav-tabs mt-3" id="tableTabs" role="tablist" style="margin-left: -300px; margin-right: -300px; width: calc(100% + 600px);">
             <li class="nav-item" role="presentation">
-                <a href="{{ route('admin.user.policy', ['mode' => 'grade']) }}" class="nav-link">
-                    등급
-                </a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a href="{{ route('admin.user.policy', ['mode' => 'subscription']) }}" class="nav-link">
+                <a href="{{ route('admin.income.policy', ['mode' => 'subscription']) }}" class="nav-link">
                     DAO
                 </a>
             </li>
             <li class="nav-item" role="presentation">
-                <a href="{{ route('admin.user.policy', ['mode' => 'referral']) }}" class="nav-link active">
+                <a href="{{ route('admin.income.policy', ['mode' => 'referral']) }}" class="nav-link active">
                     추천보너스
+                </a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a href="{{ route('admin.income.policy', ['mode' => 'rank']) }}" class="nav-link">
+                    직급보너스
                 </a>
             </li>
         </ul>
@@ -41,7 +41,7 @@
                         </thead>
                         <tbody class="table-group-divider">
                             @foreach($policies as $key => $val)
-                            <tr class="user_policy">
+                            <tr class="income_policy">
                                 <input type="hidden" name="id" value="{{ $val->id }}" >
                                 <td class="text-center">{{ $val->grade->name }}</td>
                                 @for($i =1; $i <= 21; $i++)
@@ -99,7 +99,7 @@
     </div>
 </div>
 
-<form method="POST" id="updateForm" action="{{ route('admin.user.policy.update') }}" >
+<form method="POST" id="updateForm" action="{{ route('admin.income.policy.update') }}" >
     @csrf
     <input type="hidden" name="mode" value="referral">
 </form>
@@ -107,5 +107,5 @@
 @endsection
 
 @push('script')
-<script src="{{ asset('js/admin/user/policy.js') }}"></script>
+<script src="{{ asset('js/admin/income/policy.js') }}"></script>
 @endpush

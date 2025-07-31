@@ -67,6 +67,11 @@ class IncomeTransfer extends Model
         return $this->hasOne(ReferralBonus::class, 'transfer_id', 'id');
     }
 
+    public function rankBonus()
+    {
+        return $this->hasOne(RankBonus::class, 'transfer_id', 'id');
+    }
+
     public function reward()
     {
         return $this->hasOne(StakingReward::class, 'transfer_id', 'id');
@@ -89,6 +94,9 @@ class IncomeTransfer extends Model
                 break;
             case 'referral_bonus' :
                 return __('asset.referral_bonus');
+                break;
+            case 'rank_bonus' :
+                return __('asset.rank_bonus');
                 break;
             case 'staking_reward' :
                 return __('asset.staking_profit');

@@ -30,6 +30,12 @@
                 </div>
                 <h3 class="text-primary fs-6 mb-1">{{ $data['referral_bonus'] }}</h3>
             </div>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <p class="text-body fs-4 m-0">{{ __('asset.total_rank_bonus') }}</p>
+                    <h3 class="text-primary fs-6 mb-1">{{ $data['rank_bonus'] }}</h3>
+                </div>
+            </div>
             <div class="mb-4">
                 <div class="d-flex justify-content-between align-items-start">
                     <p class="text-body fs-4 m-0">{{ __('asset.total_external_withdrawal') }}</p>
@@ -52,7 +58,6 @@
             </div>         
         </div>
     </div>
-    @if($list->isNotEmpty())
     <div class="table-responsive pb-5">
         <table class="table table-striped table-bordered">
             <thead class="mb-2">
@@ -61,10 +66,22 @@
                     <th>{{ __('system.amount') }}</th>
                     <th>{{ __('asset.profit_rate') }}</th>
                     <th>{{ __('user.child_id') }}</th>
-                    <th>{{ __('system.category') }}</th>
+                    <th>
+                        <select id="incomeTypeSelect" name="type" class="form-select form-select-sm">
+                            <option value="">{{ __('system.category') }}</option>
+                            <option value="deposit" {{ request('type') == 'deposit' ? 'selected' : '' }}>{{ __('asset.internal_transfer') }}</option>
+                            <option value="withdrawal" {{ request('type') == 'withdrawal' ? 'selected' : '' }}>{{ __('asset.external_withdrawal') }}</option>
+                            <option value="trading_profit" {{ request('type') == 'trading_profit' ? 'selected' : '' }}>{{ __('asset.trading_profit') }}</option>
+                            <option value="subscription_bonus" {{ request('type') == 'subscription_bonus' ? 'selected' : '' }}>{{ __('asset.subscription_bonus') }}</option>
+                            <option value="referral_bonus" {{ request('type') == 'referral_bonus' ? 'selected' : '' }}>{{ __('asset.referral_bonus') }}</option>
+                            <option value="rank_bonus" {{ request('type') == 'rank_bonus' ? 'selected' : '' }}>{{ __('asset.rank_bonus') }}</option>
+                            <option value="staking_reward" {{ request('type') == 'staking_reward' ? 'selected' : '' }}>{{ __('asset.staking_profit') }}</option>
+                        <select>
+                    </th>
                 </tr>
             </thead>
             <tbody id="loadMoreContainer">              
+                @if($list->isNotEmpty())
                 @foreach($list as $key => $val)
                 <tr>
                     <td>{{ date_format($val->created_at, 'Y-m-d') }}</td>
@@ -90,6 +107,10 @@
                     <td>{{ $val->type_text }}</td>
                 </tr>
                 @endforeach
+                @else
+                    <tr>
+                        <td class="text-center" colspan="5">No data.</td>
+                    </tr>
             </tbody>
         </table> 
         @if($has_more)
@@ -99,3 +120,8 @@
     @endif
 </main>
 @endsection
+
+@push('script')
+<script src="{{ asset('js/income/income.js') }}"></script>
+@endpush
+

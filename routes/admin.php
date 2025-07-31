@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\Asset\PolicyController as AssetPolicyController;
 use App\Http\Controllers\Admin\Income\IncomeController;
 use App\Http\Controllers\Admin\Income\DepositController as IncomeDepositController;
 use App\Http\Controllers\Admin\Income\WithdrawalController as IncomeWithdrawalController;
+use App\Http\Controllers\Admin\Income\PolicyController as IncomePolicyController;
 
 use App\Http\Controllers\Admin\Trading\TradingController;
 use App\Http\Controllers\Admin\Trading\PolicyController as TradingPolicyController;
@@ -69,7 +70,7 @@ Route::middleware(['admin.auth', 'otp'])->group(function () {
                 Route::post('delete', [GradeController::class, 'delete'])->name('admin.user.grade.delete');
             });    
             Route::prefix('policy')->group(function () {
-                Route::get('/{mode}', [UserPolicyController::class, 'index'])->name('admin.user.policy');
+                Route::get('/', [UserPolicyController::class, 'index'])->name('admin.user.policy');
                 Route::post('update', [UserPolicyController::class, 'update'])->name('admin.user.policy.update');
                 Route::get('export', [UserPolicyController::class, 'export'])->name('admin.user.policy.export');
             });
@@ -120,12 +121,21 @@ Route::middleware(['admin.auth', 'otp'])->group(function () {
         Route::get('view/{id}', [IncomeController::class, 'view'])->name('admin.income.view');
         Route::post('update', [IncomeController::class, 'update'])->name('admin.income.update');
         Route::get('export', [IncomeController::class, 'export'])->name('admin.income.export');
+
         Route::middleware(['check_admin_level:2'])->group(function () {
             Route::prefix('deposit')->group(function () {
                 Route::post('update', [IncomeDepositController::class, 'update'])->name('admin.income.deposit.update');
             });
             Route::prefix('withdrawal')->group(function () {
                 Route::post('update', [IncomeWithdrawalController::class, 'update'])->name('admin.income.withdrawal.update');
+            });
+        });
+
+        Route::middleware(['check_admin_level:3'])->group(function () {
+            Route::prefix('policy')->group(function () {
+                Route::get('/{mode}', [IncomePolicyController::class, 'index'])->name('admin.income.policy');
+                Route::post('store', [IncomePolicyController::class, 'store'])->name('admin.income.policy.store');
+                Route::post('update', [IncomePolicyController::class, 'update'])->name('admin.income.policy.update');
             });
         });
     });
