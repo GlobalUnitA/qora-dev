@@ -25,6 +25,9 @@
                         <li class="nav-item" role="presentation">
                             <a href="{{ route('admin.income.list', array_merge(request()->query(), ['type' => 'referral_bonus'])) }}" class="nav-link {{ Request('type') == 'referral_bonus' ? 'active' : '' }}">추천 보너스</a>
                         </li>
+                        <li class="nav-item" role="presentation">
+                            <a href="{{ route('admin.income.list', array_merge(request()->query(), ['type' => 'rank_bonus'])) }}" class="nav-link {{ Request('type') == 'rank_bonus' ? 'active' : '' }}">직급 보너스</a>
+                        </li>
                     </ul>
                 </div>
                 <div class="card">

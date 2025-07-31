@@ -94,6 +94,10 @@ class IncomeController extends Controller
             case 'referral_bonus' :
                 return view('admin.income.referral-list', compact('list'));
             break;
+
+            case 'rank_bonus' :
+                return view('admin.income.rank-list', compact('list'));
+            break;
         
             default :
                 return view('admin.income.deposit-list', compact('list'));
