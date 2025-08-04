@@ -43,5 +43,6 @@ class TestController extends Controller
         dd('123');
 
         echo "zzzz";
+        echo "kkkk";
     }
 }
