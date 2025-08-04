@@ -38,6 +38,6 @@ class TestController extends Controller
     }
    public function index()
     {
-
+        echo "git test from intellj ultimate";
     }
 }
