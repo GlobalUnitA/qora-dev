@@ -41,5 +41,7 @@ class TestController extends Controller
         echo "git test from intellj ultimate";
 
         dd('123');
+
+        echo "zzzz";
     }
 }
