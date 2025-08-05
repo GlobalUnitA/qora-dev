@@ -30,15 +30,15 @@ class PolicyController extends Controller
                     ->where('policy_modify_logs.policy_type', 'subscription_policies')
                     ->orderBy('policy_modify_logs.created_at', 'desc')
                     ->get();
-               
+
                 return view('admin.income.policy.subscription', compact('policies', 'modify_logs'));
-                
+
             break;
 
             case 'referral' :
 
                 $policies = ReferralPolicy::all();
-                
+
                 $modify_logs = PolicyModifyLog::join('referral_policies', 'referral_policies.id', '=', 'policy_modify_logs.policy_id')
                     ->join('user_grades', 'user_grades.id', '=', 'referral_policies.grade_id')
                     ->join('admins', 'admins.id', '=', 'policy_modify_logs.admin_id')
@@ -46,9 +46,9 @@ class PolicyController extends Controller
                     ->where('policy_modify_logs.policy_type', 'referral_policies')
                     ->orderBy('policy_modify_logs.created_at', 'desc')
                     ->get();
-               
+
                 return view('admin.income.policy.referral', compact('policies', 'modify_logs'));
-                
+
             break;
 
             case 'rank' :
@@ -56,7 +56,7 @@ class PolicyController extends Controller
                 $policies = RankPolicy::all();
 
                 $user_grades = UserGrade::all();
-                
+
                 $modify_logs = PolicyModifyLog::join('rank_policies', 'rank_policies.id', '=', 'policy_modify_logs.policy_id')
                     ->join('user_grades', 'user_grades.id', '=', 'rank_policies.grade_id')
                     ->join('admins', 'admins.id', '=', 'policy_modify_logs.admin_id')
@@ -64,19 +64,25 @@ class PolicyController extends Controller
                     ->where('policy_modify_logs.policy_type', 'rank_policies')
                     ->orderBy('policy_modify_logs.created_at', 'desc')
                     ->get();
-               
+
                 return view('admin.income.policy.rank', compact('policies', 'user_grades', 'modify_logs'));
-                
+
             break;
-        } 
+        }
     }
 
-    public function store(Request $request) 
+    public function store(Request $request)
     {
+        if (RankPolicy::where('grade_id', $request->grade_id)->exists()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => '이미 해당 등급에 대한 정책이 존재합니다.',
+            ]);
+        }
+
         DB::beginTransaction();
 
         try {
-
             $conditions = array_values($request->conditions);
 
             if (is_null($conditions[0]['min_level']) || is_null($conditions[0]['max_level']) || is_null($conditions[0]['referral_count'])) {
@@ -100,7 +106,7 @@ class PolicyController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            
+
             \Log::error('Failed to create rank policy', ['error' => $e->getMessage()]);
 
             return response()->json([
@@ -108,10 +114,10 @@ class PolicyController extends Controller
                 'message' => '예기치 못한 오류가 발생했습니다.',
             ]);
         }
-       
+
     }
 
-    public function update(Request $request) 
+    public function update(Request $request)
     {
 
         DB::beginTransaction();
@@ -143,7 +149,7 @@ class PolicyController extends Controller
                         $data['conditions'] = null;
                     }
                     $rankPolicy->update($data);
-                    
+
                 break;
             }
 
@@ -158,7 +164,7 @@ class PolicyController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            
+
             \Log::error('Failed to update '.$request->mode.' policy', ['error' => $e->getMessage()]);
 
             return response()->json([
@@ -167,4 +173,4 @@ class PolicyController extends Controller
             ]);
         }
     }
-}   
+}

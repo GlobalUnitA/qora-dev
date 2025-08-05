@@ -253,17 +253,17 @@ class UserProfile extends Model
 
     public function rankBonus()
     {
-        $bonus_given = RankBonus::where('user_id', $this->user_id)
-            ->where('grade_id', $this->grade_id)
-            ->exists();
-
-        if ($bonus_given) {
-            return;
-        }
-
         $policy = RankPolicy::where('grade_id', $this->grade_id)->first();
 
         if (!$policy) {
+            return;
+        }
+
+        $bonus_given = RankBonus::where('user_id', $this->user_id)
+            ->where('policy_id', $policy->id)
+            ->exists();
+
+        if ($bonus_given) {
             return;
         }
 
@@ -328,7 +328,7 @@ class UserProfile extends Model
 
             $rank_bonus = RankBonus::create([
                 'user_id'        => $this->user_id,
-                'grade_id'       => $this->grade_id,
+                'policy_id'      => $policy->id,
                 'transfer_id'    => $transfer->id,
                 'self_sales'     => $self_sales,
                 'group_sales'    => $group_sales,

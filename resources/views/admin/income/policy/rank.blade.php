@@ -44,11 +44,7 @@
                             <tr class="income_policy">
                                 <input type="hidden" name="id" value="{{ $val->id }}" >
                                 <td class="text-center">
-                                    <select name="grade_id" class="form-select" style="width:100px;">
-                                    @foreach($user_grades as $grade)
-                                        <option value="{{ $grade->id }}" @selected($val->grade_id == $grade->id)>{{ $grade->name }}</option>
-                                    @endforeach
-                                    </select>
+                                    {{ $val->grade->name }}
                                 </td>
                                 <td class="text-center">
                                     <input type="text" name="self_sales" value="{{ rtrim(rtrim(number_format($val->self_sales, 9, '.', ''), '0'), '.') }}" class="form-control">

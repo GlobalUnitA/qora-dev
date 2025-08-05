@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('rank_bonuses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->comment('회원 번호');
-            $table->foreignId('grade_id')->constrained('user_grades')->comment('등급 번호');
+            $table->foreignId('policy_id')->constrained('rank_policies')->comment('등급 번호');
             $table->foreignId('transfer_id')->constrained('income_transfers')->comment('내역 번호');
             $table->decimal('self_sales', 20, 9)->default(0)->comment('개인매출');
             $table->decimal('group_sales', 20, 9)->default(0)->comment('그룹매출');
