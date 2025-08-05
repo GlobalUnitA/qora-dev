@@ -45,7 +45,14 @@
                                 </div>
                                 <div class="mb-4">
                                     <label for="inputEmail" class="form-label required">{{ __('user.email') }}</label>
-                                    <input type="email" name="email" id="inputEmail" class="form-control required" required>
+                                    <div class="input-group">
+                                        <input type="email" name="email" id="inputEmail" class="form-control required" required>
+                                        <button type="button" id="verifyCode" class="btn btn-primary rounded-end-3">{{ __('system.send') }}</button>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="inputName" class="form-label required">{{ __('auth.verify_code') }}</label>
+                                    <input type="text" name="code" class="form-control required" required>
                                 </div>
                                 <div class="mb-4">
                                     <label for="inputParentId" class="form-label required">{{ __('user.recommender_uid') }}</label>
@@ -53,10 +60,10 @@
                                         <span class="me-2 lh-xl">C</span>
                                         <input type="text" name="parentId" id="inputParentId" @if($mid)value="{{ $mid }}"@endif class="form-control required" required>
                                     </div>
-                                </div>                                
+                                </div>
                                 <div class="mb-4">
                                     <label for="inputMetaUid" class="form-label">{{ __('user.meta_id') }}</label>
-                                    <input type="text" name="metaUid" id="inputMetaUid" class="form-control">                                   
+                                    <input type="text" name="metaUid" id="inputMetaUid" class="form-control">
                                 </div>
                                 <div class="alert alert-danger mt-4 mb-2" role="alert">
                                     <h6 class="text-danger text-center fw-bold fs-4 m-0 lh-base break-keep-all">{{ __('user.meta_id_guide_1') }}</h6>
@@ -64,7 +71,7 @@
                                 <p class="mb-4 break-keep-all">
                                     {{ __('user.meta_id_guide_2') }}
                                 </p>
-                                <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mt-4">{{ __('auth.join') }}</button>  
+                                <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mt-4">{{ __('auth.join') }}</button>
                             </form>
                         </div>
                     </div>

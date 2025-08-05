@@ -29,6 +29,41 @@ $(document).ready(function() {
         });
     });
 
+    $('#verifyCode').click(function() {
+
+        const email = $('#inputEmail').val();
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
+        if (!emailRegex.test(email)) {
+            alertModal($('#msg_email_invalid').data('label'));
+            $('#inputEmail').val('');
+        } else {
+
+            $('#inputEmailCheck').val(email);
+
+            const emailCheckForm = $('#emailCheckForm')[0];
+            const emailCheckFormData = new FormData(emailCheckForm);
+
+            $.ajax({
+                url: $(emailCheckForm).attr('action'),
+                type: 'POST',
+                data: emailCheckFormData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    alertModal(response.message);
+                    if(response.status !== 'success') {
+                        $(self).val('');
+                    }
+                },
+                error: function(response) {
+                    console.log(response);
+                    alertModal(errorNotice);
+                }
+            });
+        }
+    });
+
     $('#inputName').focusout(function () {
         let self = this;
         const value = $(this).val().trim();
@@ -36,7 +71,7 @@ $(document).ready(function() {
 
         if (!isValid) {
             $(self).val('');
-        } 
+        }
     });
 
     $('#inputPassword1').focusout(function() {
@@ -66,42 +101,6 @@ $(document).ready(function() {
         if(password1 !== password2) {
             alertModal($('#msg_password_missmatch').data('label'));
             $(self).val('');
-        }
-    });
-
-
-    $('#inputEmail').focusout(function() {
-        let self = this;
-        const email = $(self).val();
-        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-
-        if (!emailRegex.test(email)) {
-            alertModal($('#msg_email_invalid').data('label'));
-            $(self).val('');
-        } else {
-
-            $('#inputEmailCheck').val(email);
-
-            const emailCheckForm = $('#emailCheckForm')[0];
-            const emailCheckFormData = new FormData(emailCheckForm);
-
-            $.ajax({
-                url: $(emailCheckForm).attr('action'),
-                type: 'POST',
-                data: emailCheckFormData,
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    alertModal(response.message);
-                    if(response.status !== 'success') {
-                        $(self).val('');
-                    }
-                },
-                error: function(response) {
-                    console.log(response);
-                    alertModal(errorNotice);
-                }
-            });
         }
     });
 
