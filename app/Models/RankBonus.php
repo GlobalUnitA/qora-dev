@@ -12,7 +12,7 @@ class RankBonus extends Model
 
     protected $fillable = [
         'user_id',
-        'grade_id',
+        'policy_id',
         'transfer_id',
         'self_sales',
         'group_sales',
