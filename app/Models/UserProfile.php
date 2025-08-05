@@ -139,12 +139,12 @@ class UserProfile extends Model
     {
         $childrens = $this->getChildrenTree(21);
         $group_sales = 0;
-        
+
         foreach ($childrens as $level => $profiles) {
             foreach ($profiles as $profile) {
                 $user = $profile->user;
                 if(!$user) continue;
-                   
+
                 $group_sales += AssetTransfer::where('user_id', $user->id)
                     ->whereIn('type', ['deposit', 'internal', 'manual_deposit'])
                     ->where('status', 'completed')
@@ -195,7 +195,7 @@ class UserProfile extends Model
                 'transfer_id'  => $transfer->id,
                 'withdrawal_id' => $withdrawal->id,
                 'bonus' => $bonus,
-            ]); 
+            ]);
 
             $income->increment('balance', $bonus);
 
@@ -277,6 +277,8 @@ class UserProfile extends Model
 
         $direct_children = $this->getChildrenTree(1);
 
+        $direct_count = isset($direct_children[1]) ? $direct_children[1]->count() : 0;
+
         if (!empty($policy->conditions)) {
             $all_conditions_met = true;
 
@@ -287,9 +289,8 @@ class UserProfile extends Model
 
                 $count = 0;
 
-                foreach ($direct_children as $profiles) {
-                    $direct_count = count($profiles);
-                    $count = collect($profiles)->filter(function ($child) use ($min_level, $max_level) {
+                if (isset($direct_children[1])) {
+                    $count = $direct_children[1]->filter(function ($child) use ($min_level, $max_level) {
                         $level = $child->grade->level;
                         return $level >= $min_level && $level <= $max_level;
                     })->count();
@@ -306,63 +307,67 @@ class UserProfile extends Model
                 return;
             }
         }
-             
+
         DB::beginTransaction();
 
         try {
-
             $bonus = $policy->bonus;
 
             $income = Income::where('user_id', $this->user_id)->where('coin_id', 1)->first();
 
             $transfer = IncomeTransfer::create([
-                'user_id'   => $this->user_id,
-                'income_id'  => $income->id,
-                'type' => 'rank_bonus',
-                'status' => 'completed',
-                'amount'    => $bonus,
-                'actual_amount' => $bonus,
+                'user_id'        => $this->user_id,
+                'income_id'      => $income->id,
+                'type'           => 'rank_bonus',
+                'status'         => 'completed',
+                'amount'         => $bonus,
+                'actual_amount'  => $bonus,
                 'before_balance' => $income->balance,
-                'after_balance' => $income->balance + $bonus,
+                'after_balance'  => $income->balance + $bonus,
             ]);
 
             $rank_bonus = RankBonus::create([
-                'user_id'   => $this->user_id,
-                'grade_id'  => $this->grade_id,
-                'transfer_id'  => $transfer->id,
-                'self_sales' => $self_sales,
-                'group_sales' => $group_sales,
+                'user_id'        => $this->user_id,
+                'grade_id'       => $this->grade_id,
+                'transfer_id'    => $transfer->id,
+                'self_sales'     => $self_sales,
+                'group_sales'    => $group_sales,
                 'referral_count' => $direct_count,
-                'bonus' => $bonus,
+                'bonus'          => $bonus,
             ]);
 
             $income->increment('balance', $bonus);
 
-            foreach ($direct_children as $profiles) {
-                foreach($profiles as $profile) {
-
+            if (isset($direct_children[1])) {
+                foreach ($direct_children[1] as $profile) {
                     $self_sales = $profile->getSelfSales();
                     $group_sales = $profile->getGroupSales();
-                    
+
                     RankBonusReferral::create([
-                        'user_id'   => $profile->user_id,
-                        'bonus_id'  => $rank_bonus->id,
-                        'self_sales' => $self_sales,
+                        'user_id'     => $profile->user_id,
+                        'bonus_id'    => $rank_bonus->id,
+                        'self_sales'  => $self_sales,
                         'group_sales' => $group_sales,
                     ]);
                 }
             }
-            DB::commit();             
 
-            Log::channel('bonus')->info('Success rank bonus', ['user_id' => $this->user_id, 'bonus' => $bonus, 'transfer_id' => $transfer->id]);
+            DB::commit();
+
+            Log::channel('bonus')->info('Success rank bonus', [
+                'user_id'     => $this->user_id,
+                'bonus'       => $bonus,
+                'transfer_id' => $transfer->id,
+            ]);
 
         } catch (\Exception $e) {
-
             DB::rollBack();
 
-            \Log::channel('bonus')->error('Failed rank bonus', ['user_id' => $this->user_id, 'error' => $e->getMessage()]);
+            Log::channel('bonus')->error('Failed rank bonus', [
+                'user_id' => $this->user_id,
+                'error'   => $e->getMessage(),
+            ]);
         }
-
     }
 
     public function checkUserValidity()
