@@ -118,7 +118,10 @@ class RegisterController extends Controller
             Mail::to($request->email)->send(new EmailVerificationCode($code));
         } catch (\Symfony\Component\Mailer\Exception\TransportExceptionInterface $e) {
             \Log::error('메일 전송 실패: ' . $e->getMessage());
-            return response()->json(['message' => $e->getMessage()]);
+            return response()->json([
+                'status' => 'error',
+                'message' => __('auth.email_invalid_notice'),
+            ]);
         }
 
         return response()->json(['message' =>  __('auth.verify_code_sent_notice')]);
