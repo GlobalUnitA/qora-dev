@@ -13,18 +13,29 @@
     </div>
 
     <div class="post-content py-4 px-2 mb-3 fs-4">
-    {!! $view->content !!}
+    {!! nl2br(e($view->content)) !!}
     </div>
+    @if($view->image_urls)
+    <div class="text-center align-middle">
+        @foreach($view->image_urls as $val)
+            <div class="mb-5">
+                <a href="{{ $val }}">
+                    <img src="{{ $val }}" class="img-fluid">
+                </a>
+            </div>
+        @endforeach
+    </div>
+    @endif
     @if($board->is_comment == 'y')
     @if(!$comments->isEmpty())
     <div class="d-flex justify-content-between align-items-center">
-        <h5 class="card-title">{{ __('layout.comment_list') }}</h5>    
+        <h5 class="card-title">{{ __('layout.comment_list') }}</h5>
     </div>
     <hr>
     <div class="list-group">
         @foreach($comments as $comment)
             <div class="list-group-item">
-                <i class="ti ti-corner-down-right"></i>    
+                <i class="ti ti-corner-down-right"></i>
                 <strong>{{ $comment->user ? $comment->user->name : $comment->admin->name }}</strong>
                 @if($comment->admin)
                     <span class="badge bg-danger">{{ __('system.admin') }}</span>
