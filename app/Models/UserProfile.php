@@ -253,120 +253,125 @@ class UserProfile extends Model
 
     public function rankBonus()
     {
-        $policy = RankPolicy::where('grade_id', $this->grade_id)->first();
+        $policies = RankPolicy::join('user_grades', 'rank_policies.grade_id', '=', 'user_grades.id')
+            ->where('user_grades.level', '<=', $this->grade->level)
+            ->select('rank_policies.*')
+            ->get();
 
-        if (!$policy) {
-            return;
-        }
+        foreach ($policies as $policy) {
+            if (!$policy) {
+                continue;
+            }
 
-        $bonus_given = RankBonus::where('user_id', $this->user_id)
-            ->where('policy_id', $policy->id)
-            ->exists();
+            $bonus_given = RankBonus::where('user_id', $this->user_id)
+                ->where('policy_id', $policy->id)
+                ->exists();
 
-        if ($bonus_given) {
-            return;
-        }
+            if ($bonus_given) {
+                continue;
+            }
 
-        $self_sales = $this->getSelfSales();
-        $group_sales = $this->getGroupSales();
+            $self_sales = $this->getSelfSales();
+            $group_sales = $this->getGroupSales();
 
-        if ($self_sales < $policy->self_sales) {
-            Log::channel('bonus')->info("Rank bonus payment failed - User ID: {$this->user_id}, Grade ID: {$this->grade_id}, Reason: Insufficient personal sales volume");
-            return;
-        }
+            if ($self_sales < $policy->self_sales) {
+                Log::channel('bonus')->info("Rank bonus payment failed - User ID: {$this->user_id}, policy ID: {$policy->id}, grade ID: {$policy->grade_id}, Reason: Insufficient personal sales volume");
+                continue;
+            }
 
-        $direct_children = $this->getChildrenTree(1);
+            $direct_children = $this->getChildrenTree(1);
 
-        $direct_count = isset($direct_children[1]) ? $direct_children[1]->count() : 0;
+            $direct_count = isset($direct_children[1]) ? $direct_children[1]->count() : 0;
 
-        if (!empty($policy->conditions)) {
-            $all_conditions_met = true;
+            if (!empty($policy->conditions)) {
+                $all_conditions_met = true;
 
-            foreach ($policy->conditions as $condition) {
-                $min_level = (int) $condition['min_level'];
-                $max_level = (int) $condition['max_level'];
-                $required_count = (int) $condition['referral_count'];
+                foreach ($policy->conditions as $condition) {
+                    $min_level = (int) $condition['min_level'];
+                    $max_level = (int) $condition['max_level'];
+                    $required_count = (int) $condition['referral_count'];
 
-                $count = 0;
+                    $count = 0;
+
+                    if (isset($direct_children[1])) {
+                        $count = $direct_children[1]->filter(function ($child) use ($min_level, $max_level) {
+                            $level = $child->grade->level;
+                            return $level >= $min_level && $level <= $max_level;
+                        })->count();
+                    }
+
+                    if ($count < $required_count) {
+                        $all_conditions_met = false;
+                        break;
+                    }
+                }
+
+                if (!$all_conditions_met) {
+                    Log::channel('bonus')->info("Rank bonus not paid - User ID: {$this->user_id}, Reason: Insufficient qualified referrals for required levels.");
+                    continue;
+                }
+            }
+
+            DB::beginTransaction();
+
+            try {
+                $bonus = $policy->bonus;
+
+                $income = Income::where('user_id', $this->user_id)->where('coin_id', 1)->first();
+
+                $transfer = IncomeTransfer::create([
+                    'user_id'        => $this->user_id,
+                    'income_id'      => $income->id,
+                    'type'           => 'rank_bonus',
+                    'status'         => 'completed',
+                    'amount'         => $bonus,
+                    'actual_amount'  => $bonus,
+                    'before_balance' => $income->balance,
+                    'after_balance'  => $income->balance + $bonus,
+                ]);
+
+                $rank_bonus = RankBonus::create([
+                    'user_id'        => $this->user_id,
+                    'policy_id'      => $policy->id,
+                    'transfer_id'    => $transfer->id,
+                    'self_sales'     => $self_sales,
+                    'group_sales'    => $group_sales,
+                    'referral_count' => $direct_count,
+                    'bonus'          => $bonus,
+                ]);
+
+                $income->increment('balance', $bonus);
 
                 if (isset($direct_children[1])) {
-                    $count = $direct_children[1]->filter(function ($child) use ($min_level, $max_level) {
-                        $level = $child->grade->level;
-                        return $level >= $min_level && $level <= $max_level;
-                    })->count();
+                    foreach ($direct_children[1] as $profile) {
+                        $self_sales = $profile->getSelfSales();
+                        $group_sales = $profile->getGroupSales();
+
+                        RankBonusReferral::create([
+                            'user_id'     => $profile->user_id,
+                            'bonus_id'    => $rank_bonus->id,
+                            'self_sales'  => $self_sales,
+                            'group_sales' => $group_sales,
+                        ]);
+                    }
                 }
 
-                if ($count < $required_count) {
-                    $all_conditions_met = false;
-                    break;
-                }
+                DB::commit();
+
+                Log::channel('bonus')->info('Success rank bonus', [
+                    'user_id'     => $this->user_id,
+                    'bonus'       => $bonus,
+                    'transfer_id' => $transfer->id,
+                ]);
+
+            } catch (\Exception $e) {
+                DB::rollBack();
+
+                Log::channel('bonus')->error('Failed rank bonus', [
+                    'user_id' => $this->user_id,
+                    'error'   => $e->getMessage(),
+                ]);
             }
-
-            if (!$all_conditions_met) {
-                Log::channel('bonus')->info("Rank bonus not paid - User ID: {$this->user_id}, Reason: Insufficient qualified referrals for required levels.");
-                return;
-            }
-        }
-
-        DB::beginTransaction();
-
-        try {
-            $bonus = $policy->bonus;
-
-            $income = Income::where('user_id', $this->user_id)->where('coin_id', 1)->first();
-
-            $transfer = IncomeTransfer::create([
-                'user_id'        => $this->user_id,
-                'income_id'      => $income->id,
-                'type'           => 'rank_bonus',
-                'status'         => 'completed',
-                'amount'         => $bonus,
-                'actual_amount'  => $bonus,
-                'before_balance' => $income->balance,
-                'after_balance'  => $income->balance + $bonus,
-            ]);
-
-            $rank_bonus = RankBonus::create([
-                'user_id'        => $this->user_id,
-                'policy_id'      => $policy->id,
-                'transfer_id'    => $transfer->id,
-                'self_sales'     => $self_sales,
-                'group_sales'    => $group_sales,
-                'referral_count' => $direct_count,
-                'bonus'          => $bonus,
-            ]);
-
-            $income->increment('balance', $bonus);
-
-            if (isset($direct_children[1])) {
-                foreach ($direct_children[1] as $profile) {
-                    $self_sales = $profile->getSelfSales();
-                    $group_sales = $profile->getGroupSales();
-
-                    RankBonusReferral::create([
-                        'user_id'     => $profile->user_id,
-                        'bonus_id'    => $rank_bonus->id,
-                        'self_sales'  => $self_sales,
-                        'group_sales' => $group_sales,
-                    ]);
-                }
-            }
-
-            DB::commit();
-
-            Log::channel('bonus')->info('Success rank bonus', [
-                'user_id'     => $this->user_id,
-                'bonus'       => $bonus,
-                'transfer_id' => $transfer->id,
-            ]);
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-
-            Log::channel('bonus')->error('Failed rank bonus', [
-                'user_id' => $this->user_id,
-                'error'   => $e->getMessage(),
-            ]);
         }
     }
 
