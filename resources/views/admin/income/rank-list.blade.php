@@ -85,7 +85,7 @@
                         <div class="table-responsive">
                             <table class="table text-nowrap align-middle mb-0 table-striped table-hover">
                                 <thead>
-                                    <tr class="border-2 border-bottom border-primary border-0"> 
+                                    <tr class="border-2 border-bottom border-primary border-0">
                                         <th scope="col" class="text-center">번호</th>
                                         <th scope="col" class="text-center">UID</th>
                                         <th scope="col" class="text-center">이름</th>
@@ -95,6 +95,7 @@
                                         <th scope="col" class="text-center">개인매출</th>
                                         <th scope="col" class="text-center">그룹매출</th>
                                         <th scope="col" class="text-center">직추천 수</th>
+                                        <th scope="col" class="text-center">보너스 등급</th>
                                         <th scope="col" class="text-center">지급일자</th>
                                     </tr>
                                 </thead>
@@ -111,6 +112,7 @@
                                         <td scope="col" class="text-center">{{ $value->rankBonus->self_sales }}</td>
                                         <td scope="col" class="text-center">{{ $value->rankBonus->group_sales }}</td>
                                         <td scope="col" class="text-center">{{ $value->rankBonus->referral_count }}</td>
+                                        <td scope="col" class="text-center">{{ $value->rankBonus->policy->grade->name }}</td>
                                         <td scope="col" class="text-center">{{ $value->created_at }}</td>
                                     </tr>
                                     @endforeach

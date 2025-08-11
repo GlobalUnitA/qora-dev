@@ -26,6 +26,11 @@ class RankBonus extends Model
         'bonus' => 'decimal:9',
     ];
 
+    public function policy()
+    {
+        return $this->belongsTo(RankPolicy::class, 'policy_id', 'id');
+    }
+
     public function referrals()
     {
         return $this->hasMany(RankBonusReferral::class, 'bonus_id', 'id');
