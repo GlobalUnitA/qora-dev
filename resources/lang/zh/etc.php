@@ -1,0 +1,35 @@
+<?php
+
+return array (
+  'image_upload' => '上传图片',
+  'upload_extension_guide' => '仅支持jpg、jpeg、png格式的文件。',
+  'upload_size_guide' => '文件大小不得超过5MB。',
+  'iamge_upload_notice' => '请上传图片。',
+  'crypto_price' => '加密货币价格',
+  'trade_pair' => '交易对',
+  'current_price' => '目前价格',
+  'change_rate' => '涨跌幅',
+  'upload' => '上传',
+  'passport' => '护照',
+  'psssport_verify' => '护照认证',
+  'passport_number' => '护照号码',
+  'passport_front_upload' => '上传护照正面照片',
+  'verification_photo_upload_notice' => '上传认证照片时的注意事项',
+  'verification_photo_upload_guide1' => '请在白纸上手写 “CUBE AI 实名认证 + 认证当日日期”。',
+  'verification_photo_upload_guide2' => '请手持 :id 和手写的纸条，确保脸部正面清晰可见，拍照并上传。',
+  'id_card_verify' => '身份证认证',
+  'id_card_number' => '身份证号码',
+  'id_card_front_upload' => '上传身份证正面照片',
+  'id_card' => '身份证',
+  'driver_license' => '驾驶证',
+  'driver_license_verify' => '驾驶证认证',
+  'driver_license_front_upload' => '上传驾驶证正面照片',
+  'verification_upload' => '上传认证照片',
+  'driver_license_number' => '驾驶证号码',
+  'id' => 
+  array (
+    'passport' => '护照',
+    'id_card' => '身份证',
+    'driver_license' => '驾驶证',
+  ),
+);

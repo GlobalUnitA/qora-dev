@@ -1,0 +1,35 @@
+<?php
+
+return array (
+  'image_upload' => 'Tải ảnh lên',
+  'upload_extension_guide' => 'Chỉ hỗ trợ định dạng JPG, JPEG và PNG',
+  'upload_size_guide' => 'Dung lượng tệp tải lên tối đa là 5MB.',
+  'iamge_upload_notice' => 'Vui lòng đính kèm ảnh.',
+  'crypto_price' => 'Giá tài sản điện tử',
+  'trade_pair' => 'Cặp giao dịch',
+  'current_price' => 'Giá hiện tại',
+  'change_rate' => 'Tỷ lệ thay đổi',
+  'upload' => 'Tải lên',
+  'passport' => 'Hộ chiếu',
+  'psssport_verify' => 'Xác minh hộ chiếu',
+  'passport_number' => 'Số hộ chiếu',
+  'passport_front_upload' => 'Tải ảnh mặt trước hộ chiếu',
+  'verification_photo_upload_notice' => 'Lưu ý khi tải ảnh xác minh',
+  'verification_photo_upload_guide1' => 'Viết tay “Xác minh danh tính CUBE AI, [ngày xác minh]” lên một tờ giấy.',
+  'verification_photo_upload_guide2' => 'Vui lòng chụp ảnh chính diện cầm :id và giấy viết tay và tải lên.',
+  'id_card_verify' => 'Xác minh CCCD',
+  'id_card_number' => 'Số ID',
+  'id_card_front_upload' => 'Tải ảnh mặt trước CCCD.',
+  'id_card' => 'CCCD',
+  'driver_license' => 'Giấy phép lái xe',
+  'driver_license_verify' => 'Xác minh giấy phép lái xe',
+  'driver_license_front_upload' => 'Tải ảnh mặt trước giấy phép lái xe.',
+  'verification_upload' => 'Tải ảnh xác minh',
+  'driver_license_number' => 'Số giấy phép lái xe',
+  'id' => 
+  array (
+    'passport' => 'Hộ chiếu',
+    'id_card' => 'CCCD',
+    'driver_license' => 'Giấy phép lái xe',
+  ),
+);

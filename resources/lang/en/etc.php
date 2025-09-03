@@ -1,0 +1,35 @@
+<?php
+
+return array (
+  'image_upload' => 'Upload Image',
+  'upload_extension_guide' => 'Only JPG, JPEG, and PNG file formats are supported.',
+  'upload_size_guide' => 'Maximum upload size is 5MB.',
+  'iamge_upload_notice' => 'Please attach an image.',
+  'crypto_price' => 'Digital Asset Price',
+  'trade_pair' => 'Trade Pair',
+  'current_price' => 'Current Price',
+  'change_rate' => 'Change Rate',
+  'upload' => 'Upload',
+  'passport' => 'Passport',
+  'psssport_verify' => 'Verify Passport',
+  'passport_number' => 'Passport Number',
+  'passport_front_upload' => 'Please upload the front page of your passport.',
+  'verification_photo_upload_notice' => 'Verification Photo Upload Guidelines',
+  'verification_photo_upload_guide1' => 'Handwrite “CUBE AI Identity Verification, [date of verification]” on a piece of paper.',
+  'verification_photo_upload_guide2' => 'Take a photo of you holding your :id and the handwritten note and upload it.',
+  'id_card_verify' => 'Verify ID',
+  'id_card_number' => 'ID Number',
+  'id_card_front_upload' => 'Please upload the front page of your ID.',
+  'id_card' => 'ID',
+  'driver_license' => 'Driver License',
+  'driver_license_verify' => 'Verify Driver License',
+  'driver_license_front_upload' => 'Please upload the front page of your Driver License.',
+  'verification_upload' => 'Upload Verification Photo',
+  'driver_license_number' => 'Driver License Number',
+  'id' => 
+  array (
+    'passport' => 'Passport',
+    'id_card' => 'ID',
+    'driver_license' => 'Driver license',
+  ),
+);
