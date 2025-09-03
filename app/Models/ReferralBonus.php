@@ -26,14 +26,14 @@ class ReferralBonus extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function deposit()
-    {
-        return $this->belongsTo(AssetTransfer::class, 'deposit_id', 'id');
-    }
-
     public function transfer()
     {
         return $this->belongsTo(IncomeTransfer::class, 'transfer_id', 'id');
+    }
+
+    public function staking()
+    {
+        return $this->belongsTo(Staking::class, 'staking_id', 'id');
     }
 
     public function referrer()

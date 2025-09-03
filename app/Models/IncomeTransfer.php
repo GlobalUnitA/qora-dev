@@ -67,11 +67,6 @@ class IncomeTransfer extends Model
         return $this->hasOne(ReferralBonus::class, 'transfer_id', 'id');
     }
 
-     public function referralMatching()
-    {
-        return $this->hasOne(ReferralMatching::class, 'transfer_id', 'id');
-    }
-
     public function rankBonus()
     {
         return $this->hasOne(RankBonus::class, 'transfer_id', 'id');
