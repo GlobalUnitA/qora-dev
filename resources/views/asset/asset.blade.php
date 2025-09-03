@@ -5,7 +5,7 @@
     <h2 class="mb-3 text-center">{{ $data['coin_name'] }} {{ __('asset.asset_detail') }}</h2>
     <hr>
     <div class="g-3 my-5">
-        <div class="p-4 rounded bg-primary-subtle text-body mb-4">
+        <div class="p-4 rounded bg-primary-subtle-75 text-body mb-4">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
                     <p class="text-primary fs-4 m-0">{{ __('asset.total_asset') }}</p>

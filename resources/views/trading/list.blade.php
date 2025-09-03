@@ -17,7 +17,7 @@
                 @foreach($list as $key => $value)
                 <tr>
                     <td>{{ $value->created_at->format('Y-m-d h:i:s') }}</td>
-                    <td>C{{ $value->referrer_id }}</td>
+                    <td>{{ $value->referrer_id }}</td>
                     <td>{{ number_format(floor( $value->bonus * 10000) / 10000, 4) }}</td>
                 </tr>
                 @endforeach                
@@ -40,7 +40,7 @@
 <template id="loadMoreTemplate">
     <tr>
         <td>{{created_at}}</td>
-        <td>C{{referrer_id}}</td>
+        <td>{{referrer_id}}</td>
         <td>{{bonus}}</td>
     </tr>
 </template>

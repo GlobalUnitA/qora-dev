@@ -1,10 +1,3 @@
-
-<!--div class="position-sticky mt-5" style="bottom: 79px;">
-    <p class="w-100 p-3 m-0 bg-light fs-2">
-        (주)글로벌유니트에이 | 대표: 김용덕 | 사업자 등록번호: 436-81-00891 | 주소: 서울 광진구 광나루로56길 85 사무동 27층 11~13호 | globalunita@globalunit-a.com
-        <span class="fs-1 d-block mt-1">Copyright Global Unit-A. All rights reserved.</span>
-    </p>
-</div-->
 <footer class="footerContainer container px-0 fixed-bottom bg-white border-start border-end border-start-sm-0 border-end-sm-0 border-top">
     <div class="container">
         <div class="row text-center py-3">
@@ -42,13 +35,15 @@
                 </a>
             </div>
             <div class="col px-1">
-                <a href="{{ route('trading', ['team' => true]) }}" class="text-decoration-none text-dark">
+                <!--a href="{{ route('trading', ['team' => true]) }}" class="text-decoration-none text-dark"-->
+                <a href="#" class="text-decoration-none text-dark" onclick="alertModal('{{ __('system.coming_soon_notice') }}')">
                     <img src="{{ asset('/images/icon/icon_menu_team.svg') }}" class="pb-1">
                     <div class="fs-3">{{ __('asset.team_info') }}</div>
                 </a>
             </div>
             <div class="col px-1">
-                <a href="{{ route('board.list', ['code' => 'terms']) }}" class="text-decoration-none text-dark">
+                <!--a href="{{ route('board.list', ['code' => 'terms']) }}" class="text-decoration-none text-dark"-->
+                <a href="#" class="text-decoration-none text-dark" onclick="alertModal('{{ __('system.coming_soon_notice') }}')">
                     <img src="{{ asset('/images/icon/icon_menu_terms.svg') }}" class="pb-1">
                     <div class="fs-3">{{ __('layout.terms') }}</div>
                 </a>

@@ -180,7 +180,7 @@ class AssetTransfer extends Model
 
                 $profile->checkUserValidity();
                 $profile->checkUserGrade();
-                
+                $profile->referralBonus($deposit);
 
             } catch (\Throwable $e) {
 

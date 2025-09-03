@@ -76,7 +76,7 @@
                                     <tr>
                                         <td scope="col" class="text-center">{{ $list->firstItem() + $key }}</td>
                                         <td scope="col" class="text-center">{{ $value->user->profile->grade->name }}</td>
-                                        <td scope="col" class="text-center">C{{ $value->user_id }}</td>
+                                        <td scope="col" class="text-center">{{ $value->user_id }}</td>
                                         <td scope="col" class="text-center">{{ $value->user->name }}</td>
                                         <td scope="col" class="text-center">{{ $value->coin->code }}</td>
                                         <td scope="col" class="text-center">{{ $value->current_count }}</td>
@@ -88,7 +88,7 @@
                                     @endforeach
                                     @else
                                     <tr>
-                                        <td class="text-center" colspan="7">No Data.</td>
+                                        <td class="text-center" colspan="10">No Data.</td>
                                     </tr>
                                     @endif
                                 </tbody>

@@ -12,13 +12,12 @@ class GradePolicy extends Model
 
     protected $fillable = [
         'grade_id',
-        'base_sales',
+        'referral_count',
         'self_sales',
         'group_sales',
     ];
     
     protected $casts = [
-        'base_sales' => 'decimal:9',
         'self_sales' => 'decimal:9',
         'group_sales' => 'decimal:9',
         'updated_at' => 'datetime:Y-m-d H:i:s',
@@ -30,7 +29,7 @@ class GradePolicy extends Model
     }
 
     protected static $columnDescriptions = [
-        'base_sales' => '기본 매출',
+        'referral_count' => '추천 인원',
         'self_sales' => '개인 매출',
         'group_sales' => '그룹 매출',
     ];

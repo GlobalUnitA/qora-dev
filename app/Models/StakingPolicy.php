@@ -13,12 +13,13 @@ class StakingPolicy extends Model
 
     protected $fillable = [
         'coin_id',
-        'staking_name',
+        'refund_coin_id',
+        'reward_coin_id',
+        'staking_type',
         'min_quantity',
         'max_quantity',
         'daily',
         'period',
-        'memo'
     ];
 
     protected $casts = [

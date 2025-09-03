@@ -13,6 +13,7 @@ class RankBonusReferral extends Model
     protected $fillable = [
         'user_id',
         'bonus_id',
+        'level',
         'self_sales',
         'group_sales',
     ];

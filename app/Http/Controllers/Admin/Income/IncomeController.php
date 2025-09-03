@@ -74,35 +74,13 @@ class IncomeController extends Controller
         ->orderBy('id', 'desc')
         ->paginate(10);
     
-        switch ($request->type) {
-            case 'withdrawal' :
-                return view('admin.income.withdrawal-list', compact('list'));
-            break;
-
-            case 'trading_profit' :
-                return view('admin.income.profit-list', compact('list'));
-            break;
-
-            case 'staking_reward' :
-                return view('admin.income.reward-list', compact('list'));
-            break;
-
-            case 'subscription_bonus' :
-                return view('admin.income.subscription-list', compact('list'));
-            break;
-
-            case 'referral_bonus' :
-                return view('admin.income.referral-list', compact('list'));
-            break;
-
-            case 'rank_bonus' :
-                return view('admin.income.rank-list', compact('list'));
-            break;
-        
-            default :
-                return view('admin.income.deposit-list', compact('list'));
-            break;
-        }        
+        return match ($request->type) {
+            'withdrawal' => view('admin.income.withdrawal-list', compact('list')),
+            'referral_bonus' => view('admin.income.referral-list', compact('list')),
+            'referral_matching' => view('admin.income.referral-matching-list', compact('list')),
+            'rank_bonus' => view('admin.income.rank-list', compact('list')),
+            default => view('admin.income.deposit-list', compact('list')),
+        };    
     }
 
     public function view($id)

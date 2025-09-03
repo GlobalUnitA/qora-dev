@@ -4,11 +4,6 @@
 <header class="px-4 py-5 w-100 border-top-title" style="background: url('https://cubeaibot.com/images/tit_bg_01.png') center right no-repeat, #1e1e1f;" >
     <h2 class="text-white mb-1 px-1">Staking</h2>
     <h6 class="text-white px-1">{{ __('staking.staking') }}</h6>
-    <!-- <div class="m-0 px-1">
-        <a href="{{ route('asset.withdrawal.list') }}">
-            <h5 class="btn btn-outline-light m-0">출금내역</h5>
-        </a>
-    </div> -->
 </header>
 <main class="container-fluid py-5 mb-5">
     <div class="px-3 mb-5">          

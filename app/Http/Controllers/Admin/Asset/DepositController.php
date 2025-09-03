@@ -68,7 +68,7 @@ class DepositController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => '수동 입금이 완료되었습니다.',
-                'url' => route('admin.user.view', ['id' => $asset->user_id]),
+                'url' => route('admin.user.view', ['id' => $user->id]),
             ]);
 
         } catch (\Exception $e) {

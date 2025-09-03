@@ -26,7 +26,7 @@ class OtpController extends Controller
         
         $user = auth('admin')->user();
 
-        if($user->otp->secret_key) {
+        if ($user->otp->secret_key) {
             $secret_key = $user->otp->secret_key;
         } else {
             $secret_key = $this->google2fa->generateSecretKey();

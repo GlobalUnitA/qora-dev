@@ -18,7 +18,7 @@
                     </tr>
                     <tr>
                         <th class="text-center text-body align-middle">{{ __('UID') }}</th>
-                        <td class="align-middle text-body">C{{ $view->user_id }}</td>
+                        <td class="align-middle text-body">{{ $view->user_id }}</td>
                     </tr>
                     <tr>
                         <th class="text-center text-body align-middle">{{ __('auth.password') }}</th>

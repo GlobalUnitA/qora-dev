@@ -47,4 +47,5 @@ return array (
   'stock_amount' => 'Số lượng sở hữu',
   'dismiss_today' => 'Không hiển thị hôm nay',
   'close' => 'Đóng',
+  'modify_notice' => 'Chỉnh sửa thành công.',
 );

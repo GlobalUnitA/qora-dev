@@ -7,7 +7,7 @@
             </div>
             <div id="alertMessage" class="modal-body fs-5 px-4"></div>
             <div class="modal-footer">
-                <button type="button" class="btn text-white border-0" style="background: linear-gradient(to right, #00bbf6, #3163F8);" id="confirmBtn">{{ __('system.confirm') }}</button>
+                <button type="button" class="btn text-white border-0" style="background: linear-gradient(to right, #00d8a0, #00b084);" id="confirmBtn">{{ __('system.confirm') }}</button>
             </div>
         </div>
     </div>

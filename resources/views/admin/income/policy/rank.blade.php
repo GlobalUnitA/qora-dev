@@ -5,13 +5,13 @@
     <div class="container-fluid" >
         <ul class="nav nav-tabs mt-3" id="tableTabs" role="tablist" >
             <li class="nav-item" role="presentation">
-                <a href="{{ route('admin.income.policy', ['mode' => 'subscription']) }}" class="nav-link">
-                    DAO
+                <a href="{{ route('admin.income.policy', ['mode' => 'referral']) }}" class="nav-link">
+                    추천보너스
                 </a>
             </li>
             <li class="nav-item" role="presentation">
-                <a href="{{ route('admin.income.policy', ['mode' => 'referral']) }}" class="nav-link">
-                    추천보너스
+                <a href="{{ route('admin.income.policy', ['mode' => 'referral_matching']) }}" class="nav-link">
+                    추천매칭
                 </a>
             </li>
             <li class="nav-item" role="presentation">
@@ -31,7 +31,6 @@
                         <thead>
                             <tr class="border-2 border-bottom border-primary border-0">
                                 <th scope="col" class="text-center">레벨</th>
-                                <th scope="col" class="text-center">개인매출<br>(추가자격)</th>
                                 <th scope="col" class="text-center">보너스</th>
                                 <th scope="col" class="text-center">조건</th>
                                 <th scope="col" class="text-center">수정일자</th>
@@ -47,65 +46,43 @@
                                     {{ $val->grade->name }}
                                 </td>
                                 <td class="text-center">
-                                    <input type="text" name="self_sales" value="{{ rtrim(rtrim(number_format($val->self_sales, 9, '.', ''), '0'), '.') }}" class="form-control">
-                                </td>
-                                <td class="text-center">
                                     <input type="text" name="bonus" value="{{ rtrim(rtrim(number_format($val->bonus, 9, '.', ''), '0'), '.') }}" class="form-control">
                                 </td>
-                                <td class="text-center" id="input_condition_{{ $key+1 }}">
+                                <td id="input_condition_{{ $key+1 }}">
                                     @if(!is_null($val->conditions))
-                                    @foreach($val->conditions as $k => $v)
                                     <div class="row gx-3 align-items-center mb-2 add_condition_{{ $key+1 }}">
+                                        <div class="col-2">
+                                            <label class="form-label mb-0">직추천</label>
+                                        </div>
                                         <div class="col-auto">
                                             <label class="form-label mb-0">최소 레벨:</label>
                                         </div>
                                         <div class="col-2">
-                                            <input type="text" name="conditions[{{ $k }}][min_level]" value="{{ $v['min_level'] }}" class="form-control form-control-sm"/>
-                                        </div>
-                                        <div class="col-auto">
-                                            <label class="form-label mb-0">최대 레벨:</label>
-                                        </div>
-                                        <div class="col-2">
-                                            <input type="text" name="conditions[{{ $k }}][max_level]" value="{{ $v['max_level'] }}" class="form-control form-control-sm"/>
+                                            <input type="text" name="conditions[direct][min_level]" value="{{ $val->conditions['direct']['min_level'] }}" class="form-control form-control-sm"/>
                                         </div>
                                         <div class="col-auto">
                                             <label class="form-label mb-0">인원 수:</label>
                                         </div>
                                         <div class="col-2">
-                                            <input type="text" name="conditions[{{ $k }}][referral_count]" value="{{ $v['referral_count'] }}" class="form-control form-control-sm"/>
-                                        </div>
-                                        <div class="col-1">
-                                            @if($k > 0)
-                                            <button type="button" class="btn btn-danger btn-sm removeConditionBtn" data-index="{{ $key+1 }}">- 삭제</button>
-                                            @else
-                                            <button type="button" class="btn btn-success btn-sm addConditionBtn" data-index="{{ $key+1 }}">+ 추가</button>
-                                            @endif
-                                        </div>
+                                            <input type="text" name="conditions[direct][referral_count]" value="{{ $val->conditions['direct']['referral_count'] }}" class="form-control form-control-sm"/>
+                                        </div>                        
                                     </div>
-                                    @endforeach
-                                    @else
                                     <div class="row gx-3 align-items-center mb-2 add_condition_{{ $key+1 }}">
+                                        <div class="col-2">
+                                            <label class="form-label mb-0">추천 산하</label>
+                                        </div>
                                         <div class="col-auto">
                                             <label class="form-label mb-0">최소 레벨:</label>
                                         </div>
                                         <div class="col-2">
-                                            <input type="text" name="conditions[0][min_level]" value="" class="form-control form-control-sm"/>
-                                        </div>
-                                        <div class="col-auto">
-                                            <label class="form-label mb-0">최대 레벨:</label>
-                                        </div>
-                                        <div class="col-2">
-                                            <input type="text" name="conditions[0][max_level]" value="" class="form-control form-control-sm"/>
+                                            <input type="text" name="conditions[all][min_level]" value="{{ $val->conditions['all']['min_level'] }}" class="form-control form-control-sm"/>
                                         </div>
                                         <div class="col-auto">
                                             <label class="form-label mb-0">인원 수:</label>
                                         </div>
                                         <div class="col-2">
-                                            <input type="text" name="conditions[0][referral_count]" value="" class="form-control form-control-sm"/>
-                                        </div>
-                                        <div class="col-1">
-                                            <button type="button" class="btn btn-success btn-sm addConditionBtn" data-index="{{ $key+1 }}">+ 추가</button>
-                                        </div>
+                                            <input type="text" name="conditions[all][referral_count]" value="{{ $val->conditions['all']['referral_count'] }}" class="form-control form-control-sm"/>
+                                        </div>                        
                                     </div>
                                     @endif
                                 </td>
@@ -147,10 +124,6 @@
                                         @endforeach
                                     </select>
                                 </td>
-                                <th class="text-center align-middle">개인매출<br>(추가자격)</th>
-                                <td class="align-middle">
-                                    <input type="text" name="self_sales" value="" class="form-control w-50">
-                                </td>
                                 <th class="text-center align-middle">보너스</th>
                                 <td class="align-middle">
                                     <input type="text" name="bonus" value="" class="form-control w-50">
@@ -160,46 +133,43 @@
                                 <th class="text-center align-middle">조건</th>
                                 <td colspan="5" class="align-middle" id="input_condition_0">
                                    <div class="row gx-3 align-items-center mb-2 add_condition_0">
+                                        <div class="col-1">
+                                            <label class="form-label mb-0">직추천</label>
+                                        </div>
                                         <div class="col-auto">
                                             <label class="form-label mb-0">최소 레벨:</label>
                                         </div>
                                         <div class="col-2">
-                                            <input type="text" name="conditions[0][min_level]" class="form-control form-control-sm"/>
-                                        </div>
-                                        <div class="col-auto">
-                                            <label class="form-label mb-0">최대 레벨:</label>
-                                        </div>
-                                        <div class="col-2">
-                                            <input type="text" name="conditions[0][max_level]" class="form-control form-control-sm"/>
+                                            <input type="text" name="conditions[direct][min_level]" value="0" class="form-control form-control-sm"/>
                                         </div>
                                         <div class="col-auto">
                                             <label class="form-label mb-0">인원 수:</label>
                                         </div>
                                         <div class="col-2">
-                                            <input type="text" name="conditions[0][referral_count]" class="form-control form-control-sm"/>
+                                            <input type="text" name="conditions[direct][referral_count]" value="0" class="form-control form-control-sm"/>
                                         </div>
+                                    </div>
+                                    <div class="row gx-3 align-items-center mb-2 add_condition_0">
                                         <div class="col-1">
-                                            <button type="button" class="btn btn-success btn-sm addConditionBtn" data-index="0">+ 추가</button>
+                                            <label class="form-label mb-0">추천 산하</label>
+                                        </div>
+                                        <div class="col-auto">
+                                            <label class="form-label mb-0">최소 레벨:</label>
+                                        </div>
+                                        <div class="col-2">
+                                            <input type="text" name="conditions[all][min_level]" value="0" class="form-control form-control-sm"/>
+                                        </div>
+                                        <div class="col-auto">
+                                            <label class="form-label mb-0">인원 수:</label>
+                                        </div>
+                                        <div class="col-2">
+                                            <input type="text" name="conditions[all][referral_count]" value="0" class="form-control form-control-sm"/>
                                         </div>
                                     </div>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                    <div class="tet-body mb-4">
-                        <h6 class="text-body mt-4">ex) 5,6,7 중 2명 달성, 8 이상 1명 달성, 9이상 1명 달성</h6>
-                        <h6 class="text-body mt-4">잘못된 조건</h6>
-                        <p class="ms-3 mb-1">조건 A : 최소 레벨 5, 최대 레벨 7, 인원 수 2 {5,7}</p>
-                        <p class="ms-3 mb-1">조건 B : 최소 레벨 8, 최대 레벨 15, 인원 수 1 {8,15}</p>
-                        <p class="ms-3 mb-1">조건 C : 최소 레벨 9, 최대 레벨 15, 인원 수 1 {9,15}</p>
-                        <h6 class="text-body mt-4">정확한 조건</h6>
-                        <p class="ms-3 mb-1">조건 A : 최소 레벨 5, 최대 레벨 7, 인원 수 2 {5,7}</p>
-                        <p class="ms-3 mb-1">조건 B : 최소 레벨 8, 최대 레벨 8, 인원 수 1 {8,8}</p>
-                        <p class="ms-3 mb-1">조건 C : 최소 레벨 9, 최대 레벨 15, 인원 수 1 {9,15}</p>
-                        <p class="mt-4 mb-1">위의 예시의 잘못된 조건처럼 최소,최대 레벨 구간이 겹칠 경우, 조건 A와 B만 일치하면 되므로, 3명만 달성되도 지급됩니다.</p>
-                    </div>
-
-                    <hr>
                     <div class="d-flex justify-content-end align-items-center">
                         <button type="submit" class="btn btn-danger">추가</button>
                     </div>

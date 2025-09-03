@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Response;
 
 class SessionTimeout
@@ -25,14 +26,18 @@ class SessionTimeout
             if (!$login_at) {
                 session(['login_at' => now()]);
             } else {
-                
+
                 if (now()->diffInMinutes($login_at) > $this->timeout) {
-                   
+
                     Auth::logout();
                     Session::invalidate();
                     Session::regenerateToken();
 
-                    return redirect('/login');
+                    return redirect('/login')->withCookies([
+                        Cookie::forget(config('session.cookie')),
+                    ]);
+                } else {
+                    session(['login_at' => now()]);
                 }
             }
         }

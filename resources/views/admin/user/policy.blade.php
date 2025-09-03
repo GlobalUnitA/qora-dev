@@ -16,7 +16,7 @@
                             <tr class="border-2 border-bottom border-primary border-0"> 
                                 <th scope="col" class="ps-0 text-center">이름</th>
                                 <th scope="col" class="text-center">레벨</th>
-                                <th scope="col" class="text-center">기본 매출</th>
+                                <th scope="col" class="text-center">추천 인원</th>
                                 <th scope="col" class="text-center">개인 매출</th>
                                 <th scope="col" class="text-center">그룹 매출</th>
                                 <th scope="col" class="text-center" >수정일자</th>
@@ -29,7 +29,7 @@
                                 <input type="hidden" name="id" value="{{ $val['id'] }}" >
                                 <td class="text-center">{{ $val->grade->name }}</td>
                                 <td class="text-center">{{ $val->grade->level }}</td>
-                                <td class="text-center"><input type="text" name="base_sales" value="{{ $val->base_sales }}" class="form-control"></td>
+                                <td class="text-center"><input type="text" name="referral_count" value="{{ $val->referral_count }}" class="form-control"></td>
                                 <td class="text-center"><input type="text" name="self_sales" value="{{ $val->self_sales }}" class="form-control"></td>
                                 <td class="text-center"><input type="text" name="group_sales" value="{{ $val->group_sales }}" class="form-control"></td>
                                 <td class="text-center">{{ $val->updated_at }}</td>

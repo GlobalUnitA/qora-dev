@@ -10,6 +10,7 @@ use App\Models\UserProfile;
 use App\Models\Asset;
 use App\Models\AssetTransfer;
 use App\Http\Controllers\Controller;
+use App\Services\S3Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -17,10 +18,11 @@ use Carbon\Carbon;
 
 class AssetController extends Controller
 {
+    protected S3Service $s3Service;
 
-    public function __construct()
+    public function __construct(S3Service $s3Service)
     {
-        
+        $this->s3Service = $s3Service;
     }
    
     public function list(Request $request)
@@ -79,7 +81,11 @@ class AssetController extends Controller
     {
         $view = AssetTransfer::find($id);
 
-        return view('admin.asset.view', compact('view'));
+        if ($view->image_urls[0]) {
+            $download_url = $this->s3Service->generateDownloadUrl($view->image_urls[0], 600);
+        }
+
+        return view('admin.asset.view', compact('view', 'download_url'));
     }
 
 

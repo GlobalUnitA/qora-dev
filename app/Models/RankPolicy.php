@@ -11,13 +11,11 @@ class RankPolicy extends Model
 
     protected $fillable = [
         'grade_id',
-        'self_sales',
         'bonus',
         'conditions',
     ];
 
     protected $casts = [
-        'self_sales' => 'decimal:9',
         'bonus' => 'decimal:9',
         'conditions' => 'array',
     ];
@@ -29,7 +27,6 @@ class RankPolicy extends Model
 
     protected static $columnDescriptions = [
         'grade_id' => '레벨',
-        'self_sales' => '개인매출(추가자격)',
         'bonus' => '보너스',
         'conditions' => '조건',
     ];

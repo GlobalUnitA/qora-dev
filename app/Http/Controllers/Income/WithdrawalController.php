@@ -25,6 +25,7 @@ class WithdrawalController extends Controller
         $incomes = Income::where('user_id', auth()->id())
         ->whereHas('coin', function ($query) {
             $query->where('is_active', 'y');
+            $query->where('is_income', 'y');
         })
         ->get();
      

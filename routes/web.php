@@ -39,6 +39,7 @@ use App\Http\Controllers\About\AboutController;
 
 use App\Http\Controllers\Proc\LanguageController;
 use App\Http\Controllers\Proc\PopupController;
+use App\Http\Controllers\Proc\FileUploadController;
 
 Route::get('test', [TestController::class, 'index'])->name('test');
 
@@ -183,3 +184,4 @@ Route::middleware(['auth', 'session.timeout'])->group(function () {
 
 Route::get('/change-language/{locale}', [LanguageController::class, 'changeLanguage'])->name('change.language');
 Route::post('/popup/hide', [PopupController::class, 'hide'])->name('popup.hide');
+Route::post('/file/presigned-url', [FileUploadController::class, 'generatePresignedUrl'])->name('file.presigned-url');

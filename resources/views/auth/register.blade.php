@@ -47,19 +47,18 @@
                                     <label for="inputEmail" class="form-label required">{{ __('user.email') }}</label>
                                     <div class="input-group">
                                         <input type="email" name="email" id="inputEmail" class="form-control required" required>
-                                        <button type="button" id="verifyCode" class="btn btn-primary rounded-end-3">{{ __('system.send') }}</button>
+                                        <!-- Email verification temporarily disabled -->
+                                        <!--button type="button" id="verifyCode" class="btn btn-primary rounded-end-3">{{ __('system.send') }}</button-->
                                     </div>
                                 </div>
-                                <div class="mb-4">
+                                <!-- Email verification temporarily disabled -->
+                                <!--div class="mb-4">
                                     <label for="inputName" class="form-label required">{{ __('auth.verify_code') }}</label>
                                     <input type="text" name="code" class="form-control required" required>
-                                </div>
+                                </div-->
                                 <div class="mb-4">
                                     <label for="inputParentId" class="form-label required">{{ __('user.recommender_uid') }}</label>
-                                    <div class="d-flex">
-                                        <span class="me-2 lh-xl">C</span>
-                                        <input type="text" name="parentId" id="inputParentId" @if($mid)value="{{ $mid }}"@endif class="form-control required" required>
-                                    </div>
+                                    <input type="text" name="parentId" id="inputParentId" @if($mid)value="{{ $mid }}"@endif class="form-control required" required>
                                 </div>
                                 <div class="mb-4">
                                     <label for="inputMetaUid" class="form-label">{{ __('user.meta_id') }}</label>

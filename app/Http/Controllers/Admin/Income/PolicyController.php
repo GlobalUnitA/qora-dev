@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Income;
 use App\Models\UserGrade;
 use App\Models\SubscriptionPolicy;
 use App\Models\ReferralPolicy;
+use App\Models\ReferralMatchingPolicy;
 use App\Models\RankPolicy;
 use App\Models\PolicyModifyLog;
 use App\Http\Controllers\Controller;
@@ -51,6 +52,20 @@ class PolicyController extends Controller
 
             break;
 
+            case 'referral_matching' :
+
+                $policies = ReferralMatchingPolicy::all();
+
+                $modify_logs = PolicyModifyLog::join('referral_matching_policies', 'referral_matching_policies.id', '=', 'policy_modify_logs.policy_id')
+                    ->join('user_grades', 'user_grades.id', '=', 'referral_matching_policies.grade_id')
+                    ->join('admins', 'admins.id', '=', 'policy_modify_logs.admin_id')
+                    ->select('user_grades.name as grade_name', 'admins.name', 'policy_modify_logs.*')
+                    ->where('policy_modify_logs.policy_type', 'referral_matching_policies')
+                    ->orderBy('policy_modify_logs.created_at', 'desc')
+                    ->get();
+
+                return view('admin.income.policy.referral-matching', compact('policies', 'modify_logs'));
+
             case 'rank' :
 
                 $policies = RankPolicy::all();
@@ -83,17 +98,11 @@ class PolicyController extends Controller
         DB::beginTransaction();
 
         try {
-            $conditions = array_values($request->conditions);
-
-            if (is_null($conditions[0]['min_level']) || is_null($conditions[0]['max_level']) || is_null($conditions[0]['referral_count'])) {
-                $conditions = null;
-            }
-
+        
             RankPolicy::create([
                 'grade_id' => $request->grade_id,
-                'self_sales' => $request->self_sales,
                 'bonus' => $request->bonus,
-                'conditions' => $conditions,
+                'conditions' => $request->conditions,
             ]);
 
             DB::commit();

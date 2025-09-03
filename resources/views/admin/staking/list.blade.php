@@ -85,7 +85,7 @@
                                     @foreach ($list as $key => $value)
                                     <tr>
                                         <td scope="col" class="text-center">{{ $list->firstItem() + $key }}</td>
-                                        <td scope="col" class="text-center">C{{ $value->user_id }}</td>
+                                        <td scope="col" class="text-center">{{ $value->user_id }}</td>
                                         <td scope="col" class="text-center">{{ $value->user->name }}</td>
                                         <td scope="col" class="text-center">{{ $value->asset->coin->name }}</td>
                                         <td scope="col" class="text-center">{{ $value->amount }}</td>

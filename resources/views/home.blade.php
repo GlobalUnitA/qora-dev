@@ -8,17 +8,17 @@
                 {{ __('user.level') }}<span class="fw-semibold d-inline-block ps-2">{{ Auth::user()->profile->grade->name }}</span>
             </p>
             <p class="mb-2 divider ps-3 position-relative fs-4">
-                UID<span class="fw-semibold d-inline-block ps-2">C{{ Auth::user()->id }}</span>
+                UID<span class="fw-semibold d-inline-block ps-2">{{ Auth::user()->id }}</span>
             </p>
             <a href="#">
-                <p type="button" class="mb-2 fs-4 ps-2 copyBtn" data-copy="C{{ Auth::user()->id }}">{{ __('system.copy') }}</p>
+                <p type="button" class="mb-2 fs-4 ps-2 copyBtn" data-copy="{{ Auth::user()->id }}">{{ __('system.copy') }}</p>
             </a>
         </div>
         <div class="d-flex justify-content-between align-items-center w-100">
             <div>
                 <!-- <h4 class="m-0 fs-6 lh-md pe-1">{{ Auth::user()->name }} <span class="fw-normal lh-base">{{ __('messages.member.member_welcome') }}</span></h4> -->
                 <h4 class="m-0 fs-6 pe-1"><span class="fw-normal lh-base">Hello, </span>{{ Auth::user()->name }}</h4>
-                <p class="m-0 pe-1 text-body">Real AI. Real Yield. Real Execution.</p>
+                <p class="m-0 pe-1 text-body opacity-50">Make crypto work smarter for you</p>
             </div>
             <div>
                 <a href="{{ route('profile') }}" class="btn btn-dark w-100 text-decoration-none d-flex p-0">
@@ -52,16 +52,15 @@
                 </div>
             </div>
             <div class="carousel-item">
-                <a href="{{ route('about') }}">
-                    <img src="{{ asset('images/slide_bg_02.jpg') }}" class="d-block w-100" alt="...">
-                    <div class="carousel-caption d-none d-md-block">
-                        <!-- <h5>Second slide label</h5>
-                        <p>Some representative placeholder content for the second slide.</p> -->
-                    </div>
-                </a>
+                <img src="{{ asset('images/slide_bg_02.jpg') }}" class="d-block w-100" alt="...">
+                <div class="carousel-caption d-none d-md-block">
+                    <!-- <h5>Second slide label</h5>
+                    <p>Some representative placeholder content for the second slide.</p> -->
+                </div>
             </div>
             <div class="carousel-item">
-                <a href="{{ route('board.list', ['code' =>'product'])}}">
+                <!--a href="{{ route('board.list', ['code' =>'product'])}}"-->
+                <a href="#" onclick="alertModal('{{ __('system.coming_soon_notice') }}')">
                     <img src="{{ asset('images/slide_bg_03.jpg') }}" class="d-block w-100" alt="...">
                     <div class="carousel-caption d-none d-md-block">
                         <!-- <h5>Third slide label</h5>
@@ -83,10 +82,10 @@
         <div class="card-body py-4 px-0">
             <nav>
                 <div class="nav justify-content-center" id="nav-tab" role="tablist">
-                    <button class="nav-link nav-asset active px-3" id="nav-asset-tab" data-bs-toggle="tab" data-bs-target="#nav-asset" type="button" role="tab" aria-controls="nav-asset" aria-selected="true">
+                    <button class="nav-link nav-asset active ps-0 pe-3" id="nav-asset-tab" data-bs-toggle="tab" data-bs-target="#nav-asset" type="button" role="tab" aria-controls="nav-asset" aria-selected="true">
                         <h5 class="link-card-tab fs-6 my-3">{{ __('asset.assets_held') }}</h5>
                     </button>
-                    <button class="nav-link nav-wallet px-3 position-relative divider-w" id="nav-wallet-tab" data-bs-toggle="tab" data-bs-target="#nav-wallet" type="button" role="tab" aria-controls="nav-wallet" aria-selected="false">
+                    <button class="nav-link nav-wallet ps-3 pe-0 position-relative divider-w" id="nav-wallet-tab" data-bs-toggle="tab" data-bs-target="#nav-wallet" type="button" role="tab" aria-controls="nav-wallet" aria-selected="false">
                         <h5 class="link-card-tab fs-6 my-3">{{ __('asset.income_wallet') }}</h5>
                     </button>
                 </div>
@@ -99,7 +98,7 @@
                         $remaining = $assets->slice(2);
                     @endphp
                         @foreach($firstTwo as $asset)
-                        <div class="d-flex justify-content-between align-items-center py-4 px-4">
+                        <div class="d-flex justify-content-between align-items-center pt-4 px-4">
                             <h6 class="text-white fs-4 fw-normal lh-md m-0">{{ $asset->coin->name }}</h6>
                             <h4 class="fw-bold text-white fs-5 fs-md-6 text-end flex-grow-1 m-0 px-1">{{ number_format(floor( $asset->balance * 10000) / 10000, 4) }}</h4>
                             <a href="{{ route('asset', ['id' => $asset->encrypted_id]) }}">
@@ -112,15 +111,15 @@
                     <div class="collapse-box">
                         <div class="collapse" id="collapseBox">
                             @foreach($remaining as $asset)
-                            <div class="d-flex justify-content-between align-items-center py-4 px-4">
-                                <h6 class="text-white fs-5 m-0">{{ $asset->coin->name }}</h6>
+                            <div class="d-flex justify-content-between align-items-center pt-4 px-4">
+                                <h6 class="text-white fs-4 fw-normal lh-md m-0">{{ $asset->coin->name }}</h6>
                                 <a href="{{ route('asset', ['id' => $asset->encrypted_id]) }}">
                                     <h4 class="fw-bold text-white fs-6 fs-md-6 m-0">{{ number_format(floor( $asset->balance * 10000) / 10000, 4) }}<span class="btn btn-outline-light btn-sm py-1 px-3 mb-1 ms-2">{{ __('system.detail') }}</span></h4>
                                 </a>
                             </div>
                             @endforeach
                         </div>
-                        <a class="d-block my-2 opacity-75 text-white" style="height: 24px;" data-bs-toggle="collapse" href="#collapseBox" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        <a class="d-block mt-4 mb-2 opacity-75 text-white" style="height: 24px;" data-bs-toggle="collapse" href="#collapseBox" role="button" aria-expanded="false" aria-controls="collapseExample">
                             <span class="fs-4 mb-4"></span>
                         </a>
                     </div>
@@ -133,10 +132,11 @@
                         $remaining = $incomes->slice(2);
                     @endphp
                         @foreach($firstTwo as $income)
-                        <div class="d-flex justify-content-between align-items-center py-4 px-4">
+                        <div class="d-flex justify-content-between align-items-center pt-4 px-4">
                             <h6 class="text-white fs-4 fw-normal lh-md m-0">{{ $income->coin->name }}</h6>
                             <h4 class="fw-bold text-white fs-6 fs-md-6 text-end flex-grow-1 m-0 px-1">{{ number_format(floor( $income->balance * 10000) / 10000, 4) }}</h4>
-                            <a href="{{ route('income', ['id' => $income->encrypted_id]) }}">
+                            <a href="#" onclick="alertModal('{{ __('system.coming_soon_notice') }}')">
+                            <!--a href="{{ route('income', ['id' => $income->encrypted_id]) }}"-->
                                 <span class="btn btn-outline-light btn-sm py-1 px-3 ms-2">{{ __('system.detail') }}</span>
                             </a>
                         </div>
@@ -146,54 +146,22 @@
                     <div class="collapse-box">
                         <div class="collapse" id="collapseBox">
                             @foreach($remaining as $income)
-                            <div class="d-flex justify-content-between align-items-center py-4 px-4">
-                                <h6 class="text-white fs-5 m-0">{{ $income->coin->name }}</h6>
-                                <a href="{{ route('income', ['id' => $income->encrypted_id]) }}">
+                            <div class="d-flex justify-content-between align-items-center pt-4 px-4">
+                                <h6 class="text-white fs-4 fw-normal lh-md m-0">{{ $income->coin->name }}</h6>
+                                <a href="#" onclick="alertModal('{{ __('system.coming_soon_notice') }}')">
+                                <!--a href="{{ route('income', ['id' => $income->encrypted_id]) }}"-->
                                     <h4 class="fw-bold text-white fs-6 fs-md-6 m-0">{{ number_format(floor( $income->balance * 10000) / 10000, 4) }}<span class="btn btn-outline-light btn-sm py-1 px-3 mb-1 ms-2">{{ __('system.detail') }}</span></h4>
                                 </a>
                             </div>
                             @endforeach
                         </div>
-                        <a class="d-block my-2 opacity-75 text-white" style="height: 24px;" data-bs-toggle="collapse" href="#collapseBox" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        <a class="d-block mt-4 mb-2 opacity-75 text-white" style="height: 24px;" data-bs-toggle="collapse" href="#collapseBox" role="button" aria-expanded="false" aria-controls="collapseExample">
                             <span class="fs-4 mb-4"></span>
                         </a>
                     </div>
                     @endif
                 </div>
             </div>
-            <!-- <h5 class="text-white fs-5 mb-4 pt-3">{{ __('asset.assets_held') }}</h5>
-            <div>
-            @php
-                $firstTwo = $assets->take(2);
-                $remaining = $assets->slice(2);
-            @endphp
-                @foreach($firstTwo as $asset)
-                <div class="d-flex justify-content-between align-items-center py-4 px-4">
-                    <h6 class="text-white fs-4 fw-normal lh-md m-0">{{ $asset->coin->name }}</h6>
-                    <h4 class="fw-bold text-white fs-6 fs-md-6 text-end flex-grow-1 m-0 px-1">{{ $asset->balance }}</h4>
-                    <a href="{{ route('asset', ['id' => $asset->encrypted_id]) }}">
-                        <span class="btn btn-outline-light btn-sm py-1 px-3 ms-2">{{ __('system.detail') }}</span>
-                    </a>
-                </div>
-                @endforeach
-            </div>
-            @if($remaining->isNotEmpty())
-            <div class="collapse-box">
-                <div class="collapse" id="collapseBox">
-                    @foreach($remaining as $asset)
-                    <div class="d-flex justify-content-between align-items-center py-4 px-4">
-                        <h6 class="text-white fs-5 m-0">{{ $asset->coin->name }}</h6>
-                        <a href="{{ route('asset', ['id' => $asset->encrypted_id]) }}">
-                            <h4 class="fw-bold text-white fs-6 fs-md-6 m-0">{{ $asset->balance }}<span class="btn btn-outline-light btn-sm py-1 px-3 mb-1 ms-2">{{ __('system.detail') }}</span></h4>
-                        </a>
-                    </div>
-                    @endforeach
-                </div>
-                <a class="d-block my-2 opacity-75 text-white" style="height: 24px;" data-bs-toggle="collapse" href="#collapseBox" role="button" aria-expanded="false" aria-controls="collapseExample">
-                    <span class="fs-4 mb-4"></span>
-                </a>
-            </div>
-            @endif -->
         </div>
     </div>
     <div class="mb-5">
@@ -205,39 +173,29 @@
                     <p class="m-0 fw-medium fs-3">{{ __('asset.deposit') }}</p>                    
                 </div>
             </a>
+            {{-- 
             <a href="{{ route('asset.withdrawal') }}" class="link-body-emphasis w-100" style="max-width: 25%">
                 <div class="d-flex align-items-center flex-column">
                     <img src="{{ asset('/images/icon/icon_main_withdrawal.png') }}" width="44" class="mb-1">
                     <p class="m-0 fw-medium fs-3">{{ __('asset.withdrawal') }}</p>                    
                 </div>
             </a>
-            <!--a href="{{ route('trading') }}" class="link-body-emphasis w-100" style="max-width: 25%">
+            <a href="{{ route('trading') }}" class="link-body-emphasis w-100" style="max-width: 25%">
                 <div class="d-flex align-items-center flex-column">
                 <img src="{{ asset('/images/icon/icon_main_trading.png') }}" width="44" class="mb-1">
                     <p class="m-0 fw-medium fs-3">{{ __('asset.trading') }}</p>                    
                 </div>
-            </a-->           
+            </a>           
             <a href="{{ route('staking') }}" class="link-body-emphasis w-100" style="max-width: 25%">
                 <div class="d-flex align-items-center flex-column">
                 <img src="{{ asset('/images/icon/icon_main_investment.png') }}" width="44" class="mb-1">
                     <p class="m-0 fw-medium fs-3">{{ __('staking.staking') }}</p>                    
                 </div>
-            </a>                
-        </div>
-        <!--div class="d-flex justify-content-start align-items-center">
-        <a href="#" class="link-body-emphasis w-100" style="max-width: 25%">
-                <div class="d-flex align-items-center flex-column">
-                <img src="{{ asset('/images/icon/icon_main_withdrawal.svg') }}" width="44" class="mb-1">
-                    <p class="m-0 fw-medium fs-3">추가메뉴</p>                    
-                </div>
             </a>
-            <a href="#" class="link-body-emphasis w-100" style="max-width: 25%">
-                <div class="text-center">
-                    <p class="m-0 fw-medium fs-3"><span class="bg-light px-2 py-3 rounded-4">+ 추가</span></p>                    
-                </div>
-            </a>                
-        </div-->
+            --}}               
+        </div>
     </div>
+    {{--
     <div class="pb-5">
         <h5 class="mb-3">{{ __('etc.crypto_price') }}</h5>
         <div class="row g-3">            
@@ -259,13 +217,16 @@
                 </table>
         </div>
     </div>
+    --}}
     <div class="d-flex card text-center rounded-0" style="background: #070707; margin-bottom: 100px;">
         <div class="card-body p-4 position-relative" style="background: url('images/mockup.png') center bottom no-repeat; background-size: 620px; height: 670px;">
-            <h5 class="text-white pt-3 opacity-50">From Strategy to Yield</h5>
-            <h3 class="text-white pb-4">CUBEAI Delivers<br>Real Results</</h3>
+            <h5 class="text-white pt-3 opacity-50">Building Decentralized</h5>
+            <h3 class="text-white pb-4">Innovation<br>Together</</h3>
+            {{-- 
             <a href="{{ route('staking') }}" class="position-absolute w-100 px-3" style="bottom: 0; left: 0;">
                 <button class="btn btn-primary w-100 py-3 my-5 fs-4">Stake Now <span class="opacity-50">&</span> Earn Rewards!</button>
-            </a>           
+            </a> 
+            --}}          
         </div>
     </div>
 </main>

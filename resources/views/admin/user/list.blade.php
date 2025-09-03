@@ -33,7 +33,7 @@
                                     <tr style="cursor:pointer;" onclick="window.location='{{ route('admin.user.view', ['id' => $value->user_id]) }}';">
                                         <th scope="row" class="ps-0 fw-medium text-center">{{ $list->firstItem() + $key }}</th>
                                         <td class="text-center">{{ $value->account }}</td>
-                                        <td class="text-center">C{{ $value->user_id }}</td>
+                                        <td class="text-center">{{ $value->user_id }}</td>
                                         <td class="text-center">{{ $value->name }}</td>
                                         <td class="text-center">{{ $value->grade_name }}</td>
                                         <td class="text-center">{{ $value->phone }}</td>

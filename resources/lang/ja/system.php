@@ -47,4 +47,5 @@ return array (
   'stock_amount' => '保有数量',
   'dismiss_today' => '今日は表示しない',
   'close' => '閉じる',
+  'modify_notice' => '修正済みです。',
 );

@@ -82,7 +82,7 @@ class UserProfile extends Model
         return $is_valid;
     }
 
-    public function getParentTree($max_level = 21)
+    public function getParentTree($max_level = 20)
     {
         $levels = [];
         $current = $this;
@@ -102,7 +102,7 @@ class UserProfile extends Model
     }
 
 
-    public function getChildrenTree($max_level = 21)
+    public function getChildrenTree($max_level = 20)
     {
         $levels = [];
         $current_level_users = collect([$this]);
@@ -137,7 +137,7 @@ class UserProfile extends Model
 
     public function getGroupSales()
     {
-        $childrens = $this->getChildrenTree(21);
+        $childrens = $this->getChildrenTree(20);
         $group_sales = 0;
 
         foreach ($childrens as $level => $profiles) {
@@ -158,7 +158,7 @@ class UserProfile extends Model
 
     public function subscriptionBonus($withdrawal)
     {
-        $parents = $this->getParentTree(21);
+        $parents = $this->getParentTree(20);
 
         foreach ($parents as $level => $parent_profile) {
 
@@ -204,50 +204,133 @@ class UserProfile extends Model
 
     }
 
-    public function referralBonus($staking)
+    public function referralBonus($deposit)
     {
-        $parents = $this->getParentTree(21);
+        try {
 
+            DB::beginTransaction();
+
+            $parents = $this->getParentTree(20);
+
+            foreach ($parents as $level => $parent_profile) {
+
+                if ($parent_profile->is_valid === 'n') continue;
+
+                $policy = ReferralPolicy::where('grade_id', $parent_profile->grade->id)->first();
+
+                if (!$policy) continue;
+
+                $rate_key = "level_{$level}_rate";
+
+                $bonus = $deposit->amount * $policy->$rate_key / 100;
+
+                if ($bonus <= 0) continue;
+                
+                $income = Income::where('user_id', $parent_profile->user_id)->where('coin_id', 1)->first();
+
+                $transfer = IncomeTransfer::create([
+                    'user_id'   => $parent_profile->user_id,
+                    'income_id'  => $income->id,
+                    'type' => 'referral_bonus',
+                    'status' => 'completed',
+                    'amount'    => $bonus,
+                    'actual_amount' => $bonus,
+                    'before_balance' => $income->balance,
+                    'after_balance' => $income->balance + $bonus,
+                ]);
+
+                $referral_bonus = ReferralBonus::create([
+                    'user_id'   => $parent_profile->user_id,
+                    'referrer_id' => $this->user_id,
+                    'deposit_id'   => $deposit->id,
+                    'transfer_id'  => $transfer->id,
+                    'bonus' => $bonus,
+                ]);
+
+                $income->increment('balance', $bonus);
+
+                Log::channel('bonus')->info('Success referral bonus', [
+                    'user_id' => $parent_profile->user_id, 
+                    'referrer_id' => $this->user_id,
+                    'bonus_id' => $referral_bonus->id,
+                    'transfer_id' => $transfer->id,
+                    'bonus' => $bonus,
+                    'before_balance' => $transfer->before_balance,
+                    'after_balance' => $transfer->after_balance,
+                ]);
+
+                $this->referralMatching($referral_bonus);
+            }
+     
+            DB::commit();
+
+        }  catch (\Exception $e) {
+
+            DB::rollBack();
+
+            Log::channel('bonus')->error('Referral bonus transaction failed', [
+                'deposit_id' => $deposit->id,
+                'user_id' => $this->user_id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+        }
+    }
+
+    public function referralMatching($bonus)
+    {
+
+        $parents = $this->getParentTree(20);
+        
         foreach ($parents as $level => $parent_profile) {
 
-            if ($parent_profile->is_valid === 'n') {
-                continue;
-            }
+            if ($parent_profile->is_valid === 'n') continue;
+            
+            $policy = ReferralMatchingPolicy::where('grade_id', $parent_profile->grade->id)->first();
 
-            $policy = ReferralPolicy::where('grade_id', $parent_profile->grade->id)->first();
+            if (!$policy) continue;
 
             $rate_key = "level_{$level}_rate";
 
-            $bonus = $staking->amount * $policy->$rate_key / 100;
+            $matching = $bonus->transfer->amount * $policy->$rate_key / 100;
 
-            if ($bonus <= 0) {
-                continue;
-            }
-
-            $income = Income::where('user_id', $parent_profile->user_id)->where('coin_id', $staking->income->coin_id)->first();
+            if ($matching <= 0) continue;
+            
+            $income = Income::where('user_id', $parent_profile->user_id)
+                ->where('coin_id', 1)
+                ->first();
 
             $transfer = IncomeTransfer::create([
                 'user_id'   => $parent_profile->user_id,
                 'income_id'  => $income->id,
-                'type' => 'referral_bonus',
+                'type' => 'referral_matching',
                 'status' => 'completed',
-                'amount'    => $bonus,
-                'actual_amount' => $bonus,
+                'amount'    => $matching,
+                'actual_amount' => $matching,
                 'before_balance' => $income->balance,
-                'after_balance' => $income->balance + $bonus,
+                'after_balance' => $income->balance + $matching,
             ]);
 
-            ReferralBonus::create([
+            $referral_matching = ReferralMatching::create([
                 'user_id'   => $parent_profile->user_id,
                 'referrer_id' => $this->user_id,
-                'staking_id'   => $staking->id,
+                'bonus_id'   => $bonus->id,
                 'transfer_id'  => $transfer->id,
-                'bonus' => $bonus,
+                'matching' => $matching,
             ]);
 
-            $income->increment('balance', $bonus);
+            $income->increment('balance', $matching);
 
-            Log::channel('bonus')->info('Success referral bonus', ['user_id' => $this->user_id, 'bonus' => $bonus, 'transfer_id' => $transfer->id]);
+            Log::channel('bonus')->info('Success referral matching', [
+                'user_id' => $parent_profile->user_id, 
+                'referrer_id' => $this->user_id,
+                'bonus_id' => $bonus->id, 
+                'matching_id' => $referral_matching->id,
+                'transfer_id' => $transfer->id, 
+                'matching' => $matching, 
+                'before_balance' => $transfer->before_balance,
+                'after_balance' => $transfer->after_balance,
+            ]);
         }
     }
 
@@ -271,51 +354,45 @@ class UserProfile extends Model
                 continue;
             }
 
-            $self_sales = $this->getSelfSales();
-            $group_sales = $this->getGroupSales();
+            $direct_children = $this->getChildrenTree(1);
+            $direct_count = isset($direct_children[1]) ? $direct_children[1]->count() : 0;
 
-            if ($self_sales < $policy->self_sales) {
-                Log::channel('bonus')->info("Rank bonus payment failed - User ID: {$this->user_id}, policy ID: {$policy->id}, grade ID: {$policy->grade_id}, Reason: Insufficient personal sales volume");
+            $direct_min_level = (int) $policy->conditions['direct']['min_level'];
+            $direct_required_count = (int) $policy->conditions['direct']['referral_count'];
+
+            $direct_met_count = $direct_children[1]->filter(function ($child) use ($direct_min_level) {
+                $level = $child->grade->level;
+                return $level >= $direct_min_level;
+            })->count();
+            
+            if ($direct_met_count < $direct_required_count) {
+                Log::channel('bonus')->info("Rank bonus not paid - User ID: {$this->user_id}, Reason: Insufficient qualified directs for required levels.");
                 continue;
             }
 
-            $direct_children = $this->getChildrenTree(1);
+            $all_children = collect($this->getChildrenTree(20))->flatten(1);
+            $all_count = $all_children->count();
 
-            $direct_count = isset($direct_children[1]) ? $direct_children[1]->count() : 0;
+            $all_min_level = (int) $policy->conditions['all']['min_level'];
+            $all_required_count = (int) $policy->conditions['all']['referral_count'];
 
-            if (!empty($policy->conditions)) {
-                $all_conditions_met = true;
+            $all_met_count = $all_children->filter(function ($child) use ($all_min_level) {
+                $level = $child->grade->level;
+                return $level >= $all_min_level;
+            })->count();
 
-                foreach ($policy->conditions as $condition) {
-                    $min_level = (int) $condition['min_level'];
-                    $max_level = (int) $condition['max_level'];
-                    $required_count = (int) $condition['referral_count'];
-
-                    $count = 0;
-
-                    if (isset($direct_children[1])) {
-                        $count = $direct_children[1]->filter(function ($child) use ($min_level, $max_level) {
-                            $level = $child->grade->level;
-                            return $level >= $min_level && $level <= $max_level;
-                        })->count();
-                    }
-
-                    if ($count < $required_count) {
-                        $all_conditions_met = false;
-                        break;
-                    }
-                }
-
-                if (!$all_conditions_met) {
-                    Log::channel('bonus')->info("Rank bonus not paid - User ID: {$this->user_id}, Reason: Insufficient qualified referrals for required levels.");
-                    continue;
-                }
+            if ($all_met_count < $all_required_count) {
+                Log::channel('bonus')->info("Rank bonus not paid - User ID: {$this->user_id}, Reason: Insufficient qualified downline members.");
+                continue;
             }
 
             DB::beginTransaction();
 
             try {
                 $bonus = $policy->bonus;
+
+                $self_sales = $this->getSelfSales();
+                $group_sales = $this->getGroupSales();
 
                 $income = Income::where('user_id', $this->user_id)->where('coin_id', 1)->first();
 
@@ -336,25 +413,12 @@ class UserProfile extends Model
                     'transfer_id'    => $transfer->id,
                     'self_sales'     => $self_sales,
                     'group_sales'    => $group_sales,
-                    'referral_count' => $direct_count,
+                    'direct_count' => $direct_count,
+                    'referral_count' => $all_count,
                     'bonus'          => $bonus,
                 ]);
 
-                $income->increment('balance', $bonus);
-
-                if (isset($direct_children[1])) {
-                    foreach ($direct_children[1] as $profile) {
-                        $self_sales = $profile->getSelfSales();
-                        $group_sales = $profile->getGroupSales();
-
-                        RankBonusReferral::create([
-                            'user_id'     => $profile->user_id,
-                            'bonus_id'    => $rank_bonus->id,
-                            'self_sales'  => $self_sales,
-                            'group_sales' => $group_sales,
-                        ]);
-                    }
-                }
+                $income->increment('balance', $bonus);  
 
                 DB::commit();
 
@@ -399,7 +463,7 @@ class UserProfile extends Model
     {
         $this->evaluateUserGrade();
 
-        $parent_tree = $this->getParentTree(21);
+        $parent_tree = $this->getParentTree(20);
 
         foreach ($parent_tree as $parent_profile) {
             if ($parent_profile) {
@@ -417,7 +481,7 @@ class UserProfile extends Model
             ->get()
             ->sum(fn($deposit) => (float) $deposit->getAmountInUsdt());
 
-        $children_tree = $this->getChildrenTree(21);
+        $children_tree = $this->getChildrenTree(20);
         $group_sales = 0;
         foreach ($children_tree as $profiles) {
             foreach ($profiles as $child_profile) {
@@ -432,10 +496,10 @@ class UserProfile extends Model
             }
         }
 
-        $this->checkLevelUp($this->grade->level, $self_sales, $group_sales);
+        $this->checkLevelUp($this->grade->level, $this->referral_count, $self_sales, $group_sales);
     }
 
-    private function checkLevelUp($current_level, $self_sales, $group_sales)
+    private function checkLevelUp($current_level, $referral_count, $self_sales, $group_sales)
     {
 
         $next_level = $current_level + 1;
@@ -447,11 +511,9 @@ class UserProfile extends Model
         }
 
         if (
-            $self_sales >= $next_policy->base_sales &&
-            (
-                $self_sales >= $next_policy->self_sales ||
-                $group_sales >= $next_policy->group_sales
-            )
+            $referral_count >= $next_policy->referral_count &&
+            $self_sales >= $next_policy->self_sales &&
+            $group_sales >= $next_policy->group_sales  
         ) {
             $result = UserProfile::where('id', $this->id)->update([
                 'grade_id' => $next_grade->id
@@ -468,6 +530,5 @@ class UserProfile extends Model
 
         return;
     }
-
 
 }

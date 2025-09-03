@@ -67,12 +67,10 @@
                                 <th class="text-center align-middle">이미지</th>
                                 <td colspan=3 class="align-middle">
                                     <div class="text-center align-middle">
-                                        @if($view->image_urls)
-                                            @foreach($view->image_urls as $val)
-                                                <a href="{{ $val }}">
-                                                    <img src="{{ $val }}" class="img-fluid" style="height:300px">
-                                                </a>
-                                            @endforeach
+                                        @if($download_url)
+                                            <a href="{{ $download_url }}" target='_blank'>
+                                                <img src="{{ $download_url }}" class="img-fluid" style="height:300px">
+                                            </a>
                                         @else
                                             <span>이미지가 없습니다.</span>
                                         @endif

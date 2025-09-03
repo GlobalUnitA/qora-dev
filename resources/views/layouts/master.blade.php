@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-bs-theme="" id="htmlPage">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-bs-theme="" id="htmlPage" class="">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,7 +12,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Laravel') }}</title>
 </head>
-<body>
+<body class="p-0">
 
     <div class="layoutContainer container min-vh-100 overflow-hidden px-0 bg-body border border-sm-0 layout-padding">
         @if(Auth::check() && !Request::is('register*'))
@@ -53,6 +53,8 @@
 <div id="msg_logout" data-label="{{ __('user.logout_confirm') }}"></div>
 <div id="msg_required" data-label="{{ __('system.required_fields_notice') }}"></div>
 <div id="msg_copy" data-label="{{ __('system.copy_notice') }}"></div>
+<div id="msg_comming_soon" data-label="{{ __('system.coming_soon_notice') }}"></div>
+
 @stack('message')
 
 <script src="{{ asset('libs/jquery/dist/jquery.min.js') }}"></script>

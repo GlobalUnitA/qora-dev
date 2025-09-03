@@ -46,8 +46,10 @@ including image thumbnails), including optional [HTTPS](https://mailpit.axllent.
 - Mobile and tablet HTML preview toggle in desktop mode
 - [Message tagging](https://mailpit.axllent.org/docs/usage/tagging/) including manual tagging or automated tagging using filtering and "plus addressing"
 - [SMTP relaying](https://mailpit.axllent.org/docs/configuration/smtp-relay/) (message release) - relay messages via a different SMTP server including an optional allowlist of accepted recipients
+- [SMTP forwarding](https://mailpit.axllent.org/docs/configuration/smtp-forward/) - automatically forward messages via a different SMTP server to predefined email addresses
 - Fast message [storing & processing](https://mailpit.axllent.org/docs/configuration/email-storage/) - ingesting 100-200 emails per second over SMTP depending on CPU, network speed & email size,
 easily handling tens of thousands of emails, with automatic email pruning (by default keeping the most recent 500 emails)
+- [Chaos](https://mailpit.axllent.org/docs/integration/chaos/) feature to enable configurable SMTP errors to test application resilience
 - `List-Unsubscribe` syntax validation
 - Optional [webhook](https://mailpit.axllent.org/docs/integration/webhook/) for received messages
 
@@ -66,12 +68,18 @@ Mailpit runs as a single binary and can be installed in different ways:
 - **FreeBSD**: `pkg install mailpit`
 
 
-### Install via bash script (Linux & Mac)
+### Install via script (Linux & Mac)
 
 Linux & Mac users can install it directly to `/usr/local/bin/mailpit` with:
 
-```bash
-sudo bash < <(curl -sL https://raw.githubusercontent.com/axllent/mailpit/develop/install.sh)
+```shell
+sudo sh < <(curl -sL https://raw.githubusercontent.com/axllent/mailpit/develop/install.sh)
+```
+
+You can also change the install path to something else by setting the `INSTALL_PATH` environment, for example:
+
+```shell
+INSTALL_PATH=/usr/bin sudo sh < <(curl -sL https://raw.githubusercontent.com/axllent/mailpit/develop/install.sh)
 ```
 
 

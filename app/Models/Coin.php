@@ -15,6 +15,8 @@ class Coin extends Model
         'address',
         'image_urls',
         'is_active',
+        'is_asset',
+        'is_income',
     ];
 
     protected $casts = [

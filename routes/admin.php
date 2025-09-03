@@ -31,6 +31,9 @@ use App\Http\Controllers\Admin\Trading\PolicyController as TradingPolicyControll
 use App\Http\Controllers\Admin\Staking\StakingController;
 use App\Http\Controllers\Admin\Staking\PolicyController as StakingPolicyController;
 
+use App\Http\Controllers\Admin\Mining\MiningController;
+use App\Http\Controllers\Admin\Mining\PolicyController as MiningPolicyController;
+
 use App\Http\Controllers\Admin\Board\BoardController;
 use App\Http\Controllers\Admin\Board\PostController;
 use App\Http\Controllers\Admin\Board\CommentController;
@@ -162,6 +165,19 @@ Route::middleware(['admin.auth', 'otp'])->group(function () {
                     Route::get('{mode}/{id?}', [StakingPolicyController::class, 'view'])->name('admin.staking.policy.view');
                     Route::post('store', [StakingPolicyController::class, 'store'])->name('admin.staking.policy.store');
                     Route::post('update', [StakingPolicyController::class, 'update'])->name('admin.staking.policy.update');
+                });
+            });
+        });
+
+        Route::prefix('mining')->group(function () {
+            Route::get('list', [MiningController::class, 'list'])->name('admin.mining.list');
+            Route::middleware(['check_admin_level:3'])->group(function () {
+                Route::prefix('policy')->group(function () {
+                    Route::get('/', [MiningPolicyController::class, 'index'])->name('admin.mining.policy');
+                    Route::get('export', [MiningPolicyController::class, 'export'])->name('admin.mining.policy.export');
+                    Route::get('{mode}/{id?}', [MiningPolicyController::class, 'view'])->name('admin.mining.policy.view');
+                    Route::post('store', [MiningPolicyController::class, 'store'])->name('admin.mining.policy.store');
+                    Route::post('update', [MiningPolicyController::class, 'update'])->name('admin.mining.policy.update');
                 });
             });
         });

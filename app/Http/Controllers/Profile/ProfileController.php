@@ -52,7 +52,7 @@ class ProfileController extends Controller
 
                 return response()->json([
                     'status' => 'success',
-                    'message' => '수정되었습니다.',
+                    'message' =>  __('system.modify_notice'),
                     'url' => route('home'),
                 ]);
 
@@ -63,7 +63,7 @@ class ProfileController extends Controller
 
                 return response()->json([
                     'status' => 'error',
-                    'message' => '예기치 못한 오류가 발생했습니다.',
+                    'message' => __('system.error_notice'),
                 ]);
             }
         }
@@ -72,9 +72,9 @@ class ProfileController extends Controller
     public function password()
     {
         $view = UserProfile::join('users', 'user_profiles.user_id', '=', 'users.id')
-        ->select('user_profiles.*', 'users.name', 'users.account')
-        ->where('user_profiles.user_id', '=', Auth::id())
-        ->first();
+            ->select('user_profiles.*', 'users.name', 'users.account')
+            ->where('user_profiles.user_id', '=', Auth::id())
+            ->first();
 
         return view('profile.password', compact('view'));  
     }
@@ -94,16 +94,15 @@ class ProfileController extends Controller
                 'message' => __('auth.password_missmatch_notice'),
             ]);
         }
-
         
         $user->password = Hash::make($request->password);
         $user->save();
 
         return response()->json([
-                    'status' => 'success',
-                    'message' => '비밀번호가 변경되었습니다.',
-                    'url' => route('profile'),
-                ]);
+            'status' => 'success',
+            'message' => __('system.modify_notice'),
+            'url' => route('profile'),
+        ]);
     }
 
     protected function validator(array $data)

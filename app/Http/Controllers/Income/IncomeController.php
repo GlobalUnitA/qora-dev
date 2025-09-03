@@ -113,8 +113,8 @@ class IncomeController extends Controller
                     ? optional(optional($item->profit)->trading)->profit_rate.'%'
                     : null,
                 'referrer_id' => match ($item->type) {
-                    'subscription_bonus' => 'C'.optional($item->subscriptionBonus)->referrer_id,
-                    'referral_bonus' => 'C'.optional($item->referralBonus)->referrer_id,
+                    'subscription_bonus' => optional($item->subscriptionBonus)->referrer_id,
+                    'referral_bonus' => optional($item->referralBonus)->referrer_id,
                     default => null,
                 },
                 'type_text' => $item->type_text,

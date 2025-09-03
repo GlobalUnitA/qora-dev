@@ -13,20 +13,19 @@
                         <li class="nav-item" role="presentation">
                             <a href="{{ route('admin.income.list', array_merge(request()->query(), ['type' => 'withdrawal'])) }}" class="nav-link {{ Request('type') == 'withdrawal' ? 'active' : '' }}">외부출금</a>
                         </li>
-                        <li class="nav-item" role="presentation">
-                            <a href="{{ route('admin.income.list', array_merge(request()->query(), ['type' => 'trading_profit'])) }}" class="nav-link {{ Request('type') == 'trading_profit' ? 'active' : '' }}">트레이딩</a>
-                        </li>
+                        {{--
                         <li class="nav-item" role="presentation">
                             <a href="{{ route('admin.income.list', array_merge(request()->query(), ['type' => 'staking_reward'])) }}" class="nav-link {{ Request('type') == 'staking_reward' ? 'active' : '' }}">스테이킹</a>
                         </li>
+                        --}}
                         <li class="nav-item" role="presentation">
-                            <a href="{{ route('admin.income.list', array_merge(request()->query(), ['type' => 'subscription_bonus'])) }}" class="nav-link {{ Request('type') == 'subscription_bonus' ? 'active' : '' }}">DAO</a>
+                            <a href="{{ route('admin.income.list', array_merge(request()->query(), ['type' => 'referral_bonus'])) }}" class="nav-link {{ Request('type') == 'referral_bonus' ? 'active' : '' }}">추천보너스</a>
+                        </li>   
+                        <li class="nav-item" role="presentation">
+                            <a href="{{ route('admin.income.list', array_merge(request()->query(), ['type' => 'referral_matching'])) }}" class="nav-link {{ Request('type') == 'referral_matching' ? 'active' : '' }}">추천매칭</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a href="{{ route('admin.income.list', array_merge(request()->query(), ['type' => 'referral_bonus'])) }}" class="nav-link {{ Request('type') == 'referral_bonus' ? 'active' : '' }}">추천 보너스</a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a href="{{ route('admin.income.list', array_merge(request()->query(), ['type' => 'rank_bonus'])) }}" class="nav-link {{ Request('type') == 'rank_bonus' ? 'active' : '' }}">직급 보너스</a>
+                            <a href="{{ route('admin.income.list', array_merge(request()->query(), ['type' => 'rank_bonus'])) }}" class="nav-link {{ Request('type') == 'rank_bonus' ? 'active' : '' }}">승급보너스</a>
                         </li>
                     </ul>
                 </div>
@@ -102,7 +101,7 @@
                                     @foreach ($list as $key => $value)
                                     <tr style="cursor:pointer;" onclick="window.location='{{ route('admin.income.view', ['id' => $value->id]) }}';">
                                         <td scope="col" class="text-center">{{ $list->firstItem() + $key }}</td>
-                                        <td scope="col" class="text-center">C{{ $value->user_id }}</td>
+                                        <td scope="col" class="text-center">{{ $value->user_id }}</td>
                                         <td scope="col" class="text-center">{{ $value->user->name }}</td>
                                         <td scope="col" class="text-center">{{ $value->income->coin->name }}</td>
                                         <td scope="col" class="text-center">{{ $value->profit->trading->balance }}</td>

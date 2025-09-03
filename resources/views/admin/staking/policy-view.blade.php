@@ -30,9 +30,9 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th class="text-center align-middle">코인</th>
+                                <th class="text-center align-middle">참여 코인</th>
                                 <td class="align-middle">
-                                    <select name="coin_id" class="form-control w-50">
+                                    <select name="coin_id" class="form-select w-50">
                                         <option value="">코인 선택</option>
                                         @foreach ($coins as $coin)
                                         <option value="{{ $coin->id }}" @selected($view->coin_id == $coin->id)>{{ $coin->name }}</option>
@@ -46,6 +46,27 @@
                                     <input type="radio" name="staking_type" value="daily" id="daily" class="form-check-input" @if($view->staking_type == 'daily') checked @endif>
                                     <label class="form-check-label" for="daily">원리금 지급형</label>
                                 </td>
+                            </tr>
+                            <tr>
+                                <th class="text-center align-middle">원금 코인</th>
+                                <td class="align-middle">
+                                    <select name="coin_id" class="form-select w-50">
+                                        <option value="">코인 선택</option>
+                                        @foreach ($coins as $coin)
+                                        <option value="{{ $coin->id }}" @selected($view->refund_coin_id == $coin->id)>{{ $coin->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </td>
+                                <th class="text-center align-middle">수익 코인</th>
+                                <td class="align-middle">
+                                    <select name="coin_id" class="form-select w-50">
+                                        <option value="">코인 선택</option>
+                                        @foreach ($coins as $coin)
+                                        <option value="{{ $coin->id }}" @selected($view->reward_coin_id == $coin->id)>{{ $coin->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </td>
+                            </tr>
                             <tr>
                                 <th class="text-center align-middle">참여수량</th>
                                 <td class="align-middle" colspan="3">

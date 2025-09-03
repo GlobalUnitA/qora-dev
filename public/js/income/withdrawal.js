@@ -11,7 +11,7 @@ $(document).ready(function() {
     $("input[name='amount']").on('input', function () {
         calculateFinalAmount();
     });
-    
+
     $('#withdrawalForm').submit(function (event) {
         event.preventDefault();
 
@@ -41,6 +41,10 @@ $(document).ready(function() {
             },
             error: function(xhr, status, error) {
                 console.log(error);
+                if (xhr.status === 419) {
+                    alertModal($('#msg_session_expried').data('label'), '/');
+                    setTimeout(() => location.reload(), 2000);
+                }
                 if (xhr.status === 422) {
                     var errors = xhr.responseJSON.errors;
                     var errorMessage = '';
@@ -57,7 +61,7 @@ $(document).ready(function() {
                 }
             }
         });
-        
+
     });
 });
 

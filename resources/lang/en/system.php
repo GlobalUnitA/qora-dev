@@ -47,4 +47,5 @@ return array (
   'stock_amount' => 'Holdings',
   'dismiss_today' => 'Don\'t show again today',
   'close' => 'Close',
+  'modify_notice' => 'Successfully Updated.',
 );

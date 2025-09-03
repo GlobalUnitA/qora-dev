@@ -12,10 +12,11 @@
 
         <div class="card border-0 shadow-sm">
             <div class="card-body p-3">
-                <form method="POST" id="ajaxForm" action = "{{ route('asset.deposit.store') }}" enctype="multipart/form-data">
+                <form method="POST" id="confirmForm" action = "{{ route('asset.deposit.store') }}" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" name="asset" value="{{ $asset->encrypted_id }}">
                     <input type="hidden" name="amount" value="{{ $amount }}">
+                    <input type="hidden" name="file_key" value="">
                     <p class="mb-3 fs-4 text-body">{{ __('etc.image_upload') }}</p>
                     <div id="uploadBox" class="position-relative bg-light rounded p-4 text-center mb-5">
                         <input type="file" name="file" class="position-absolute top-0 start-0 w-100 h-100 opacity-0" accept="image/jpeg,image/jpg,image/png" id="fileInput" style="cursor: pointer;">

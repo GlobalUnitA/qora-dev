@@ -9,6 +9,7 @@ use App\Models\KakaoApi;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use Vinkla\Hashids\Facades\Hashids;
 use Carbon\Carbon;
@@ -27,6 +28,7 @@ class DepositController extends Controller
         $assets = Asset::where('user_id', auth()->id())
         ->whereHas('coin', function ($query) {
             $query->where('is_active', 'y');
+            $query->where('is_asset', 'y');
         })
         ->get();
 
@@ -56,33 +58,18 @@ class DepositController extends Controller
         $validated = $request->validate([
             'asset' => 'required|string',
             'amount' => 'required|numeric',
-            'file' => 'required|image|mimes:jpeg,png,jpg,webp,heic,heif|max:5120',
             'txid' => 'required|string|max:200',
+            'file_key' => 'required|string',
         ]);
-
-        $file = $request->file('file');
-
-        if (!$file->isValid()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => __('etc.iamge_upload_notice'),
-            ]);
-        }
 
         DB::beginTransaction();
 
         try {
+
             $asset_id = Hashids::decode($validated['asset']);
             $asset = Asset::findOrFail($asset_id[0]);
 
             $file_name = '_' . time() . '_' . auth()->id() . '.jpg';
-            $save_path = storage_path('app/public/uploads/deposit/' . $file_name);
-
-            Image::make($file->getRealPath())
-            ->encode('jpg', 90)
-            ->save($save_path);
-
-            $file_url[] = asset('storage/uploads/deposit/' . $file_name);
 
             $deposit = AssetTransfer::create([
                 'user_id' => auth()->id(),
@@ -91,16 +78,14 @@ class DepositController extends Controller
                 'amount' => $validated['amount'],
                 'txid' => $validated['txid'],
                 'actual_amount' => $validated['amount'],
-                'image_urls' => $file_url,
+                'image_urls' => [$validated['file_key']],
             ]);
 
-            DepositToast::create([
-                'deposit_id' => $deposit->id,
-            ]);
+            DepositToast::create(['deposit_id' => $deposit->id,]);
 
             DB::commit();
 
-            $message = 'UID C'.auth()->id().' 회원님이 입금 신청하였습니다.';
+            $message = 'UID '.auth()->id().' 회원님이 입금 신청하였습니다.';
             $this->kakaoApi->sendPurchaseNotification($message);
 
             return response()->json([
@@ -134,7 +119,6 @@ class DepositController extends Controller
             ->count();
 
         $has_more = $total_count > $limit;
-
 
         return view('asset.deposit-list', compact('list', 'has_more', 'limit'));
     }

@@ -34,7 +34,7 @@
                                     <tr style="cursor:pointer;" onclick="window.location='{{ route('admin.user.kyc.view', ['id' => $value->id]) }}';">
                                         <th scope="row" class="ps-0 fw-medium text-center">{{ $list->firstItem() + $key }}</th>
                                         <td class="text-center">{{ $value->user->account }}</td>
-                                        <td class="text-center">C{{ $value->user_id }}</td>
+                                        <td class="text-center">{{ $value->user_id }}</td>
                                         <td class="text-center">{{ $value->user->name }}</td>
                                         <td class="text-center">{{ $value->user->profile->grade->name }}</td>
                                         <td class="text-center">{{ $value->user->profile->phone }}</td>

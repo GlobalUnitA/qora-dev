@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\GradePolicy;
 use App\Models\SubscriptionPolicy;
 use App\Models\ReferralPolicy;
+use App\Models\ReferralMatchingPolicy;
 use App\Models\RankPolicy;
 use App\Models\AssetPolicy;
 use App\Models\TradingPolicy;
@@ -28,6 +29,7 @@ class AppServiceProvider extends ServiceProvider
         GradePolicy::observe(PolicyObserver::class);
         SubscriptionPolicy::observe(PolicyObserver::class);
         ReferralPolicy::observe(PolicyObserver::class);
+        ReferralMatchingPolicy::observe(PolicyObserver::class);
         RankPolicy::observe(PolicyObserver::class);
         AssetPolicy::observe(PolicyObserver::class);
         TradingPolicy::observe(PolicyObserver::class);

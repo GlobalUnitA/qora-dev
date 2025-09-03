@@ -17,6 +17,7 @@ use App\Models\StakingPolicy;
 use App\Models\StakingProfit;
 use App\Models\StakingRefund;
 use App\Models\StakingReward;
+use App\Models\ReferralMatchingPolicy;
 use App\Models\Staking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -38,6 +39,6 @@ class TestController extends Controller
     }
    public function index()
     {
-
+        
     }
 }

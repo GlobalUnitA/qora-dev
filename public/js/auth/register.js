@@ -23,8 +23,14 @@ $(document).ready(function() {
             },
             error: function(response) {
                 console.log(response);
-                alertModal(errorNotice);
-                $('#inputAccount').val('');
+                if (response.status === 419) {
+                    alertModal($('#msg_session_expried').data('label'), '/');
+                    setTimeout(() => location.reload(), 2000);
+                }
+                else {
+                    alertModal(errorNotice);
+                    $('#inputAccount').val('');
+                }
             }
         });
     });

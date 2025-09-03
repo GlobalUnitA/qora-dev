@@ -15,7 +15,8 @@ class Staking extends Model
     protected $fillable = [
         'user_id',
         'asset_id',
-        'income_id',
+        'refund_id',
+        'reward_id',
         'staking_id',
         'status',
         'amount',
@@ -39,12 +40,12 @@ class Staking extends Model
 
     public function asset()
     {
-        return $this->belongsTo(Asset::class, 'asset_id', 'id');
+        return $this->belongsTo(Asset::class, 'refund_id', 'id');
     }
 
     public function income()
     {
-        return $this->belongsTo(Income::class, 'income_id', 'id');
+        return $this->belongsTo(Income::class, 'reward_id', 'id');
     }
 
     public function policy()

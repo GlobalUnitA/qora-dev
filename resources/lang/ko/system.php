@@ -47,4 +47,5 @@ return array (
   'stock_amount' => '보유수량',
   'dismiss_today' => '오늘 하루 보지 않기',
   'close' => '닫기',
+  'modify_notice' => '수정되었습니다.',
 );

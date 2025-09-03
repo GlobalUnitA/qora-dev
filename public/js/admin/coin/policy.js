@@ -8,10 +8,14 @@ $(document).ready(function() {
 
                 const address = $('input[name="address['+id+']"]').val();
                 const active = $('input[name="is_active['+id+']"]:checked').val();
+                const asset = $('input[name="is_asset['+id+']"]:checked').val();
+                const income = $('input[name="is_income['+id+']"]:checked').val();
 
                 formData.append('id', id);
                 formData.append('address', address);
                 formData.append('is_active', active);
+                formData.append('is_asset', asset);
+                formData.append('is_income', income);
                 
                 $.ajax({
                     url: $('#updateForm').attr('action'),

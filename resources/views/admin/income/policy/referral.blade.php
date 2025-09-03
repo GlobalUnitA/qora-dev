@@ -5,13 +5,13 @@
     <div class="container-fluid">
             <ul class="nav nav-tabs mt-3" id="tableTabs" role="tablist" style="margin-left: -300px; margin-right: -300px; width: calc(100% + 600px);">
             <li class="nav-item" role="presentation">
-                <a href="{{ route('admin.income.policy', ['mode' => 'subscription']) }}" class="nav-link">
-                    DAO
+                <a href="{{ route('admin.income.policy', ['mode' => 'referral']) }}" class="nav-link active">
+                    추천보너스
                 </a>
             </li>
             <li class="nav-item" role="presentation">
-                <a href="{{ route('admin.income.policy', ['mode' => 'referral']) }}" class="nav-link active">
-                    추천보너스
+                <a href="{{ route('admin.income.policy', ['mode' => 'referral_matching']) }}" class="nav-link">
+                    추천매칭
                 </a>
             </li>
             <li class="nav-item" role="presentation">

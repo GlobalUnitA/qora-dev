@@ -2,14 +2,17 @@
 
 @section('content')
 <div class="page-wrapper login" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed" style="transform: translateY(-71px);">
-    <div class="position-absolute overflow-hidden w-100 min-vh-100 d-flex align-items-center justify-content-center bg-dark">
+    <div class="position-absolute overflow-hidden w-100 min-vh-100 d-flex align-items-center justify-content-center" style="background: #00b084;">
         <div class="d-flex align-items-center justify-content-center w-100 z-1 my-4">
             <div class="row justify-content-center w-100">
                 <div class="col-11 px-2">
-                    <div class="card mb-0" style="background: rgba(255,255,255,0.04); backdrop-filter: blur(2px);">
+                    <div class="card mb-0" style="background: rgba(0,0,0,0.4); backdrop-filter: blur(6px);">
                         <div class="card-body">
                             <div class="text-center mb-2">
-                                <img src="{{ asset('/images/logos/logo_color_w.svg') }}" alt="" class="my-3 login-logo">
+                                <h1 class="text-white">
+                                    <img src="{{ asset('/images/logos/logo_w.png') }}" alt="" class="login-logo" style="width: 30px;">
+                                    Qora
+                                </h1>
                             </div>
                             <form method="POST" id="ajaxForm" action="{{ route('login') }}">
                                 @csrf
@@ -37,7 +40,7 @@
                                         </label>
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-5">{{ __('auth.login') }}                                
+                                <button type="submit" class="btn btn-dark w-100 py-8 fs-4 mb-5">{{ __('auth.login') }}                                
                                 </button>
                                 <div class="d-flex align-items-center justify-content-center mb-4">
                                     <a class="text-white fw-normal pe-3" href="{{ route('register') }}">{{ __('auth.sign_up') }}</a>
@@ -52,7 +55,7 @@
         </div>
         <div class="bg-video">
             <video class="bg-video__content" autoplay muted loop playsinline>
-                <source src="{{ asset('images/video_earth.mp4') }}" type="video/mp4" />
+                <source src="{{ asset('images/video_03.mp4') }}" type="video/mp4" />
             </video>
         </div>
     </div>

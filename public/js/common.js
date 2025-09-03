@@ -82,7 +82,7 @@ function submitAjax(form) {
             console.log(error);
             if (xhr.status === 419) {
                 alertModal($('#msg_session_expried').data('label'), '/');
-                return;
+                setTimeout(() => location.reload(), 2000);
             }
             if (xhr.status === 422) {
                 const errors = xhr.responseJSON.errors;

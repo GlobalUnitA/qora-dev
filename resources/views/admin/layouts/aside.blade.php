@@ -2,9 +2,9 @@
     <div>
         
         <div class="mt-5 mb-5">
-            <div class="d-flex align-items-center justify-content-center ms-5 mb-3">
+            <div class="d-flex align-items-center justify-content-center mb-3">
                 <a href="{{ route('admin') }}" class="text-nowrap logo-img">
-                    <img src="{{ asset('images/logos/emblem.png') }}" class="w-50" alt>
+                    <img src="{{ asset('images/logos/emblem.png') }}">
                 </a>
             </div>
             <p class="mb-3 text-center">어서오세요, <a href="{{ route('admin.manager.view', ['id' => auth()->guard('admin')->user()->id])}}">{{ Auth::guard('admin')->user()->name }}</a>님</p>
@@ -96,6 +96,7 @@
                     </a>
                 </li>
                 @if (auth()->guard('admin')->user()->admin_level >= 2 )
+                {{--
                 <li class="sidebar-item">
                     <a class="sidebar-link" href="{{ route('admin.trading.list') }}" aria-expanded="false">
                         <span>
@@ -110,6 +111,15 @@
                             <i class="ti ti-chart-bar"></i>
                         </span>
                         <span class="hide-menu">스테이킹</span>
+                    </a>
+                </li>
+                --}}
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="{{ route('admin.mining.list', ['status' => 'pending']) }}" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-diamond"></i>
+                        </span>
+                        <span class="hide-menu">마이닝</span>
                     </a>
                 </li>
                 @endif
@@ -157,13 +167,14 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="{{ route('admin.income.policy', ['mode' => 'subscription']) }}" aria-expanded="false">
+                    <a class="sidebar-link" href="{{ route('admin.income.policy', ['mode' => 'referral']) }}" aria-expanded="false">
                         <span>
                             <i class="ti ti-gift-off"></i>
                         </span>
                         <span class="hide-menu">수익 정책</span>
                     </a>
                 </li>
+                {{--
                 <li class="sidebar-item">
                     <a class="sidebar-link" href="{{ route('admin.trading.policy') }}" aria-expanded="false">
                         <span>
@@ -178,6 +189,15 @@
                             <i class="ti ti-chart-bar-off"></i>
                         </span>
                         <span class="hide-menu">스테이킹 정책</span>
+                    </a>
+                </li>
+                --}}
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="{{ route('admin.mining.policy', ['id' => '1']) }}" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-diamond-off"></i>
+                        </span>
+                        <span class="hide-menu">마이닝 정책</span>
                     </a>
                 </li>
                 @endif

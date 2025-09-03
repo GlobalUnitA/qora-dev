@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Staking;
+namespace App\Http\Controllers\Admin\Mining;
 
 use App\Exports\StakingPolicyExport;
 use App\Models\Coin;

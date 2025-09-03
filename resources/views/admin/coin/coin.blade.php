@@ -19,6 +19,8 @@
                                 <th scope="col" class="text-center">이름</th>
                                 <th scope="col" class="text-center">주소</th>
                                 <th scope="col" class="text-center">사용 여부</th>
+                                <th scope="col" class="text-center">자산 여부</th>
+                                <th scope="col" class="text-center">수익 여부</th>
                                 <th scope="col" class="text-center">로고</th>
                                 <th scope="col" class="text-center" >추가일자</th>
                                 <th></th>
@@ -44,6 +46,30 @@
                                         </label>
                                         <label class="form-check-label">
                                             <input type="radio" name="is_active[{{ $value->id }}]" value="n" class="form-check-input" @if($value->is_active == 'n') checked @endif>
+                                            사용안함
+                                        </label>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <div class="d-flex">
+                                        <label class="form-check-label me-3">
+                                            <input type="radio" name="is_asset[{{ $value->id }}]" value="y" class="form-check-input" @if($value->is_asset == 'y') checked @endif>
+                                            사용
+                                        </label>
+                                        <label class="form-check-label">
+                                            <input type="radio" name="is_asset[{{ $value->id }}]" value="n" class="form-check-input" @if($value->is_asset == 'n') checked @endif>
+                                            사용안함
+                                        </label>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <div class="d-flex">
+                                        <label class="form-check-label me-3">
+                                            <input type="radio" name="is_income[{{ $value->id }}]" value="y" class="form-check-input" @if($value->is_income == 'y') checked @endif>
+                                            사용
+                                        </label>
+                                        <label class="form-check-label">
+                                            <input type="radio" name="is_income[{{ $value->id }}]" value="n" class="form-check-input" @if($value->is_income == 'n') checked @endif>
                                             사용안함
                                         </label>
                                     </div>

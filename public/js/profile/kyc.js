@@ -1,12 +1,12 @@
 $(document).ready(function() {
-   
+
     $('.kycForm').submit(function (event) {
         event.preventDefault();
 
         const nationality = $('#nationality').val();
-        
+
         const formData = new FormData(this);
-        formData.append('nationality', nationality); 
+        formData.append('nationality', nationality);
 
         $.ajax({
             url: $(this).attr('action'),
@@ -20,23 +20,27 @@ $(document).ready(function() {
             },
             error: function( xhr, status, error) {
                 console.log(error);
+                if (xhr.status === 419) {
+                    alertModal($('#msg_session_expried').data('label'), '/');
+                    setTimeout(() => location.reload(), 2000);
+                }
                 if (xhr.status === 422) {
-                    const errors = xhr.responseJSON.errors; 
+                    const errors = xhr.responseJSON.errors;
                     let errorMessage = '';
-        
+
                     for (let field in errors) {
                         if (errors.hasOwnProperty(field)) {
                             errorMessage += errors[field].join('<br>');
                         }
                     }
-        
+
                     alertModal(errorMessage.trim());
                 } else {
                     alertModal('예기치 못한 오류가 발생했습니다.');
                 }
             }
         });
-        
+
     });
 
     // upload

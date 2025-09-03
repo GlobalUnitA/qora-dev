@@ -1,12 +1,12 @@
 @php
-    $message = 'UID C' . $info->deposit->user_id . ' 회원님이 <br>' . $info->deposit->asset->coin->name . ' ' . number_format($info->deposit->amount) . ' 입금 신청하였습니다.';
+    $message = 'UID ' . $info->deposit->user_id . ' 회원님이 <br>' . $info->deposit->asset->coin->name . ' ' . number_format($info->deposit->amount) . ' 입금 신청하였습니다.';
     $timestamp = \Carbon\Carbon::parse($info->created_at)->diffForHumans();
 @endphp
 
 
 <div class="toast border-0 opacity-75 show" role="alert" aria-live="assertive" aria-atomic="true" id="toast-{{ $info->id }}">
     <div class="toast-header text-white border-0 p-3" style="background: #2f2f30;">
-        <strong class="me-auto opacity-75">CubeAI</strong>
+        <strong class="me-auto opacity-75">Qora</strong>
         <small>{{ $timestamp }}</small>
         <button type="button" class="btn-close" data-bs-dismiss="toast" data-id="{{ $info->id }}" aria-label="Close" style="filter: invert(1);"></button>
     </div>
@@ -34,7 +34,7 @@ $(function() {
                 alertModal(response.message, response.url);
             },
             error: function() {
-                alertModal('서버 오류가 발생했습니다.');
+                alertModal('예기치 못한 오류가 발생했습니다.');
             }
         });
     });
@@ -54,7 +54,7 @@ $(function() {
                 alertModal(response.message);
             },
             error: function() {
-                alertModal('서버 오류가 발생했습니다.');
+                alertModal('예기치 못한 오류가 발생했습니다.');
             }
         });
     });

@@ -122,7 +122,9 @@ class CoinController extends Controller
 
             Coin::where('id', $request->id)->update([
                 'address' => $request->address,
-                'is_active' => $request->is_active
+                'is_active' => $request->is_active,
+                'is_asset' => $request->is_asset,
+                'is_income' => $request->is_income,
             ]);
 
             DB::commit(); 

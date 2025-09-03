@@ -17,6 +17,7 @@ class RankBonus extends Model
         'self_sales',
         'group_sales',
         'bonus',
+        'direct_count',
         'referral_count',
     ];
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Staking;
 
 use App\Models\User;
 use App\Models\Asset;
+use App\Models\AssetTransfer;
 use App\Models\Income;
 use App\Models\Staking;
 use App\Models\StakingPolicy;
@@ -73,10 +74,10 @@ class StakingController extends Controller
         $startDate = Carbon::now()->subDays(30);
         $endDate = Carbon::now(); 
         
-        $staking = StakingPolicy::find($request->staking);
+        $policy = StakingPolicy::find($request->staking);
 
-        $min = $staking->min_quantity;
-        $max = $staking->max_quantity;
+        $min = $policy->min_quantity;
+        $max = $policy->max_quantity;
 
         if ($request->amount < $min || $request->amount > $max) {
 
@@ -86,35 +87,49 @@ class StakingController extends Controller
             ]);
         }
 
+
         DB::beginTransaction();
 
         try {
 
-            $asset = Asset::where('user_id', auth()->id())->where('coin_id', $staking->coin_id)->first();
-            $income = Income::where('user_id', auth()->id())->where('coin_id', $staking->coin_id)->first();
+            $asset = Asset::where('user_id', auth()->id())->where('coin_id', $policy->coin_id)->first();
+            $refund = Asset::where('user_id', auth()->id())->where('coin_id', $policy->refund_coin_id)->first();
+            $reward = Income::where('user_id', auth()->id())->where('coin_id', $policy->reward_coin_id)->first();
 
             if ($asset->balance < $request->amount) {
                 throw new \Exception(__('asset.lack_balance_notice'));
             }
     
-            $date = $this->getStakingDate($staking->period);
+            $date = $this->getStakingDate($policy->period);
 
             $staking = Staking::create([
                 'user_id' => auth()->id(),
                 'asset_id' => $asset->id,
-                'income_id' => $income->id,
-                'staking_id' => $staking->id,
+                'refund_id' => $refund->id,
+                'reward_id' => $reward->id,
+                'staking_id' => $policy->id,
                 'amount' => $request->amount,
-                'period' => $staking->period,
+                'period' => $policy->period,
                 'started_at' => $date['start'],
                 'ended_at' => $date['end'],
+            ]);
+
+            AssetTransfer::create([
+                'user_id' => $staking->user_id,
+                'asset_id' => $asset->id,
+                'type' => 'staking',
+                'status' => 'completed',
+                'amount' => $request->amount,
+                'actual_amount' => $request->amount,
+                'before_balance' => $asset->balance,
+                'after_balance' => $asset->balance - $request->amount,
             ]);
 
             $asset->update([
                 'balance' => $asset->balance - $request->amount
             ]);
 
-            $income->user->profile->referralBonus($staking);
+            $asset->user->profile->referralBonus($staking);
 
             DB::commit();
         

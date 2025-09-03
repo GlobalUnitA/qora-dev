@@ -131,7 +131,7 @@
                         @foreach($subscription_bonuses->take(5) as $bonus)
                         <tr>
                             <td>{{ date_format($bonus->created_at, 'Y-m-d h:i:s') }}</td>
-                            <td>C{{ $bonus->referrer_id }}</td>
+                            <td>{{ $bonus->referrer_id }}</td>
                             <td>{{ number_format(floor( $bonus->bonus * 10000) / 10000, 4) }} {{ $bonus->transfer->income->coin->code }}</td>
                         </tr>
                         @endforeach
