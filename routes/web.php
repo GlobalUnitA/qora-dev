@@ -68,9 +68,11 @@ Route::prefix('chart')->group(function () {
 
 Route::middleware(['auth', 'session.timeout'])->group(function () {
 
-    
+
     Route::get('/', [HomeController::class, 'index'])->name('home');
-    Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::get('/home', function () {
+        return redirect()->route('home');
+    });
 
     Route::prefix('verify-otp')->group(function () {
         Route::get('/', [OtpController::class, 'index'])->name('otp');
@@ -80,7 +82,7 @@ Route::middleware(['auth', 'session.timeout'])->group(function () {
             Route::get('verify', [OtpController::class, 'email_verify'])->name('otp.email.verify');
         });
     });
-    
+
     Route::prefix('profile')->group(function () {
         Route::get('/', [ProfileController::class, 'index'])->name('profile');
         Route::post('update', [ProfileController::class, 'update'])->name('profile.update');
@@ -99,16 +101,16 @@ Route::middleware(['auth', 'session.timeout'])->group(function () {
             Route::get('/', [AssetController::class, 'list'])->name('asset.list');
             Route::post('load-more', [AssetController::class, 'loadMore'])->name('asset.list.loadMore');
         });
-        
+
         Route::prefix('deposit')->group(function () {
             Route::get('/', [AssetDepositController::class, 'index'])->name('asset.deposit');
             Route::post('confirm', [AssetDepositController::class, 'confirm'])->name('asset.deposit.confirm');
             Route::post('store', [AssetDepositController::class, 'store'])->name('asset.deposit.store');
             Route::prefix('list')->group(function () {
-                Route::get('/', [AssetDepositController::class, 'list'])->name('asset.deposit.list');    
+                Route::get('/', [AssetDepositController::class, 'list'])->name('asset.deposit.list');
                 Route::post('load-more', [AssetDepositController::class, 'loadMore'])->name('asset.deposit.list.loadMore');
             });
-        }); 
+        });
 
         Route::prefix('withdrawal')->group(function () {
             Route::middleware(['otp'])->group(function () {
@@ -117,14 +119,14 @@ Route::middleware(['auth', 'session.timeout'])->group(function () {
             Route::post('store', [AssetWithdrawalController::class, 'store'])->name('asset.withdrawal.store');
             Route::get('complete/{id}', [AssetWithdrawalController::class, 'complete'])->name('asset.withdrawal.complete');
             Route::prefix('list')->group(function () {
-                Route::get('/', [AssetWithdrawalController::class, 'list'])->name('asset.withdrawal.list');    
+                Route::get('/', [AssetWithdrawalController::class, 'list'])->name('asset.withdrawal.list');
                 Route::post('load-more', [AssetWithdrawalController::class, 'loadMore'])->name('asset.withdrawal.list.loadMore');
             });
         });
     });
 
     Route::prefix('income')->group(function () {
-        Route::get('/', [IncomeController::class, 'index'])->name('income'); 
+        Route::get('/', [IncomeController::class, 'index'])->name('income');
         Route::prefix('list')->group(function () {
             Route::get('{id}', [IncomeController::class, 'list'])->name('income.list');
             Route::post('load-more', [IncomeController::class, 'loadMore'])->name('income.list.loadMore');
@@ -133,7 +135,7 @@ Route::middleware(['auth', 'session.timeout'])->group(function () {
             Route::get('/', [IncomeDepositController::class, 'index'])->name('income.deposit');
             Route::post('store', [IncomeDepositController::class, 'store'])->name('income.deposit.store');
             Route::prefix('list')->group(function () {
-                Route::get('/', [IncomeDepositController::class, 'list'])->name('income.deposit.list');    
+                Route::get('/', [IncomeDepositController::class, 'list'])->name('income.deposit.list');
                 Route::post('load-more', [IncomeDepositController::class, 'loadMore'])->name('income.deposit.list.loadMore');
             });
         });
@@ -144,7 +146,7 @@ Route::middleware(['auth', 'session.timeout'])->group(function () {
             Route::post('store', [IncomeWithdrawalController::class, 'store'])->name('income.withdrawal.store');
             Route::get('complete/{id}', [IncomeWithdrawalController::class, 'complete'])->name('income.withdrawal.complete');
             Route::prefix('list')->group(function () {
-                Route::get('/', [IncomeWithdrawalController::class, 'list'])->name('income.withdrawal.list');    
+                Route::get('/', [IncomeWithdrawalController::class, 'list'])->name('income.withdrawal.list');
                 Route::post('load-more', [IncomeWithdrawalController::class, 'loadMore'])->name('income.withdrawal.list.loadMore');
             });
         });
