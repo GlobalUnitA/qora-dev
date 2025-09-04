@@ -90,10 +90,10 @@
                                         <th scope="col" class="text-center">이름</th>
                                         <th scope="col" class="text-center">등급</th>
                                         <th scope="col" class="text-center">종류</th>
-                                        <th scope="col" class="text-center">인센티브</th>
+                                        <th scope="col" class="text-center">매칭</th>
                                         <th scope="col" class="text-center">상태</th>
                                         <th scope="col" class="text-center">산하ID</th>
-                                        <th scope="col" class="text-center">출금금액</th>
+                                        <th scope="col" class="text-center">산하보너스</th>
                                         <th scope="col" class="text-center">일자</th>
                                     </tr>
                                 </thead>
@@ -125,8 +125,8 @@
                                                     {{ __('환불') }}
                                             @endswitch
                                         </td>
-                                        <td scope="col" class="text-center">{{ $value->subscriptionBonus->referrer_id }}</td>
-                                        <td scope="col" class="text-center">{{ $value->subscriptionBonus->withdrawal->amount }}</td>
+                                        <td scope="col" class="text-center">{{ $value->referralMatching->referrer_id }}</td>
+                                        <td scope="col" class="text-center">{{ number_format($value->referralMatching->bonus->bonus) }}</td>
                                         <td scope="col" class="text-center">{{ $value->created_at }}</td>
                                     </tr>
                                     @endforeach

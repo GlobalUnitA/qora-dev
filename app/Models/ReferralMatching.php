@@ -14,11 +14,11 @@ class ReferralMatching extends Model
         'bonus_id',
         'transfer_id',
         'referrer_id',
-        'bonus',
+        'matching',
     ];
     
     protected $casts = [
-        'bonus' => 'decimal:9',
+        'matching' => 'decimal:9',
     ];
 
     public function user()

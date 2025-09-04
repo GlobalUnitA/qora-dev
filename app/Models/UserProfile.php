@@ -265,7 +265,7 @@ class UserProfile extends Model
             DB::commit();
 
         }  catch (\Exception $e) {
-            
+
             DB::rollBack();
 
             Log::channel('bonus')->error('Referral bonus transaction failed', [
@@ -316,7 +316,7 @@ class UserProfile extends Model
                 'referrer_id' => $this->user_id,
                 'bonus_id'   => $bonus->id,
                 'transfer_id'  => $transfer->id,
-                'bonus' => $matching,
+                'matching' => $matching,
             ]);
 
             $income->increment('balance', $matching);
