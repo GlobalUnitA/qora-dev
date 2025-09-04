@@ -29,7 +29,7 @@ use PragmaRX\Google2FA\Google2FA;
 use Carbon\Carbon;
 
 
-//테스트 주석 30
+//테스트 주석 31
 class TestController extends Controller
 {
     protected $kakaoApi;
