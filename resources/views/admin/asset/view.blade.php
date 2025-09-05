@@ -12,7 +12,7 @@
                         @else
                             {{ __('입금 정보') }}
                         @endif
-                    </h5>    
+                    </h5>
                     <div>{{ $view->created_at }}</div>
                 </div>
                 @if($view->type == 'withdrawal')
@@ -29,7 +29,7 @@
                                 <th class="text-center align-middle">아이디</th>
                                 <td class="align-middle" style="min-width: 150px;">{{ $view->user->account }}</td>
                                 <th class="text-center align-middle">이름</th>
-                                <td class="align-middle" style="min-width: 150px;">{{ $view->user->name }}</td>                            
+                                <td class="align-middle" style="min-width: 150px;">{{ $view->user->name }}</td>
                             </tr>
                             <tr>
                                 <th class="text-center align-middle">종류</th>
@@ -49,10 +49,11 @@
                                 <td colspan="3" class="align-middle">
                                     @if($view->status == 'pending')
                                     <select name="status" id="category" class="form-select w-25">
-                                        <option value="pending" @if($view->status == 'pending') selected @endif>입금신청</option>
-                                        <option value="waiting" @if($view->status == 'completed') selected @endif>입금대기</option>
-                                        <option value="canceled" @if($view->status == 'canceled') selected @endif>입금취소</option>
-                                        <option value="refunded" @if($view->status == 'refunded') selected @endif>입금반환</option>
+                                        <option value="pending">입금신청</option>
+                                        <option value="waiting">입금대기</option>
+                                        <option value="completed">입금완료</option>
+                                        <option value="canceled">입금취소</option>
+                                        <option value="refunded">입금반환</option>
                                     </select>
                                     @else
                                     {{ $view->status_text }}
@@ -92,7 +93,7 @@
                                         <option value="pending" @if($view->status == 'pending') selected @endif>출금신청</option>
                                         <option value="completed" @if($view->status == 'completed') selected @endif>출금완료</option>
                                         <option value="canceled" @if($view->status == 'canceled') selected @endif>출금취소</option>
-                                    </select> 
+                                    </select>
                                     @else
                                     {{ $view->status_text }}
                                     @endif

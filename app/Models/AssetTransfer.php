@@ -40,7 +40,7 @@ class AssetTransfer extends Model
         'image_urls' => 'array',
     ];
 
-    protected $appends = 
+    protected $appends =
     [
         'status_text',
         'type_text',
@@ -64,7 +64,7 @@ class AssetTransfer extends Model
         $amount_in_usdt = $this->amount * (float) $price;
 
         return $amount_in_usdt;
-       
+
     }
 
     public function getTypeTextAttribute()
@@ -145,55 +145,59 @@ class AssetTransfer extends Model
             ->get();
 
         Log::channel('asset')->info('start to reflected to user asset balance', ['cutoff' => $cutoff]);
-        Log::channel('asset')->info('transfer count', ['trasnfer_count' => count($transfers)]);
+        Log::channel('asset')->info('transfer count', ['transfer_count' => count($transfers)]);
 
         foreach ($transfers as $deposit) {
-            
-            DB::beginTransaction();
-
-            try {
-                $asset = $deposit->asset;
-
-                $before_balance = $asset->balance;
-                $amount = $deposit->amount;
-                $after_balance = $asset->balance + $amount; 
-
-                $asset->update(['balance' => $after_balance]);
-                $deposit->update([
-                    'status' => 'completed',
-                    'before_balance' => $before_balance, 
-                    'after_balance' => $after_balance,
-                ]);
-
-                Log::channel('asset')->info('Deposited amount reflected to user asset balance', [
-                    'user_id' => $asset->user_id,
-                    'transfer_id' => $deposit->id,
-                    'balance' => $amount,
-                    'before_balance' => $before_balance, 
-                    'after_balance' => $after_balance,
-                    'timestamp' => now(),
-                ]);
-
-                DB::commit();
-
-                $profile = UserProfile::where('user_id', $asset->user_id)->first();
-
-                $profile->checkUserValidity();
-                $profile->checkUserGrade();
-                $profile->referralBonus($deposit);
-
-            } catch (\Throwable $e) {
-
-                DB::rollBack();
-
-                Log::channel('asset')->error('Failed to reflected to user asset balance', [
-                    'transfer_id' => $deposit->id,
-                    'error' => $e->getMessage(),
-                ]);
-
-            }
+            $deposit->processDeposit();
         }
 
         Log::channel('asset')->info('end to reflected to user asset balance');
+    }
+
+    public function processDeposit()
+    {
+        DB::beginTransaction();
+
+        try {
+            $asset = $this->asset;
+
+            $before_balance = $asset->balance;
+            $amount = $this->amount;
+            $after_balance = $asset->balance + $amount;
+
+            $asset->update(['balance' => $after_balance]);
+            $this->update([
+                'status' => 'completed',
+                'before_balance' => $before_balance,
+                'after_balance' => $after_balance,
+            ]);
+
+            Log::channel('asset')->info('Deposited amount reflected to user asset balance', [
+                'user_id' => $asset->user_id,
+                'transfer_id' => $this->id,
+                'balance' => $amount,
+                'before_balance' => $before_balance,
+                'after_balance' => $after_balance,
+                'timestamp' => now(),
+            ]);
+
+            DB::commit();
+
+            $profile = UserProfile::where('user_id', $asset->user_id)->first();
+
+            $profile->checkUserValidity();
+            $profile->checkUserGrade();
+            $profile->referralBonus($this);
+
+        } catch (\Throwable $e) {
+
+            DB::rollBack();
+
+            Log::channel('asset')->error('Failed to reflected to user asset balance', [
+                'transfer_id' => $this->id,
+                'error' => $e->getMessage(),
+            ]);
+
+        }
     }
 }

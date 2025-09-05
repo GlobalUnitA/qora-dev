@@ -15,7 +15,7 @@ class DepositController extends Controller
 {
     public function __construct()
     {
-        
+
     }
 
     public function deposit($id)
@@ -25,17 +25,17 @@ class DepositController extends Controller
 
         return view('admin.asset.deposit', compact('user'));
     }
-   
+
     public function store(Request $request)
     {
         $request->validate([
             'id' => ['required', 'integer'],
             'amount' => ['required', 'numeric', 'min:0'],
         ]);
-        
+
         DB::beginTransaction();
 
-        try {       
+        try {
 
             $asset = Asset::find($request->id);
 
@@ -57,14 +57,14 @@ class DepositController extends Controller
                 'before_balance' => $before_balance,
                 'after_balance' => $after_balance,
             ]);
-        
-            DB::commit(); 
+
+            DB::commit();
 
             $user = User::find($deposit->user_id);
 
             $user->profile->checkUserValidity();
             $user->profile->checkUserGrade();
-          
+
             return response()->json([
                 'status' => 'success',
                 'message' => '수동 입금이 완료되었습니다.',
@@ -86,7 +86,7 @@ class DepositController extends Controller
 
     public function update(Request $request)
     {
-        
+
         $request->validate([
             'id' => ['required', 'integer'],
             'amount' => ['numeric', 'min:0'],
@@ -102,14 +102,18 @@ class DepositController extends Controller
 
             $user = User::find($deposit->user_id);
 
+            if ($request->status === 'completed') {
+                $deposit->processDeposit();
+            }
+
             $deposit->update([
                 'status' => $request->status ?? $deposit->status,
                 'amount' => $request->amount ?? $deposit->amount,
                 'actual_amount' => $request->amount ?? $deposit->actual_amount,
                 'memo' => $request->memo
             ]);
-            
-            DB::commit(); 
+
+            DB::commit();
 
             return response()->json([
                 'status' => 'success',
@@ -128,6 +132,6 @@ class DepositController extends Controller
                 'message' => '예기치 못한 오류가 발생했습니다.',
             ]);
         }
-        
+
     }
 }
