@@ -225,7 +225,7 @@ class UserProfile extends Model
                 $bonus = $deposit->amount * $policy->$rate_key / 100;
 
                 if ($bonus <= 0) continue;
-                
+
                 $income = Income::where('user_id', $parent_profile->user_id)->where('coin_id', 1)->first();
 
                 $transfer = IncomeTransfer::create([
@@ -250,8 +250,10 @@ class UserProfile extends Model
                 $income->increment('balance', $bonus);
 
                 Log::channel('bonus')->info('Success referral bonus', [
-                    'user_id' => $parent_profile->user_id, 
+                    'user_id' => $parent_profile->user_id,
                     'referrer_id' => $this->user_id,
+                    'level' => $level,
+                    'deposit_id' => $deposit->id,
                     'bonus_id' => $referral_bonus->id,
                     'transfer_id' => $transfer->id,
                     'bonus' => $bonus,
@@ -261,7 +263,7 @@ class UserProfile extends Model
 
                 $this->referralMatching($referral_bonus);
             }
-     
+
             DB::commit();
 
         }  catch (\Exception $e) {
@@ -279,13 +281,19 @@ class UserProfile extends Model
 
     public function referralMatching($bonus)
     {
+        $user = $bonus->user->profile;
+        $parents = $user->getParentTree(20);
 
-        $parents = $this->getParentTree(20);
-        
         foreach ($parents as $level => $parent_profile) {
 
+            Log::channel('bonus')->info('start referral matching', [
+                'user_id' => $user->user_id,
+                'parent_id' => $parent_profile->id,
+                'level' => $level,
+            ]);
+
             if ($parent_profile->is_valid === 'n') continue;
-            
+
             $policy = ReferralMatchingPolicy::where('grade_id', $parent_profile->grade->id)->first();
 
             if (!$policy) continue;
@@ -295,7 +303,7 @@ class UserProfile extends Model
             $matching = $bonus->transfer->amount * $policy->$rate_key / 100;
 
             if ($matching <= 0) continue;
-            
+
             $income = Income::where('user_id', $parent_profile->user_id)
                 ->where('coin_id', 1)
                 ->first();
@@ -313,7 +321,7 @@ class UserProfile extends Model
 
             $referral_matching = ReferralMatching::create([
                 'user_id'   => $parent_profile->user_id,
-                'referrer_id' => $this->user_id,
+                'referrer_id' => $user->user_id,
                 'bonus_id'   => $bonus->id,
                 'transfer_id'  => $transfer->id,
                 'matching' => $matching,
@@ -322,12 +330,13 @@ class UserProfile extends Model
             $income->increment('balance', $matching);
 
             Log::channel('bonus')->info('Success referral matching', [
-                'user_id' => $parent_profile->user_id, 
-                'referrer_id' => $this->user_id,
-                'bonus_id' => $bonus->id, 
+                'user_id' => $parent_profile->user_id,
+                'referrer_id' => $user->user_id,
+                'level' => $level,
+                'bonus_id' => $bonus->id,
                 'matching_id' => $referral_matching->id,
-                'transfer_id' => $transfer->id, 
-                'matching' => $matching, 
+                'transfer_id' => $transfer->id,
+                'matching' => $matching,
                 'before_balance' => $transfer->before_balance,
                 'after_balance' => $transfer->after_balance,
             ]);
@@ -364,7 +373,7 @@ class UserProfile extends Model
                 $level = $child->grade->level;
                 return $level >= $direct_min_level;
             })->count();
-            
+
             if ($direct_met_count < $direct_required_count) {
                 Log::channel('bonus')->info("Rank bonus not paid - User ID: {$this->user_id}, Reason: Insufficient qualified directs for required levels.");
                 continue;
@@ -418,7 +427,7 @@ class UserProfile extends Model
                     'bonus'          => $bonus,
                 ]);
 
-                $income->increment('balance', $bonus);  
+                $income->increment('balance', $bonus);
 
                 DB::commit();
 
@@ -513,7 +522,7 @@ class UserProfile extends Model
         if (
             $referral_count >= $next_policy->referral_count &&
             $self_sales >= $next_policy->self_sales &&
-            $group_sales >= $next_policy->group_sales  
+            $group_sales >= $next_policy->group_sales
         ) {
             $result = UserProfile::where('id', $this->id)->update([
                 'grade_id' => $next_grade->id
