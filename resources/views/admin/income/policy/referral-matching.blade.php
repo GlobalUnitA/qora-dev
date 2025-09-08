@@ -30,7 +30,7 @@
                 <div class="table-responsive">
                     <table class="table text-nowrap align-middle mb-0 table-striped">
                         <thead>
-                            <tr class="border-2 border-bottom border-primary border-0"> 
+                            <tr class="border-2 border-bottom border-primary border-0">
                                 <th scope="col" class="ps-0 text-center">이름</th>
                                 @for($i =1; $i <= 21; $i++)
                                 <th scope="col" class="text-center" >{{ $i }}</th>
@@ -51,7 +51,7 @@
                                 <td class="text-center">
                                     <button class="btn btn-sm btn-danger updateBtn">수정</button>
                                 </td>
-                            </tr>                    
+                            </tr>
                             @endforeach
                         </tbody>
                     </table>
@@ -69,7 +69,7 @@
                 <div class="table-responsive">
                     <table class="table text-nowrap align-middle mb-0 table-striped">
                         <thead>
-                            <tr class="border-2 border-bottom border-primary border-0"> 
+                            <tr class="border-2 border-bottom border-primary border-0">
                                 <th scope="col" class="ps-0 text-center">이름</th>
                                 <th scope="col" class="ps-0 text-center">변경 내용</th>
                                 <th scope="col" class="ps-0 text-center">변경 전</th>
@@ -87,7 +87,7 @@
                                 <td class="text-center">{{ $val->new_value }}</td>
                                 <td class="text-center">{{ $val->name }}</td>
                                 <td class="text-center">{{ $val->created_at }}</td>
-                            </tr>                    
+                            </tr>
                             @endforeach
                         </tbody>
                     </table>
@@ -101,7 +101,7 @@
 
 <form method="POST" id="updateForm" action="{{ route('admin.income.policy.update') }}" >
     @csrf
-    <input type="hidden" name="mode" value="referral">
+    <input type="hidden" name="mode" value="referral_matching">
 </form>
 
 @endsection

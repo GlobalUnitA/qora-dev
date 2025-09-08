@@ -11,8 +11,8 @@ use App\Models\PolicyModifyLog;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
-use Carbon\Carbon;
 
 class PolicyController extends Controller
 {
@@ -20,21 +20,6 @@ class PolicyController extends Controller
     public function index(Request $request)
     {
         switch ($request->mode) {
-            case 'subscription' :
-
-                $policies = SubscriptionPolicy::all();
-
-                $modify_logs = PolicyModifyLog::join('subscription_policies', 'subscription_policies.id', '=', 'policy_modify_logs.policy_id')
-                    ->join('user_grades', 'user_grades.id', '=', 'subscription_policies.grade_id')
-                    ->join('admins', 'admins.id', '=', 'policy_modify_logs.admin_id')
-                    ->select('user_grades.name as grade_name', 'admins.name', 'policy_modify_logs.*')
-                    ->where('policy_modify_logs.policy_type', 'subscription_policies')
-                    ->orderBy('policy_modify_logs.created_at', 'desc')
-                    ->get();
-
-                return view('admin.income.policy.subscription', compact('policies', 'modify_logs'));
-
-            break;
 
             case 'referral' :
 
@@ -49,8 +34,6 @@ class PolicyController extends Controller
                     ->get();
 
                 return view('admin.income.policy.referral', compact('policies', 'modify_logs'));
-
-            break;
 
             case 'referral_matching' :
 
@@ -82,7 +65,19 @@ class PolicyController extends Controller
 
                 return view('admin.income.policy.rank', compact('policies', 'user_grades', 'modify_logs'));
 
-            break;
+            default :
+
+                $policies = SubscriptionPolicy::all();
+
+                $modify_logs = PolicyModifyLog::join('subscription_policies', 'subscription_policies.id', '=', 'policy_modify_logs.policy_id')
+                    ->join('user_grades', 'user_grades.id', '=', 'subscription_policies.grade_id')
+                    ->join('admins', 'admins.id', '=', 'policy_modify_logs.admin_id')
+                    ->select('user_grades.name as grade_name', 'admins.name', 'policy_modify_logs.*')
+                    ->where('policy_modify_logs.policy_type', 'subscription_policies')
+                    ->orderBy('policy_modify_logs.created_at', 'desc')
+                    ->get();
+
+                return view('admin.income.policy.subscription', compact('policies', 'modify_logs'));
         }
     }
 
@@ -98,7 +93,7 @@ class PolicyController extends Controller
         DB::beginTransaction();
 
         try {
-        
+
             RankPolicy::create([
                 'grade_id' => $request->grade_id,
                 'bonus' => $request->bonus,
@@ -116,7 +111,7 @@ class PolicyController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
 
-            \Log::error('Failed to create rank policy', ['error' => $e->getMessage()]);
+            Log::error('Failed to create rank policy', ['error' => $e->getMessage()]);
 
             return response()->json([
                 'status' => 'error',
@@ -147,6 +142,13 @@ class PolicyController extends Controller
 
                 break;
 
+                case 'referral_matching' :
+
+                    $referralMatchingPolicy = ReferralMatchingPolicy::findOrFail($request->id);
+                    $referralMatchingPolicy->update($request->all());
+
+                    break;
+
                 case 'rank' :
 
                     $rankPolicy = RankPolicy::findOrFail($request->id);
@@ -174,7 +176,7 @@ class PolicyController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
 
-            \Log::error('Failed to update '.$request->mode.' policy', ['error' => $e->getMessage()]);
+            Log::error('Failed to update '.$request->mode.' policy', ['error' => $e->getMessage()]);
 
             return response()->json([
                 'status' => 'error',
