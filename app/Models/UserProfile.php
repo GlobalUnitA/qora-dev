@@ -286,12 +286,6 @@ class UserProfile extends Model
 
         foreach ($parents as $level => $parent_profile) {
 
-            Log::channel('bonus')->info('start referral matching', [
-                'user_id' => $user->user_id,
-                'parent_id' => $parent_profile->id,
-                'level' => $level,
-            ]);
-
             if ($parent_profile->is_valid === 'n') continue;
 
             $policy = ReferralMatchingPolicy::where('grade_id', $parent_profile->grade->id)->first();
