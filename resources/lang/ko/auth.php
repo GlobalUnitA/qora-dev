@@ -60,6 +60,6 @@ return array (
   'identity_verification' => '본인 인증',
   'otp_verification_guide_p1' => '1. Google OTP와 같은 OTP 인증 앱을 다운로드 및 설치하십시오.',
   'otp_verification_guide_p2' => '2. 다운로드 후 보안 앱에서 개인키 입력 혹은 QR코드를 스캔하여 인증번호를 획득하세요.',
-  'otp_verification_notice' => '주의사항: 휴대전화를 변경하거나 분실한 경우 OTP 복원하기 위해 개인키를 안전하게 보관하시기 바랍니다. CUBEAI는 자산 보안을 위해 개인키 복구 서비스를 제공하기 않습니다.',
+  'otp_verification_notice' => '주의사항: 휴대전화를 변경하거나 분실한 경우 OTP 복원하기 위해 개인키를 안전하게 보관하시기 바랍니다. QORA는 자산 보안을 위해 개인키 복구 서비스를 제공하기 않습니다.',
   'otp_personal_key' => '개인키',
 );

@@ -60,6 +60,6 @@ return array (
   'identity_verification' => 'Xác minh danh tính',
   'otp_verification_guide_p1' => '1. Vui lòng tải và cài đặt ứng dụng xác thực OTP như Google OTP.',
   'otp_verification_guide_p2' => '2. Sau khi tải xuống, vui lòng nhập private key hoặc quét mã QR trong ứng dụng bảo mật để lấy mã xác thực.',
-  'otp_verification_notice' => 'Lưu ý: Nếu bạn đổi hoặc mất điện thoại, vui lòng lưu private key an toàn để khôi phục OTP. CUBEAI không cung cấp dịch vụ khôi phục private key vì lý do an toàn tài sản.',
+  'otp_verification_notice' => 'Lưu ý: Nếu bạn đổi hoặc mất điện thoại, vui lòng lưu private key an toàn để khôi phục OTP. QORA không cung cấp dịch vụ khôi phục private key vì lý do an toàn tài sản.',
   'otp_personal_key' => 'Private Key',
 );

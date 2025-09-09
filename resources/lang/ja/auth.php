@@ -8,7 +8,7 @@ return array (
   'sign_up' => '会員登録',
   'find_id' => 'ユーザーIDを探す',
   'find_password' => 'パスワードを探す',
-  'email' => 'メールアドレス',
+  'email' => 'メール',
   'email_verification_guide_1' => '本人認証を行います。',
   'email_verification_guide_2' => 'メールで送信された認証コードを入力してください。',
   'email_verification' => 'メール認証',
@@ -60,6 +60,6 @@ return array (
   'identity_verification' => '本人確認',
   'otp_verification_guide_p1' => '1. Google OTP などのOTP認証アプリをダウンロードしてインストールしてください。',
   'otp_verification_guide_p2' => '2. ダウンロード後、セキュリティアプリで秘密鍵を入力するか、QRコードをスキャンして認証コードを取得してください。',
-  'otp_verification_notice' => '注意事項： 携帯電話を変更または紛失した場合に備えて、OTPを復元できるよう秘密鍵を安全に保管してください。CUBEAIは資産の安全を確保するため、秘密鍵の復元サービスを提供していません。',
+  'otp_verification_notice' => '注意事項： 携帯電話を変更または紛失した場合に備えて、OTPを復元できるよう秘密鍵を安全に保管してください。QORAは資産の安全を確保するため、秘密鍵の復元サービスを提供していません。',
   'otp_personal_key' => '秘密鍵',
 );

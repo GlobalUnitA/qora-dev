@@ -13,7 +13,7 @@ return array (
   'product_intro' => 'Giới thiệu Sản phẩm',
   'guidebook' => 'Hướng dẫn',
   'favorite' => 'Yêu thích',
-  'comment_list' => 'Danh sách Trả lời',
+  'comment_list' => 'Danh sách trả lời',
   'comment_guide' => 'Vui lòng nhập bình luận.',
   'submit_request' => 'Hỏi đáp',
   'input_title_notice' => 'Vui lòng nhập tiêu đề.',

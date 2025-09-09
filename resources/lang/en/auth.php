@@ -60,6 +60,6 @@ return array (
   'identity_verification' => 'Identity Verification',
   'otp_verification_guide_p1' => '1. Please download and install an OTP authentication app such as Google OTP.',
   'otp_verification_guide_p2' => '2. After downloading, either enter the private key or scan the QR code to generate the authentication code',
-  'otp_verification_notice' => 'Notice: If you change or lose your mobile phone, make sure to securely store your private key to restore your OTP. For security reasons, CUBEAI does not offer private key recovery services.',
+  'otp_verification_notice' => 'Notice: If you change or lose your mobile phone, make sure to securely store your private key to restore your OTP. For security reasons, QORA does not offer private key recovery services.',
   'otp_personal_key' => 'Private Key',
 );

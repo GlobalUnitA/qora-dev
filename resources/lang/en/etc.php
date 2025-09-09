@@ -15,7 +15,7 @@ return array (
   'passport_number' => 'Passport Number',
   'passport_front_upload' => 'Please upload the front page of your passport.',
   'verification_photo_upload_notice' => 'Verification Photo Upload Guidelines',
-  'verification_photo_upload_guide1' => 'Handwrite “CUBE AI Identity Verification, [date of verification]” on a piece of paper.',
+  'verification_photo_upload_guide1' => 'Handwrite “QORA Identity Verification, [date of verification]” on a piece of paper.',
   'verification_photo_upload_guide2' => 'Take a photo of you holding your :id and the handwritten note and upload it.',
   'id_card_verify' => 'Verify ID',
   'id_card_number' => 'ID Number',

@@ -20,4 +20,5 @@ return array (
   'otp_connect' => 'OTP绑定',
   'connect_unlinked' => '未绑定',
   'connect_linked' => '绑定',
+  'dashboard' => 'Dashboard',
 );

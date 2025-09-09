@@ -10,7 +10,7 @@ return array (
   'meta_id' => 'USDT Address (BNB Smart Chain)',
   'user_info' => 'Member Info',
   'meta_id_guide_1' => 'We only support USDT deposits and withdrawals on the BNB Smart Chain.',
-  'meta_id_guide_2' => 'Deposits using the Ethereum network (ERC-20), Tron network (TRC-20), or smart contracts are not supported. Please ensure you verify this with the exchange or wallet from which you are withdrawing before initiating a transfer. CUBEAI is not responsible for any losses resulting from user deposit errors.',
+  'meta_id_guide_2' => 'Deposits using the Ethereum network (ERC-20), Tron network (TRC-20), or smart contracts are not supported. Please ensure you verify this with the exchange or wallet from which you are withdrawing before initiating a transfer. QORA is not responsible for any losses resulting from user deposit errors.',
   'kyc_verification' => 'KYC Verification',
   'child_id' => 'Downline ID',
   'logout_confirm' => 'Do you want to log out?',
@@ -20,4 +20,5 @@ return array (
   'otp_connect' => 'OTP Integration',
   'connect_unlinked' => 'Not Integrated',
   'connect_linked' => 'Integrated',
+  'dashboard' => 'Dashboard',
 );

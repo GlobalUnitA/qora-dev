@@ -60,6 +60,6 @@ return array (
   'identity_verification' => '身份认证',
   'otp_verification_guide_p1' => '1. 请下载并安装类似 Google OTP 的 OTP 验证应用程序。',
   'otp_verification_guide_p2' => '2. 下载后，在安全应用中输入私钥或扫描二维码以获取验证码。',
-  'otp_verification_notice' => '注意事项： 如果您更换或丢失手机，请妥善保管您的私钥以恢复OTP。为了资产安全，CUBEAI不提供私钥恢复服务。',
+  'otp_verification_notice' => '注意事项： 如果您更换或丢失手机，请妥善保管您的私钥以恢复OTP。为了资产安全，QORA不提供私钥恢复服务。',
   'otp_personal_key' => '私钥',
 );

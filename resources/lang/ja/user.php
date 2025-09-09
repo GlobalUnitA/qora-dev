@@ -12,7 +12,7 @@ return array (
   'meta_id_guide_1' => 'BNB Smart Chain上でのUSDTの入出金のみ対応しています。',
   'meta_id_guide_2' => 'イーサリアムネットワーク（ERC-20）、トロンネットワーク（TRC-20）、およびスマートコントラクトを利用した入金には対応しておりません。
 出金元の取引所やウォレットで必ず確認の上、正しくアドレスを入力してください。
-ユーザーによる入金ミスについて、CUBEAIは一切の責任を負いません。',
+ユーザーによる入金ミスについて、QORAは一切の責任を負いません。',
   'kyc_verification' => 'KYC認証',
   'child_id' => '傘下ID',
   'logout_confirm' => 'ログアウトしますか？',
@@ -22,4 +22,5 @@ return array (
   'otp_connect' => 'OTP連携',
   'connect_unlinked' => '未連携',
   'connect_linked' => '連携',
+  'dashboard' => 'ダッシュボード',
 );

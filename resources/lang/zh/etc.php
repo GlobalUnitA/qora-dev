@@ -15,7 +15,7 @@ return array (
   'passport_number' => '护照号码',
   'passport_front_upload' => '上传护照正面照片',
   'verification_photo_upload_notice' => '上传认证照片时的注意事项',
-  'verification_photo_upload_guide1' => '请在白纸上手写 “CUBE AI 实名认证 + 认证当日日期”。',
+  'verification_photo_upload_guide1' => '请在白纸上手写 “QORA 实名认证 + 认证当日日期”。',
   'verification_photo_upload_guide2' => '请手持 :id 和手写的纸条，确保脸部正面清晰可见，拍照并上传。',
   'id_card_verify' => '身份证认证',
   'id_card_number' => '身份证号码',

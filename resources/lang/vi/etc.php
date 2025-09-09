@@ -15,7 +15,7 @@ return array (
   'passport_number' => 'Số hộ chiếu',
   'passport_front_upload' => 'Tải ảnh mặt trước hộ chiếu',
   'verification_photo_upload_notice' => 'Lưu ý khi tải ảnh xác minh',
-  'verification_photo_upload_guide1' => 'Viết tay “Xác minh danh tính CUBE AI, [ngày xác minh]” lên một tờ giấy.',
+  'verification_photo_upload_guide1' => 'Viết tay “Xác minh danh tính QORA, [ngày xác minh]” lên một tờ giấy.',
   'verification_photo_upload_guide2' => 'Vui lòng chụp ảnh chính diện cầm :id và giấy viết tay và tải lên.',
   'id_card_verify' => 'Xác minh CCCD',
   'id_card_number' => 'Số ID',

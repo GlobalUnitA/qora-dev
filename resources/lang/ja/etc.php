@@ -15,7 +15,7 @@ return array (
   'passport_number' => 'パスポート番号',
   'passport_front_upload' => 'パスポート正面写真アップロード',
   'verification_photo_upload_notice' => '認証写真アップロード時の注意事項',
-  'verification_photo_upload_guide1' => '紙に「CUBE AI 実名認証、認証当日の日付」を手書きで記入してください。
+  'verification_photo_upload_guide1' => '紙に「QORA 実名認証、認証当日の日付」を手書きで記入してください。
 (かみに「CUBE AI じつめいにんしょう、にんしょうとうじつのひづけ」をてがきできにゅうしてください 。',
   'verification_photo_upload_guide2' => ':idと手書きのメモを持ち、顔が正面からはっきり見えるように写真を撮ってアップロードしてください。',
   'id_card_verify' => '身分証認証',
