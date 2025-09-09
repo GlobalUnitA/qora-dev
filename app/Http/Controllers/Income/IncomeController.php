@@ -75,7 +75,7 @@ class IncomeController extends Controller
             ->latest()
             ->take($limit)
             ->get();
-        
+
         $total_count = IncomeTransfer::where('user_id', auth()->id())
             ->when($request->filled('type'), function ($query) use ($request) {
                 return $query->where('type', $request->type);
@@ -109,12 +109,9 @@ class IncomeController extends Controller
             return [
                 'created_at' => $item->created_at->format('Y-m-d'),
                 'amount' => $item->amount,
-                 'trading_profit' => optional(optional($item->profit)->trading)->profit_rate !== null
-                    ? optional(optional($item->profit)->trading)->profit_rate.'%'
-                    : null,
                 'referrer_id' => match ($item->type) {
-                    'subscription_bonus' => optional($item->subscriptionBonus)->referrer_id,
                     'referral_bonus' => optional($item->referralBonus)->referrer_id,
+                    'referral_matching' => optional($item->referralMatching)->referrer_id,
                     default => null,
                 },
                 'type_text' => $item->type_text,

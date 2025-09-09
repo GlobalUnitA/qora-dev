@@ -90,7 +90,7 @@
                             {{--<option value="deposit" {{ request('type') == 'deposit' ? 'selected' : '' }}>{{ __('asset.internal_transfer') }}</option>--}}
                             <option value="withdrawal" {{ request('type') == 'withdrawal' ? 'selected' : '' }}>{{ __('asset.external_withdrawal') }}</option>
                             <option value="referral_bonus" {{ request('type') == 'referral_bonus' ? 'selected' : '' }}>{{ __('asset.referral_bonus') }}</option>
-                            <option value="referral_bonus" {{ request('type') == 'referral_matching' ? 'selected' : '' }}>{{ __('asset.referral_bonus_matching') }}</option>
+                            <option value="referral_matching" {{ request('type') == 'referral_matching' ? 'selected' : '' }}>{{ __('asset.referral_bonus_matching') }}</option>
                             <option value="rank_bonus" {{ request('type') == 'rank_bonus' ? 'selected' : '' }}>{{ __('asset.rank_bonus') }}</option>
                         <select>
                     </th>
@@ -103,19 +103,13 @@
                     <td>{{ date_format($val->created_at, 'Y-m-d') }}</td>
                     <td>{{ $val->amount }}</td>
                     <td>
-                        @if ($val->profit)
-                            {{ $val->profit->trading->profit_rate }}%
-                        @elseif ($val->reward)
-                            {{ $val->reward->staking->policy->daily }}%
-                        @else
-                            {{ '' }}
-                        @endif
+                        {{ '' }}
                     </td>
                     <td>
-                        @if ($val->type === 'subscription_bonus')
-                            {{ $val->subscriptionBonus ? 'C' . $val->subscriptionBonus->referrer_id : '' }}
-                        @elseif ($val->type === 'referral_bonus')
+                        @if ($val->type === 'referral_bonus')
                             {{ $val->referralBonus ? 'C' . $val->referralBonus->referrer_id : '' }}
+                        @elseif ($val->type === 'referral_matching')
+                            {{ $val->referralMatching ? 'C' . $val->referralMatching->referrer_id : '' }}
                         @else
                             {{ '' }}
                         @endif

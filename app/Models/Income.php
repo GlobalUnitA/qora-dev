@@ -90,7 +90,7 @@ class Income extends Model
         $referral_bonus = $incomeTransfers->where('type', 'referral_bonus')->where('status', 'completed');
         $referral_bonus_total = $referral_bonus->sum('amount');
 
-        $referral_matching = $incomeTransfers->where('type', '$referral_matching')->where('status', 'completed');
+        $referral_matching = $incomeTransfers->where('type', 'referral_matching')->where('status', 'completed');
         $referral_matching_total = $referral_matching->sum('amount');
 
         $rank_bonus = $incomeTransfers->where('type', 'rank_bonus')->where('status', 'completed');
