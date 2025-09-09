@@ -143,9 +143,9 @@ Route::middleware(['auth', 'session.timeout'])->group(function () {
             });
         });
         Route::prefix('withdrawal')->group(function () {
-            Route::middleware(['otp'])->group(function () {
+            //Route::middleware(['otp'])->group(function () {
                 Route::get('/', [IncomeWithdrawalController::class, 'index'])->name('income.withdrawal');
-            });
+            //});
             Route::post('store', [IncomeWithdrawalController::class, 'store'])->name('income.withdrawal.store');
             Route::get('complete/{id}', [IncomeWithdrawalController::class, 'complete'])->name('income.withdrawal.complete');
             Route::prefix('list')->group(function () {
