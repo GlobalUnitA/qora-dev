@@ -14,6 +14,7 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\OtpController;
 
 use App\Http\Controllers\Profile\ProfileController;
+use App\Http\Controllers\Profile\DashboardController;
 use App\Http\Controllers\Profile\KycVerificationController;
 
 use App\Http\Controllers\Asset\AssetController;
@@ -88,6 +89,8 @@ Route::middleware(['auth', 'session.timeout'])->group(function () {
         Route::post('update', [ProfileController::class, 'update'])->name('profile.update');
         Route::get('/password', [ProfileController::class, 'password'])->name('profile.password');
         Route::post('/password/update', [ProfileController::class, 'passwordUpdate'])->name('profile.password.update');
+
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('profile.dashboard');
 
         Route::prefix('kyc')->group(function () {
             Route::get('/', [KycVerificationController::class, 'index'])->name('kyc');

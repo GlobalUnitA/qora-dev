@@ -11,8 +11,8 @@
                     <form method="POST" id="logoutForm" class="col px-1 cursor-pointer" action="{{ route('logout') }}" >
                         @csrf
                         <div onclick="logout();">
-                            <img src="{{ asset('/images/icon/icon_nav_menu_logout.svg') }}" class="mb-2"> 
-                            <div class="text-white fs-4">{{ __('auth.logout') }}</div>                    
+                            <img src="{{ asset('/images/icon/icon_nav_menu_logout.svg') }}" class="mb-2">
+                            <div class="text-white fs-4">{{ __('auth.logout') }}</div>
                         </div>
                     </form>
                     <div class="col px-1">
@@ -20,14 +20,14 @@
                             <img src="{{ asset('/images/icon/icon_nav_menu_notice.svg') }}" class="mb-2">
                             <div class="text-white fs-4">{{ __('layout.notice') }}</div>
                         </a>
-                    </div>                
+                    </div>
                     <div class="col px-1">
                         <!--a class="nav-link text-inverse" href="{{ route('board.list', ['code' =>'qna'])}}" -->
                         <a class="nav-link text-inverse" href="#" onclick="alertModal('{{ __('system.coming_soon_notice') }}')">
                             <img src="{{ asset('/images/icon/icon_nav_menu_cs.svg') }}" class="mb-2">
                             <div class="text-white fs-4">{{ __('layout.qna') }}</div>
                         </a>
-                    </div>                
+                    </div>
                     <div class="col px-1">
                         <a class="nav-link text-inverse" href="{{ route('profile') }}">
                             <img src="{{ asset('/images/icon/icon_nav_menu_user_info.svg') }}" class="mb-2">
@@ -40,7 +40,7 @@
                 <li class="border-bottom">
                     <div class="nav-item d-flex justify-content-between align-items-center fs-5 py-3">
                         <div class="ms-3 nav-link text-inverse">{{ __('layout.dark_mode') }}</div>
-                        <div class="form-check form-switch">                            
+                        <div class="form-check form-switch">
                             <button class="btn btn-dark" id="themeBtn">On</button>
                         </div>
                     </div>
@@ -65,43 +65,45 @@
                         <div class="ms-3">{{ __('layout.direct_referral_tree') }}</div>
                         <i class="ti ti-chevron-right"></i>
                     </li>
-                </a>        
-                <a class="nav-link text-inverse fs-5 pb-0" href="{{ route('chart.aff') }}">                    
+                </a>
+                <a class="nav-link text-inverse fs-5 pb-0" href="{{ route('chart.aff') }}">
                     <li class="nav-item d-flex justify-content-between align-items-center border-bottom py-3">
                         <div class="ms-3">{{ __('layout.downline_tree') }}</div>
                         <i class="ti ti-chevron-right"></i>
                     </li>
-                </a>        
-                <!--a class="nav-link text-inverse fs-5 pb-0" href="{{ route('trading', ['team' => true]) }}">
+                </a>
+                <a class="nav-link text-inverse fs-5 pb-0" href="{{ route('profile.dashboard') }}">
                     <li class="nav-item d-flex justify-content-between align-items-center border-bottom py-3">
-                        <div class="ms-3">{{ __('asset.team_info') }}</div>
+                        <div class="ms-3">{{ __('user.dashboard') }}</div>
                         <i class="ti ti-chevron-right"></i>
                     </li>
-                </a>                
+                </a>
+                {{--
                 <a class="nav-link text-inverse fs-5 pb-0" href="{{ route('about') }}">
                     <li class="nav-item d-flex justify-content-between align-items-center border-bottom py-3">
                         <div class="ms-3">{{ __('layout.company_about') }}</div>
                         <i class="ti ti-chevron-right"></i>
                     </li>
-                </a>                
+                </a>
                 <a class="nav-link text-inverse fs-5 pb-0" href="{{ route('board.list', ['code' =>'product'])}}">
                     <li class="nav-item d-flex justify-content-between align-items-center border-bottom py-3">
                         <div class="ms-3">{{ __('layout.product_intro') }}</div>
                         <i class="ti ti-chevron-right"></i>
                     </li>
-                </a>                
+                </a>
                 <a class="nav-link text-inverse fs-5 pb-0" href="{{ route('board.list', ['code' =>'guide'])}}">
                     <li class="nav-item d-flex justify-content-between align-items-center border-bottom py-3">
                         <div class="ms-3">{{ __('layout.guidebook') }}</div>
                         <i class="ti ti-chevron-right"></i>
                     </li>
-                </a>                
+                </a>
                 <a class="nav-link text-inverse fs-5 pb-0" href="{{ route('board.list', ['code' =>'terms'])}}">
                     <li class="nav-item d-flex justify-content-between align-items-center border-bottom py-3">
                         <div class="ms-3">{{ __('layout.terms') }}</div>
                         <i class="ti ti-chevron-right"></i>
-                    </li-->
-                </a>                
+                    </li>
+                </a>
+                --}}
             </ul>
         </div>
     </div>

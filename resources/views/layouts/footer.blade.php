@@ -35,10 +35,9 @@
                 </a>
             </div>
             <div class="col px-1">
-                <!--a href="{{ route('trading', ['team' => true]) }}" class="text-decoration-none text-dark"-->
-                <a href="#" class="text-decoration-none text-dark" onclick="alertModal('{{ __('system.coming_soon_notice') }}')">
+                <a href="{{ route('profile.dashboard') }}" class="text-decoration-none text-dark">
                     <img src="{{ asset('/images/icon/icon_menu_team.svg') }}" class="pb-1">
-                    <div class="fs-3">{{ __('asset.team_info') }}</div>
+                    <div class="fs-3">{{ __('user.dashboard') }}</div>
                 </a>
             </div>
             <div class="col px-1">

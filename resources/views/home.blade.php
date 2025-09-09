@@ -30,7 +30,7 @@
     <div class="mb-2">
         @isset($notice)
         <a href="{{ route('board.view', ['code' => $notice->board->board_code, 'mode' => 'view', 'id' => $notice->id]) }}" >
-            <div class="alert alert-light d-flex" role="alert">    
+            <div class="alert alert-light d-flex" role="alert">
                 <img src="{{ asset('images/icon_notice.svg') }}">
                 <p class="fs-3 ms-2 mb-0 flex-grow-1">{{ $notice->subject }}</p>
             </div>
@@ -135,8 +135,7 @@
                         <div class="d-flex justify-content-between align-items-center pt-4 px-4">
                             <h6 class="text-white fs-4 fw-normal lh-md m-0">{{ $income->coin->name }}</h6>
                             <h4 class="fw-bold text-white fs-6 fs-md-6 text-end flex-grow-1 m-0 px-1">{{ number_format(floor( $income->balance * 10000) / 10000, 4) }}</h4>
-                            <a href="#" onclick="alertModal('{{ __('system.coming_soon_notice') }}')">
-                            <!--a href="{{ route('income', ['id' => $income->encrypted_id]) }}"-->
+                            <a href="{{ route('income', ['id' => $income->encrypted_id]) }}">
                                 <span class="btn btn-outline-light btn-sm py-1 px-3 ms-2">{{ __('system.detail') }}</span>
                             </a>
                         </div>
@@ -148,8 +147,7 @@
                             @foreach($remaining as $income)
                             <div class="d-flex justify-content-between align-items-center pt-4 px-4">
                                 <h6 class="text-white fs-4 fw-normal lh-md m-0">{{ $income->coin->name }}</h6>
-                                <a href="#" onclick="alertModal('{{ __('system.coming_soon_notice') }}')">
-                                <!--a href="{{ route('income', ['id' => $income->encrypted_id]) }}"-->
+                                <a href="{{ route('income', ['id' => $income->encrypted_id]) }}">
                                     <h4 class="fw-bold text-white fs-6 fs-md-6 m-0">{{ number_format(floor( $income->balance * 10000) / 10000, 4) }}<span class="btn btn-outline-light btn-sm py-1 px-3 mb-1 ms-2">{{ __('system.detail') }}</span></h4>
                                 </a>
                             </div>
@@ -170,35 +168,35 @@
             <a href="{{ route('asset.deposit') }}" class="link-body-emphasis w-100" style="max-width: 25%">
                 <div class="d-flex align-items-center flex-column">
                     <img src="{{ asset('/images/icon/icon_main_deposit.png') }}" width="44" class="mb-1">
-                    <p class="m-0 fw-medium fs-3">{{ __('asset.deposit') }}</p>                    
+                    <p class="m-0 fw-medium fs-3">{{ __('asset.deposit') }}</p>
                 </div>
             </a>
-            {{-- 
+            {{--
             <a href="{{ route('asset.withdrawal') }}" class="link-body-emphasis w-100" style="max-width: 25%">
                 <div class="d-flex align-items-center flex-column">
                     <img src="{{ asset('/images/icon/icon_main_withdrawal.png') }}" width="44" class="mb-1">
-                    <p class="m-0 fw-medium fs-3">{{ __('asset.withdrawal') }}</p>                    
+                    <p class="m-0 fw-medium fs-3">{{ __('asset.withdrawal') }}</p>
                 </div>
             </a>
             <a href="{{ route('trading') }}" class="link-body-emphasis w-100" style="max-width: 25%">
                 <div class="d-flex align-items-center flex-column">
                 <img src="{{ asset('/images/icon/icon_main_trading.png') }}" width="44" class="mb-1">
-                    <p class="m-0 fw-medium fs-3">{{ __('asset.trading') }}</p>                    
+                    <p class="m-0 fw-medium fs-3">{{ __('asset.trading') }}</p>
                 </div>
-            </a>           
+            </a>
             <a href="{{ route('staking') }}" class="link-body-emphasis w-100" style="max-width: 25%">
                 <div class="d-flex align-items-center flex-column">
                 <img src="{{ asset('/images/icon/icon_main_investment.png') }}" width="44" class="mb-1">
-                    <p class="m-0 fw-medium fs-3">{{ __('staking.staking') }}</p>                    
+                    <p class="m-0 fw-medium fs-3">{{ __('staking.staking') }}</p>
                 </div>
             </a>
-            --}}               
+            --}}
         </div>
     </div>
     {{--
     <div class="pb-5">
         <h5 class="mb-3">{{ __('etc.crypto_price') }}</h5>
-        <div class="row g-3">            
+        <div class="row g-3">
             <table class="table table-hover">
                 <thead>
                     <tr>
@@ -212,7 +210,7 @@
                         <th scope="row">BTC</th>
                         <td>121,960,000</td>
                         <td>+0.56%</td>
-                    </tr>                
+                    </tr>
                 </tbody>
                 </table>
         </div>
@@ -222,11 +220,11 @@
         <div class="card-body p-4 position-relative" style="background: url('images/mockup.png') center bottom no-repeat; background-size: 620px; height: 670px;">
             <h5 class="text-white pt-3 opacity-50">Building Decentralized</h5>
             <h3 class="text-white pb-4">Innovation<br>Together</</h3>
-            {{-- 
+            {{--
             <a href="{{ route('staking') }}" class="position-absolute w-100 px-3" style="bottom: 0; left: 0;">
                 <button class="btn btn-primary w-100 py-3 my-5 fs-4">Stake Now <span class="opacity-50">&</span> Earn Rewards!</button>
-            </a> 
-            --}}          
+            </a>
+            --}}
         </div>
     </div>
 </main>

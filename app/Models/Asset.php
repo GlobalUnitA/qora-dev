@@ -25,8 +25,8 @@ class Asset extends Model
     ];
 
     protected $appends = [
-        'encrypted_id', 
-        'fee_rate', 
+        'encrypted_id',
+        'fee_rate',
         'tax_rate',
     ];
 
@@ -62,24 +62,24 @@ class Asset extends Model
         if (!$policy) {
             return 0;
         }
-        
+
         $first_deposit = $this->transfers()
             ->whereIn('type', ['deposit', 'manual_deposit'])
             ->orderBy('created_at', 'asc')
             ->first();
 
         if (!$first_deposit) {
-            return 0; 
+            return 0;
         }
 
         $days = now()->diffInDays($first_deposit->created_at);
-        
+
         return ($days >= $policy->period) ? $policy->fee_rate : 0;
     }
-    
+
     public function getTaxRateAttribute()
     {
-    
+
         $policy = AssetPolicy::first();
 
         if (!$policy) {
@@ -92,35 +92,20 @@ class Asset extends Model
 
     public function getAssetInfo()
     {
-        $yesterday = Carbon::yesterday();   
-        $today = Carbon::today();       
+        $yesterday = Carbon::yesterday();
+        $today = Carbon::today();
         $tomorrow = Carbon::tomorrow();
 
         $user_profile = UserProfile::where('user_id', $this->user_id)->first();
 
-        $trading_policy = TradingPolicy::first();
-
-        $current_count = 0;
-        $max_count = $trading_policy->trading_count;
-
-        $trading = Trading::where('user_id', $this->user_id)
-                ->where('coin_id', $this->coin_id)
-                ->whereBetween('created_at', [$today, $tomorrow->copy()->subSecond()])
-                ->first();
-
-        if ($trading) {
-            $current_count = $trading->current_count;
-            $max_count = $trading->max_count;
-        }
-        
         $direct_count = 0;
         $childrens = $user_profile->getChildrenTree(21);
 
         if ($childrens) {
             $direct_count = count($childrens[1]);
         }
-        
-        $referral_count = 0; 
+
+        $referral_count = 0;
         $group_sales = 0;
         $group_sales_expected = 0;
 
@@ -130,7 +115,7 @@ class Asset extends Model
                 if(!$user) continue;
 
                 $referral_count++;
-                   
+
                 $group_sales += AssetTransfer::where('user_id', $user->id)
                     ->whereIn('type', ['deposit', 'internal', 'manual_deposit'])
                     ->where('status', 'completed')
@@ -148,11 +133,11 @@ class Asset extends Model
         $income = Income::where('user_id', $this->user_id)
                 ->where('coin_id', $this->coin_id)
                 ->first();
-        
+
         $deposits = IncomeTransfer::where('income_id', $income->id)
             ->where('type', 'deposit')
             ->get();
-        
+
         $withdrawal = IncomeTransfer::where('income_id', $income->id)
             ->where('type', 'withdrawal')
             ->get();
@@ -189,11 +174,9 @@ class Asset extends Model
                 'yesterday' => $bonus_yesterday,
                 'total' => $bonus_total,
             ],
-            'current_count' => $current_count,
-            'max_count' => $max_count,
             'direct_count' => $direct_count,
             'referral_count' => $referral_count,
-            'group_sales' => $group_sales,  
+            'group_sales' => $group_sales,
             'group_sales_expected'  => $group_sales_expected,
         ];
     }
