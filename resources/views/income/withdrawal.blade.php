@@ -17,7 +17,7 @@
             @csrf
             <fieldset>
                 <legend class="mb-3 fs-4 text-body">{{ __('asset.select_withdrawal_asset_guide') }}</legend>
-                <div class="d-grid d-grid-col-2 mb-3">                    
+                <div class="d-grid d-grid-col-2 mb-3">
                 @foreach ($incomes as $income)
                     <div class="selectedAsset">
                         <input type="radio" class="btn-check" name="income" value="{{ $income->encrypted_id }}" id="{{ $income->coin->code }}" autocomplete="off" data-balance="{{ $income->balance }}">
@@ -28,8 +28,8 @@
                         <input type="hidden" class="tax_rate" value="{{ $income->tax_rate }}">
                         <input type="hidden" class="fee_rate" value="{{ $income->fee_rate }}">
                     </div>
-                @endforeach                                  
-                </div>                
+                @endforeach
+                </div>
             </fieldset>
             <div class="my-4">
                 <label class="form-label fs-4 text-body">{{ __('asset.withdrawal_amount_guide') }}</label>
@@ -49,11 +49,11 @@
                         <h6 class="text-body mt-4">{{ __('asset.withdrawal_notice') }}</h6>
                         <p class="mb-1">- {{ __('asset.withdrawal_min_amount') }}</p>
                         <p class="mb-1">- {{ __('asset.withdrawal_arrival_period_guide') }}</p>
-                        <p class="mb-1">- {{ __('asset.withdrawal_fee_guide') }}</p>
+                        {{--<p class="mb-1">- {{ __('asset.withdrawal_fee_guide') }}</p>--}}
                         <p class="mb-1">- {{ __('asset.withdrawal_tax_guide') }}</p>
                     </div>
             </div>
-            <button type="submit" class="btn btn-primary w-100 py-3 mb-4 fs-4">{{ __('asset.withdrawal') }}</button>                                
+            <button type="submit" class="btn btn-primary w-100 py-3 mb-4 fs-4">{{ __('asset.withdrawal') }}</button>
         </form>
     </div>
 </main>
