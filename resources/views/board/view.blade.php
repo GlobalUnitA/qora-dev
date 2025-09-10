@@ -13,7 +13,11 @@
     </div>
 
     <div class="post-content py-4 px-2 mb-3 fs-4">
-    {!! nl2br(e($view->content)) !!}
+    @if ($board->is_popup == 'y')
+        {!! $view->content !!}
+    @else
+        {!! nl2br(e($view->content)) !!}
+    @endif
     </div>
     @if($view->image_urls)
     <div class="text-center align-middle">
