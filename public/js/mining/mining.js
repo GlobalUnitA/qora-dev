@@ -42,7 +42,7 @@ $(document).ready(function() {
         });
     });
 
-    $("#nodeAmount").focusout(function() {
+    $("#nodeAmount").on("input", function() {
 
         const nodeAmount =parseFloat($(this).val());
         const exchangeRate = parseFloat($("#exchangeRate").val());

@@ -4,7 +4,11 @@
 <header class="p-4 w-100 border-top-title" style="background: url('../images/tit_bg_01.png') center right no-repeat, #1e1e1f;" >
     <h2 class="text-white mb-1 px-1">Mining</h2>
     <h6 class="text-white mb-4 px-1">{{ __('mining.mining') }}</h6>
-    <div class="m-0 px-1"></div>
+    <div class="m-0 px-1">
+        <a href="{{ route('mining.list') }}">
+            <h5 class="btn btn-primary border-0 m-0 text-black" style="background: linear-gradient(to right, #00f2bc, #67eff9);">{{ __('mining.mining_list') }}</h5>
+        </a>
+    </div>
 </header>
 <main class="container-fluid py-5 mb-5">
     <div class="px-3 mb-5">

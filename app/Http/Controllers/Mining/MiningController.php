@@ -39,6 +39,13 @@ class MiningController extends Controller
         return response()->json($Mining->toArray());
     }
 
+    public function list()
+    {
+        $minings = Mining::where('user_id', auth()->id())->get();
+
+        return view('mining.list', compact('minings'));
+    }
+
     public function confirm($id)
     {
         $mining = MiningPolicy::find($id);
