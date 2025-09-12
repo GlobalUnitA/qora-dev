@@ -17,6 +17,7 @@ class Coin extends Model
         'is_active',
         'is_asset',
         'is_income',
+        'is_mining',
     ];
 
     protected $casts = [

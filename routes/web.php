@@ -27,7 +27,7 @@ use App\Http\Controllers\Income\WithdrawalController as IncomeWithdrawalControll
 
 use App\Http\Controllers\Trading\TradingController;
 
-use App\Http\Controllers\Staking\StakingController;
+use App\Http\Controllers\Mining\MiningController;
 
 use App\Http\Controllers\Chart\RefChartController;
 use App\Http\Controllers\Chart\AffChartController;
@@ -166,13 +166,16 @@ Route::middleware(['auth', 'session.timeout'])->group(function () {
         });
     });
 
-    Route::prefix('staking')->group(function () {
-        Route::get('/', [StakingController::class, 'index'])->name('staking');
-        Route::post('data', [StakingController::class, 'data'])->name('staking.data');
-        Route::get('confirm/{id}', [StakingController::class, 'confirm'])->name('staking.confirm');
-        Route::post('store', [StakingController::class, 'store'])->name('staking.store');
-        Route::get('detail', [StakingController::class, 'detail'])->name('staking.detail');
-        Route::get('profit/{id}', [StakingController::class, 'profit'])->name('staking.profit');
+    Route::prefix('mining')->group(function () {
+        Route::get('/', [MiningController::class, 'index'])->name('mining');
+
+        Route::post('data', [MiningController::class, 'data'])->name('mining.data');
+        Route::get('confirm/{id}', [MiningController::class, 'confirm'])->name('mining.confirm');
+        Route::post('store', [MiningController::class, 'store'])->name('mining.store');
+        /*
+        Route::get('detail', [MiningController::class, 'detail'])->name('mining.detail');
+        Route::get('profit/{id}', [MiningController::class, 'profit'])->name('mining.profit');
+        */
     });
 
     Route::prefix('board')->group(function () {

@@ -2,14 +2,13 @@
 
 namespace App\Providers;
 
+
 use App\Models\GradePolicy;
-use App\Models\SubscriptionPolicy;
+use App\Models\AssetPolicy;
 use App\Models\ReferralPolicy;
 use App\Models\ReferralMatchingPolicy;
 use App\Models\RankPolicy;
-use App\Models\AssetPolicy;
-use App\Models\TradingPolicy;
-use App\Models\StakingPolicy;
+use App\Models\MiningPolicy;
 use App\Models\LanguagePolicy;
 use App\Models\DepositToast;
 use App\Observers\PolicyObserver;
@@ -27,13 +26,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         GradePolicy::observe(PolicyObserver::class);
-        SubscriptionPolicy::observe(PolicyObserver::class);
+        AssetPolicy::observe(PolicyObserver::class);
         ReferralPolicy::observe(PolicyObserver::class);
         ReferralMatchingPolicy::observe(PolicyObserver::class);
         RankPolicy::observe(PolicyObserver::class);
-        AssetPolicy::observe(PolicyObserver::class);
-        TradingPolicy::observe(PolicyObserver::class);
-        //StakingPolicy::observe(PolicyObserver::class);
+        MiningPolicy::observe(PolicyObserver::class);
 
         View::composer('*', function ($view) {
             $languages = LanguagePolicy::where('type', 'locale')->first()->content ?? [];

@@ -1,0 +1,136 @@
+<?php
+
+namespace App\Http\Controllers\Mining;
+
+
+use App\Models\Asset;
+use App\Models\AssetTransfer;
+use App\Models\Income;
+use App\Models\Mining;
+use App\Models\MiningPolicy;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use Carbon\Carbon;
+
+class MiningController extends Controller
+{
+    public function __construct()
+    {
+
+    }
+
+    public function index()
+    {
+        $assets = Asset::where('user_id', auth()->id())
+            ->whereHas('coin', function ($query) {
+                $query->where('is_mining', 'y');
+            })
+            ->get();
+
+        return view('mining.mining', compact('assets'));
+    }
+
+    public function data(Request $request)
+    {
+        $Mining = MiningPolicy::where('coin_id', $request->coin)->get();
+
+        return response()->json($Mining->toArray());
+    }
+
+    public function confirm($id)
+    {
+        $mining = MiningPolicy::find($id);
+
+        $asset = Asset::where('user_id', auth()->id())
+            ->where('coin_id', $mining->coin_id)
+            ->first();
+
+        $balance = $asset->balance;
+
+        $date = $this->getMiningDate($mining->period);
+
+        return view('mining.confirm', compact('mining', 'date', 'balance'));
+    }
+
+    public function store(Request $request)
+    {
+
+        $policy = MiningPolicy::find($request->policy);
+
+        $asset = Asset::where('user_id', auth()->id())->where('coin_id', $policy->coin_id)->first();
+        $refund = Asset::where('user_id', auth()->id())->where('coin_id', $policy->refund_coin_id)->first();
+        $reward = Income::where('user_id', auth()->id())->where('coin_id', $policy->reward_coin_id)->first();
+
+        if ($asset->balance < $request->coin_amount) {
+            throw new \Exception(__('asset.lack_balance_notice'));
+        }
+
+        DB::beginTransaction();
+
+        try {
+
+            $date = $this->getMiningDate($policy->period);
+
+            $mining = Mining::create([
+                'user_id' => auth()->id(),
+                'asset_id' => $asset->id,
+                'refund_id' => $refund->id,
+                'reward_id' => $reward->id,
+                'policy_id' => $policy->id,
+                'coin_amount' => $request->coin_amount,
+                'refund_coin_amount' => $request->refund_coin_amount,
+                'node_amount' => $request->node_amount,
+                'exchange_rate' => $request->exchange_rate,
+                'period' => $policy->period,
+                'reward_count' => 0,
+                'started_at' => $date['start'],
+                'ended_at' => $date['end'],
+            ]);
+
+            AssetTransfer::create([
+                'user_id' => $mining->user_id,
+                'asset_id' => $asset->id,
+                'type' => 'mining',
+                'status' => 'completed',
+                'amount' => $request->coin_amount,
+                'actual_amount' => $request->coin_amount,
+                'before_balance' => $asset->balance,
+                'after_balance' => $asset->balance - $request->coin_amount,
+            ]);
+
+            $asset->update([
+                'balance' => $asset->balance - $request->coin_amount
+            ]);
+
+            DB::commit();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => __('mining.mining_success_notice'),
+                'url' => route('home'),
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'status' => 'error',
+                'message' =>  $e->getMessage(),
+            ]);
+
+        }
+
+    }
+
+    private function getMiningDate($period)
+    {
+        $start = Carbon::today()->addDays(1);
+        return [
+            'start' => $start,
+            'end' => $start->copy()->addDays($period-1),
+        ];
+    }
+
+}

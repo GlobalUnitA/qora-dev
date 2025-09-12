@@ -10,13 +10,15 @@ $(document).ready(function() {
                 const active = $('input[name="is_active['+id+']"]:checked').val();
                 const asset = $('input[name="is_asset['+id+']"]:checked').val();
                 const income = $('input[name="is_income['+id+']"]:checked').val();
+                const mining = $('input[name="is_mining['+id+']"]:checked').val();
 
                 formData.append('id', id);
                 formData.append('address', address);
                 formData.append('is_active', active);
                 formData.append('is_asset', asset);
                 formData.append('is_income', income);
-                
+                formData.append('is_mining', mining);
+
                 $.ajax({
                     url: $('#updateForm').attr('action'),
                     type: 'POST',
@@ -31,9 +33,9 @@ $(document).ready(function() {
                         console.log(error);
                         alertModal('예기치 못한 오류가 발생했습니다.');
                     }
-                });     
+                });
             } else {
-               return;        
+               return;
             }
         });
     });

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin\Coin;
 
 
-use App\Models\Policy;
 use App\Models\Coin;
 use App\Models\User;
 use App\Models\Asset;
@@ -11,9 +10,7 @@ use App\Models\Income;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Carbon\Carbon;
 
 class CoinController extends Controller
 {
@@ -30,23 +27,23 @@ class CoinController extends Controller
     public function store(Request $request)
     {
         if (!$request->hasFile('file')) {
-            
+
             return response()->json([
                 'status' => 'error',
                 'message' => '이미지를 첨부해주세요.',
             ]);
 
         }
-        
+
         $file = $request->file('file');
-        
+
         if ($file->isValid()) {
 
             $validated = $request->validate([
                 'code' => 'required|string|max:10',
                 'name' => 'required|string|max:50',
                 'address' => 'string|max:255',
-                'file' => 'required|image|mimes:jpeg,png,jpg,svg|max:5120', 
+                'file' => 'required|image|mimes:jpeg,png,jpg,svg|max:5120',
             ]);
 
             $data = [];
@@ -62,7 +59,7 @@ class CoinController extends Controller
 
             $data['image_urls'] = $file_url;
 
-            
+
             DB::beginTransaction();
 
             try {
@@ -85,14 +82,14 @@ class CoinController extends Controller
                     ]);
                 }
 
-                DB::commit(); 
+                DB::commit();
 
             } catch (\Exception $e) {
 
                 DB::rollBack();
-                
+
                 \Log::error('Failed to insert coin', ['error' => $e->getMessage()]);
-    
+
                 return response()->json([
                     'status' => 'error',
                     'message' => '예기치 못한 오류가 발생했습니다.',
@@ -125,15 +122,16 @@ class CoinController extends Controller
                 'is_active' => $request->is_active,
                 'is_asset' => $request->is_asset,
                 'is_income' => $request->is_income,
+                'is_mining' => $request->is_mining,
             ]);
 
-            DB::commit(); 
+            DB::commit();
 
         } catch (\Exception $e) {
 
             DB::rollBack();
-            
-            \Log::error('Failed to update coin', ['error' => $e->getMessage()]);
+
+            Log::error('Failed to update coin', ['error' => $e->getMessage()]);
 
             return response()->json([
                 'status' => 'error',

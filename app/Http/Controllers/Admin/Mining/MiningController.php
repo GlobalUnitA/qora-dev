@@ -2,13 +2,9 @@
 
 namespace App\Http\Controllers\Admin\Mining;
 
-use App\Exports\StakingPolicyExport;
-use App\Models\Staking;
-use App\Models\StakingPolicy;
-use App\Models\PolicyModifyLog;
+use App\Models\Mining;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 
@@ -16,13 +12,13 @@ class MiningController extends Controller
 {
     public function __construct()
     {
-        
+
     }
 
     public function list(Request $request)
     {
-        $list = Staking::with(['user'])
-       
+        $list = Mining::with(['user'])
+
         ->when($request->filled('category') && $request->filled('keyword'), function ($query) use ($request) {
             switch ($request->category) {
                 case 'mid':
@@ -48,17 +44,17 @@ class MiningController extends Controller
             }
         })
         ->when($request->filled('start_date') && $request->filled('end_date'), function ($query) use ($request) {
-            $start = Carbon::parse($request->start_date)->startOfDay(); 
+            $start = Carbon::parse($request->start_date)->startOfDay();
             $end = Carbon::parse($request->end_date)->endOfDay();
 
-            $query->whereBetween('stakings.created_at', [$start, $end]);
+            $query->whereBetween('mining.created_at', [$start, $end]);
         })
         ->where('status', $request->status)
         ->latest()
         ->orderBy('id', 'desc')
         ->paginate(10);
 
-        return view('admin.staking.list', compact('list'));
+        return view('admin.mining.list', compact('list'));
     }
 
 }
