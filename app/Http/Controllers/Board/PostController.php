@@ -31,6 +31,7 @@ class PostController extends Controller
         $download_urls = null;
         if (!empty($view->image_urls)) {
             foreach ($view->image_urls as $image_url) {
+                if (!$image_url) continue;
                 $download_urls[] = $this->s3Service->generateDownloadUrl($image_url, 600);
             }
         }

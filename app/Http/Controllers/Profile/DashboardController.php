@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers\Profile;
 
-
-use App\Models\IncomeTransfer;
-use App\Models\UserProfile;
+use App\Models\Mining;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -29,19 +27,20 @@ class DashboardController extends Controller
         $user = auth()->user()->profile;
         $grade = $user->grade->name;
 
-
         $childrens = $user->getChildrenTree(20);
 
         $all_count = collect($childrens)->flatten(1)->count();
         $direct_count = isset($childrens[1]) ? $childrens[1]->count() : 0;
         $group_sales = $user->getGroupSales();
 
+        $total_node_amount = number_format(Mining::where('user_id', auth()->id())->sum('node_amount'));
 
         return [
             'grade' => $grade,
             'all_count' => $all_count,
             'direct_count' => $direct_count,
             'group_sales' => $group_sales,
+            'total_node_amount' => $total_node_amount,
         ];
     }
 }
