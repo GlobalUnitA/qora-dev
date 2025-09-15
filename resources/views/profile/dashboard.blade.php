@@ -31,7 +31,7 @@
                     <div class="row g-3 mb-3">
                         <div class="col-12 col-sm-6">
                             <p class="text-body fs-4 m-0">{{ __('mining.total_staking') }}</p>
-                            <h3 class="text-primary fs-6 mb-1">0</h3>
+                            <h3 class="text-primary fs-6 mb-1">{{ $data['total_staking'] }}</h3>
                         </div>
                     </div>
                     <div class="row g-3 mb-3">

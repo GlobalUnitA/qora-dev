@@ -33,7 +33,9 @@ class DashboardController extends Controller
         $direct_count = isset($childrens[1]) ? $childrens[1]->count() : 0;
         $group_sales = $user->getGroupSales();
 
-        $total_node_amount = number_format(Mining::where('user_id', auth()->id())->sum('node_amount'));
+        $mining = Mining::where('user_id', auth()->id());
+        $total_node_amount = number_format($mining->sum('node_amount'));
+        $total_staking = number_format($mining->sum('refund_coin_amount'));
 
         return [
             'grade' => $grade,
@@ -41,6 +43,7 @@ class DashboardController extends Controller
             'direct_count' => $direct_count,
             'group_sales' => $group_sales,
             'total_node_amount' => $total_node_amount,
+            'total_staking' => $total_staking,
         ];
     }
 }
