@@ -8,7 +8,7 @@ return array (
   'mining_matching_bonus' => 'マイニングマッチングボーナス',
   'total_mining_matching_bonus' => 'マイニングマッチングボーナス合計',
   'total_node' => 'ノード数合計',
-  'total_staking' => 'ステーキング合計（vCDAO）',
+  'total_staking' => 'ステーキング合計（VCDAO）',
   'total_mining' => 'マイニング合計量（DOBUY）',
   'mining' => 'ノードマイニング',
   'max_node_amount' => '最大ノード数',

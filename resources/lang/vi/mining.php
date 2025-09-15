@@ -8,7 +8,7 @@ return array (
   'mining_matching_bonus' => 'Tiền thưởng matching mining',
   'total_mining_matching_bonus' => 'Tổng tiền thưởng matching mining',
   'total_node' => 'Tổng số node',
-  'total_staking' => 'Tổng Staking (vCDAO)',
+  'total_staking' => 'Tổng Staking (VCDAO)',
   'total_mining' => 'Tổng số lượng mining (DOBUY)',
   'mining' => 'Node Mining',
   'max_node_amount' => 'Số lượng node tối đa',
