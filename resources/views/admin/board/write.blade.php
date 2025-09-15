@@ -100,5 +100,5 @@
 @push('script')
 <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css">
-<script src="{{ asset('js/admin/post.js') }}"></script>
+<script src="{{ asset('js/admin/board/post.js') }}"></script>
 @endpush

@@ -7,13 +7,19 @@ use App\Models\Post;
 use App\Models\Comment;
 use App\Models\User;
 use App\Http\Controllers\Controller;
+use App\Services\S3Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Intervention\Image\Facades\Image;
 
 class PostController extends Controller
 {
+    protected S3Service $s3Service;
+
+    public function __construct(S3Service $s3Service)
+    {
+        $this->s3Service = $s3Service;
+    }
 
     public function view(Request $request)
     {
@@ -21,6 +27,13 @@ class PostController extends Controller
         $mode = $request->mode;
         $board = Board::where('board_code', $request->code)->first();
         $view = Post::find($request->id);
+
+        $download_urls = null;
+        if (!empty($view->image_urls)) {
+            foreach ($view->image_urls as $image_url) {
+                $download_urls[] = $this->s3Service->generateDownloadUrl($image_url, 600);
+            }
+        }
 
         if ($mode == 'view') {
             $user = User::find($view->user_id);
@@ -39,6 +52,7 @@ class PostController extends Controller
                'view' => $view,
                'comments' => $comments,
                'user' => $user,
+               'download_urls' => $download_urls,
            ];
 
             return view('board.view', $data);

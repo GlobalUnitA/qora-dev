@@ -57,12 +57,12 @@
                                 @endif
                             </td>
                         </tr>
-                        @if($board->is_popup == 'n' && $view->image_urls)
+                        @if($board->is_popup == 'n' && $download_urls)
                         <tr>
                             <th class="text-center align-middle">이미지</th>
                             <td colspan=5 class="align-middle">
                                 <div class="text-center align-middle">
-                                    @foreach($view->image_urls as $val)
+                                    @foreach($download_urls as $val)
                                         <a href="{{ $val }}">
                                             <img src="{{ $val }}" class="img-fluid me-5" style="height:300px">
                                         </a>

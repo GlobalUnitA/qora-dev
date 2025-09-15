@@ -19,9 +19,9 @@
         {!! nl2br(e($view->content)) !!}
     @endif
     </div>
-    @if($view->image_urls)
+    @if($download_urls)
     <div class="text-center align-middle">
-        @foreach($view->image_urls as $val)
+        @foreach($download_urls as $val)
             <div class="mb-5">
                 <a href="{{ $val }}">
                     <img src="{{ $val }}" class="img-fluid">
