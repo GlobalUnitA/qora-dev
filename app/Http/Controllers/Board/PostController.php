@@ -72,7 +72,7 @@ class PostController extends Controller
     public function write(Request $request)
     {
         $content = $request->input('content');
-        $file_url = $request->input('file_key', []);
+        $file_url = array_filter($request->input('file_key', []));
         $board = Board::find($request->board_id);
 
         DB::beginTransaction();

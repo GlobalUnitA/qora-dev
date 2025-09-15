@@ -123,31 +123,9 @@ class PostController extends Controller
     public function write(Request $request)
     {
         $content = $request->input('content');
-        $uploaded = $request->input('image_urls', []);
+        $file_url = array_filter($request->input('file_key', []));
+
         $board = Board::find($request->board_id);
-        $used_content = $this->extractImageUrlsFromContent($content);
-        $final_images = [];
-
-        foreach ($used_content as $url) {
-            if (str_contains($url, '/uploads/tmp/')) {
-                $relative_tmp = str_replace(asset('storage') . '/', '', $url);
-                $new_path = str_replace('uploads/tmp/', 'uploads/post/', $relative_tmp);
-
-                if (Storage::disk('public')->exists($relative_tmp)) {
-                    Storage::disk('public')->move($relative_tmp, $new_path);
-                }
-
-                $new_url = asset('storage/' . $new_path);
-                $content = str_replace($url, $new_url, $content);
-
-                $content = preg_replace('/<img(.*?)src=["\']' . preg_quote($new_url, '/') . '["\'](.*?)>/',
-                '<img$1src="' . $new_url . '"$2 style="width:100%">', $content);
-
-                $final_images[] = $new_url;
-            } else {
-                $final_images[] = $url;
-            }
-        }
 
         DB::beginTransaction();
 
@@ -161,7 +139,7 @@ class PostController extends Controller
                 'board_id' => $board->id,
                 'subject' => $request->subject,
                 'content' => $content,
-                'image_urls' => $final_images,
+                'image_urls' => $file_url,
                 'is_popup' => $is_popup,
                 'is_banner' => $is_banner,
             ]);
