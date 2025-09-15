@@ -3,9 +3,9 @@
 @section('content')
 <main class="container-fluid py-5 mb-5">
     @if($mode == 'write')
-    <form method="POST" action="{{ route('board.write') }}" id="ajaxForm">
+    <form method="POST" action="{{ route('board.write') }}" id="boardForm">
     @else
-    <form method="POST" action="{{ route('board.modify') }}" id="ajaxForm">
+    <form method="POST" action="{{ route('board.modify') }}" id="boardForm">
     @endif
         @csrf
         <input type="hidden" name="board_id" value="{{ $board->id }}">
@@ -43,6 +43,7 @@
                         </svg>
                         <img src="" class="img-preview d-none cursor-pointer" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; border: 3px solid #adb5bd; border-radius: 4px;">
                         <input type="file" name="image_urls[0]" class="file-input d-none" accept="image/jpeg, image/png">
+                        <input type="hidden" name="file_key[]">
                     </label>
                 </div>
                 <div class="preview-box" style="width: 60px; height: 60px; position: relative;">
@@ -56,6 +57,7 @@
                         </svg>
                         <img src="" class="img-preview d-none cursor-pointer" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; border: 3px solid #adb5bd; border-radius: 4px;" />
                         <input type="file" name="image_urls[1]" class="file-input d-none" accept="image/jpeg, image/png">
+                        <input type="hidden" name="file_key[]">
                     </label>
                 </div>
                 <div class="preview-box" style="width: 60px; height: 60px; position: relative;">
@@ -69,6 +71,7 @@
                         </svg>
                         <img src="" class="img-preview d-none cursor-pointer" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; border: 3px solid #adb5bd; border-radius: 4px;" />
                         <input type="file" name="image_urls[2]" class="file-input d-none" accept="image/jpeg, image/png">
+                        <input type="hidden" name="file_key[]">
                     </label>
                 </div>
             </div>
@@ -92,4 +95,8 @@
 @push('message')
 <div id="msg_input_title" data-label="{{ __('layout.input_title_notice') }}"></div>
 <div id="msg_input_contents" data-label="{{ __('layout.input_contents_notice') }}"></div>
+@endpush
+
+@push('script')
+    <script src="{{ asset('js/board/post.js') }}"></script>
 @endpush

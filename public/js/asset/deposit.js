@@ -19,21 +19,19 @@ $(document).ready(function() {
         }
 
         this.submit();
-        
+
     });
 
     $('#confirmForm').submit(function (event) {
 
         event.preventDefault();
 
-        const form = this; 
+        const form = this;
         const file = $('#fileInput')[0].files[0];
 
-        console.log(file);
-        console.log(presignedData);
         if (!file || !presignedData) return alertModal(errorNotice);
 
-       
+
         $.ajax({
             url: presignedData.uploadUrl,
             type: 'PUT',
@@ -77,5 +75,5 @@ $(document).ready(function() {
     }).catch(err => {
         alertModal(errorNotice);
     });
-    
+
 });

@@ -57,22 +57,8 @@ class PostController extends Controller
     public function write(Request $request)
     {
         $content = $request->input('content');
-        $files = $request->file('image_urls', []);
+        $file_url = $request->input('file_key', []);
         $board = Board::find($request->board_id);
-
-        $file_url = [];
-        $image_count = 0;
-        foreach ($files as $file) {
-            $image_count++;
-            $file_name = '_' . time() . '_' . auth()->id() .'_'. $image_count .'.jpg';
-            $save_path = storage_path('app/public/uploads/post/' . $file_name);
-
-            Image::make($file->getRealPath())
-                ->encode('jpg', 90)
-                ->save($save_path);
-
-            $file_url[] = asset('storage/uploads/post/' . $file_name);
-        }
 
         DB::beginTransaction();
 

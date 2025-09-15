@@ -58,7 +58,7 @@
             <p class="fs-6 m-0 fw-semibold text-body mining-limit"></p>
         </div>
         <div class="col-6">
-            <p class="fs-4 fw-light m-0">{{ __('system.period') }}</p>
+            <p class="fs-4 fw-light m-0">{{ __('mining.mining_period') }}</p>
             <p class="fs-6 m-0 fw-semibold text-body mining-period"></p>
         </div>
     </div>

@@ -22,8 +22,7 @@
                         </a>
                     </div>
                     <div class="col px-1">
-                        <!--a class="nav-link text-inverse" href="{{ route('board.list', ['code' =>'qna'])}}" -->
-                        <a class="nav-link text-inverse" href="#" onclick="alertModal('{{ __('system.coming_soon_notice') }}')">
+                        <a class="nav-link text-inverse" href="{{ route('board.list', ['code' =>'qna'])}}">
                             <img src="{{ asset('/images/icon/icon_nav_menu_cs.svg') }}" class="mb-2">
                             <div class="text-white fs-4">{{ __('layout.qna') }}</div>
                         </a>
@@ -78,7 +77,6 @@
                         <i class="ti ti-chevron-right"></i>
                     </li>
                 </a>
-                {{--
                 <a class="nav-link text-inverse fs-5 pb-0" href="{{ route('about') }}">
                     <li class="nav-item d-flex justify-content-between align-items-center border-bottom py-3">
                         <div class="ms-3">{{ __('layout.company_about') }}</div>
@@ -103,7 +101,6 @@
                         <i class="ti ti-chevron-right"></i>
                     </li>
                 </a>
-                --}}
             </ul>
         </div>
     </div>

@@ -12,7 +12,7 @@
                         @else
                         게시글 수정
                         @endif
-                    </h5>    
+                    </h5>
                 </div>
                 @if($mode == 'write')
                 <form method="POST" id="boardForm" action="{{ route('admin.post.write') }}" >
@@ -100,5 +100,5 @@
 @push('script')
 <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css">
-<script src="{{ asset('js/board.js') }}"></script>
+<script src="{{ asset('js/admin/post.js') }}"></script>
 @endpush

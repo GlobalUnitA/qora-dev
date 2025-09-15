@@ -24,11 +24,11 @@ const editor = new toastui.Editor({
   }
 });
 $(document).ready(function () {
-    
-    
+
+
     $('#boardForm').on('submit', function (e) {
 
-        e.preventDefault(); 
+        e.preventDefault();
 
         $('#content').val(editor.getHTML());
 
@@ -44,7 +44,7 @@ $(document).ready(function () {
             alertModal($('#msg_input_contents').data('label'));
             return;
         }
-    
+
         const formData = new FormData(this);
 
         $.ajax({
@@ -76,5 +76,5 @@ $(document).ready(function () {
             }
         });
     });
-    
+
 });

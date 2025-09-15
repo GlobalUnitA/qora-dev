@@ -220,40 +220,6 @@ $(document).ready(function() {
         });
     });
 
-    $('#images').on('change', function (event) {
-        const previewContainer = $('#preview');
-        previewContainer.empty();
-
-        const files = event.target.files;
-        if (files.length > 3) {
-            alertModal('최대 3장까지만 업로드 가능합니다');
-            $(this).val('');
-            return;
-        }
-
-        $.each(files, function (index, file) {
-            if (!file.type.startsWith('image/')) {
-                alertModal('이미지 파일만 업로드할 수 있습니다.');
-                return false;
-            }
-
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const img = $('<img>', {
-                    src: e.target.result,
-                    class: 'img-thumbnail',
-                    css: {
-                        maxWidth: '150px',
-                        maxHeight: '150px',
-                        objectFit: 'cover',
-                    }
-                });
-                previewContainer.append(img);
-            };
-            reader.readAsDataURL(file);
-        });
-    });
-
     $('.closePopup').on('click', function () {
 
         const popupId = $(this).data('popup');
