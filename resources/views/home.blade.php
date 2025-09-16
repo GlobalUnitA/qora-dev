@@ -187,7 +187,7 @@
             --}}
             <a href="{{ route('mining') }}" class="link-body-emphasis w-100" style="max-width: 25%">
                 <div class="d-flex align-items-center flex-column">
-                <img src="{{ asset('/images/icon/icon_main_investment.png') }}" width="44" class="mb-1">
+                <img src="{{ asset('/images/icon/icon_main_mining.png') }}" width="44" class="mb-1">
                     <p class="m-0 fw-medium fs-3">{{ __('mining.mining') }}</p>
                 </div>
             </a>
