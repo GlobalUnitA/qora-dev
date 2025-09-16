@@ -19,7 +19,7 @@
                 <tr>
                     <td>{{ date_format($mining->created_at, 'Y-m-d h:i:s') }}</td>
                     <td>{{ $mining->policy->mining_locale_name }}</td>
-                    <td>{{ number_format($mining->node_amount) }}</td>
+                    <td>{{ $mining->node_amount }}</td>
                 </tr>
             </tbody>
         </table>

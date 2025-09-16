@@ -30,7 +30,10 @@ class Mining extends Model
     ];
 
     protected $casts = [
-        'amount' => 'decimal:9',
+        'coin_amount' => 'decimal:9',
+        'refund_coin_amount' => 'decimal:9',
+        'node_amount' => 'decimal:9',
+        'exchange_rate' => 'decimal:9',
     ];
 
     protected $appends = [
