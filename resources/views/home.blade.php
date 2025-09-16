@@ -217,7 +217,7 @@
     </div>
     --}}
     <div class="d-flex card text-center rounded-0" style="background: #070707; margin-bottom: 100px;">
-        <div class="card-body p-4 position-relative" style="background: url('images/mockup.png') center bottom no-repeat; background-size: 620px; height: 670px;">
+        <div class="card-body p-4 position-relative" style="background: url('images/mockup.png') center bottom no-repeat; background-size: 620px; height: 640px;">
             <h5 class="text-white pt-3 opacity-50">Building Decentralized</h5>
             <h3 class="text-white pb-4">Innovation<br>Together</</h3>
             {{--
