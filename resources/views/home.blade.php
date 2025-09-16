@@ -168,27 +168,27 @@
             <a href="{{ route('asset.deposit') }}" class="link-body-emphasis w-100" style="max-width: 25%">
                 <div class="d-flex align-items-center flex-column">
                     <img src="{{ asset('/images/icon/icon_main_deposit.png') }}" width="44" class="mb-1">
-                    <p class="m-0 fw-medium fs-3">{{ __('asset.deposit') }}</p>
+                    <p class="m-0 fw-medium fs-3 text-center">{{ __('asset.deposit') }}</p>
                 </div>
             </a>
             {{--
             <a href="{{ route('asset.withdrawal') }}" class="link-body-emphasis w-100" style="max-width: 25%">
                 <div class="d-flex align-items-center flex-column">
                     <img src="{{ asset('/images/icon/icon_main_withdrawal.png') }}" width="44" class="mb-1">
-                    <p class="m-0 fw-medium fs-3">{{ __('asset.withdrawal') }}</p>
+                    <p class="m-0 fw-medium fs-3 text-center">{{ __('asset.withdrawal') }}</p>
                 </div>
             </a>
             <a href="{{ route('trading') }}" class="link-body-emphasis w-100" style="max-width: 25%">
                 <div class="d-flex align-items-center flex-column">
                 <img src="{{ asset('/images/icon/icon_main_trading.png') }}" width="44" class="mb-1">
-                    <p class="m-0 fw-medium fs-3">{{ __('asset.trading') }}</p>
+                    <p class="m-0 fw-medium fs-3 text-center">{{ __('asset.trading') }}</p>
                 </div>
             </a>
             --}}
             <a href="{{ route('mining') }}" class="link-body-emphasis w-100" style="max-width: 25%">
                 <div class="d-flex align-items-center flex-column">
                 <img src="{{ asset('/images/icon/icon_main_mining.png') }}" width="44" class="mb-1">
-                    <p class="m-0 fw-medium fs-3">{{ __('mining.mining') }}</p>
+                    <p class="m-0 fw-medium fs-3 text-center">{{ __('mining.mining') }}</p>
                 </div>
             </a>
         </div>
