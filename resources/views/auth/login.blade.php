@@ -10,8 +10,7 @@
                         <div class="card-body">
                             <div class="text-center mb-2">
                                 <h1 class="text-white">
-                                    <img src="{{ asset('/images/logos/logo_w.png') }}" alt="" class="login-logo" style="width: 30px;">
-                                    Qora
+                                    <img src="{{ asset('/images/logos/logo_w.png') }}" alt="" class="login-logo" style="height: 30px; width: auto;">
                                 </h1>
                             </div>
                             <form method="POST" id="ajaxForm" action="{{ route('login') }}">
@@ -20,7 +19,7 @@
                                     <label for="locale" class="text-white form-label">Language</label>
                                     <select class="form-select text-dark border-0" id="locale" required="" style="background: rgba(255,255,255,0.8);">
                                         @foreach ($locales as $locale)
-                                             <option value="{{ route('change.language', ['locale' => $locale['code']]) }}"@if (request()->cookie('app_locale', 'en') === $locale['code']) selected @endif>{{ $locale['name'] }}</option>
+                                            <option value="{{ route('change.language', ['locale' => $locale['code']]) }}"@if (request()->cookie('app_locale', 'en') === $locale['code']) selected @endif>{{ $locale['name'] }}</option>
                                         @endforeach
                                     </select>
                                 </div>
