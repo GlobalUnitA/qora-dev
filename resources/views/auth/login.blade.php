@@ -8,7 +8,7 @@
                 <div class="col-11 px-2">
                     <div class="card mb-0" style="background: rgba(0,0,0,0.4); backdrop-filter: blur(6px);">
                         <div class="card-body">
-                            <div class="text-center mb-2">
+                            <div class="text-center mb-3">
                                 <h1 class="text-white">
                                     <img src="{{ asset('/images/logos/logo_w.png') }}" alt="" class="login-logo" style="height: 30px; width: auto;">
                                 </h1>
