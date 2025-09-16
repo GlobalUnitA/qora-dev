@@ -41,7 +41,7 @@
                 <label class="form-label fs-4 text-body">{{ $mining->refundCoin->name }} {{ __('system.amount') }}</label>
                 <input type="text" name="refund_coin_amount" id="refundCoinAmount" class="form-control" value="0" readonly>
             </div>
-            <p class="opacity-50 fw-light fs-4">{{ __('1 NODE') }} = <span class="fw-bold">{{ __('1000') }}{{ $mining->coin->name }}</span></p>
+            <p class="opacity-50 fw-light fs-4">{{ __('1 NODE') }} = <span class="fw-bold">{{ __('1,000') }} {{ $mining->coin->name }}</span></p>
             <p class="mb-5 opacity-50 fw-light fs-4">{{ __('system.stock_amount') }}: <span class="fw-bold">{{ number_format($balance) }}</span></p>
             <button type="submit" class="btn btn-primary w-100 py-3 mb-4 fs-4" >{{ __('mining.participate') }}</button>
         </form>
