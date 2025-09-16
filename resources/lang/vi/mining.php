@@ -20,4 +20,5 @@ return array (
   'mining_success_notice' => 'Đã hoàn tất tham gia khai thác nút.',
   'mining_list' => 'Lịch sử tham gia',
   'mining_period' => 'Thời gian khai thác',
+  'collateral_amount' => 'Số lượng tài sản đảm bảo',
 );

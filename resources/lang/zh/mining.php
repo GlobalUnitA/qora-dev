@@ -20,4 +20,5 @@ return array (
   'mining_success_notice' => '节点挖矿参与成功',
   'mining_list' => '参与明细',
   'mining_period' => '挖矿周期',
+  'collateral_amount' => '质押数量',
 );

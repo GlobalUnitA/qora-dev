@@ -20,4 +20,5 @@ return array (
   'mining_success_notice' => 'Node mining participation completed.',
   'mining_list' => 'Participation History',
   'mining_period' => 'Mining Period',
+  'collateral_amount' => 'Collateral amount',
 );

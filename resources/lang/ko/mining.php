@@ -20,4 +20,5 @@ return array (
   'mining_success_notice' => '노드 마이닝 참여 완료하였습니다.',
   'mining_list' => '참여내역',
   'mining_period' => '마이닝 기간',
+  'collateral_amount' => '담보 수량',
 );
