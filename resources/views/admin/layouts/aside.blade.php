@@ -1,6 +1,6 @@
 <aside class="left-sidebar">
     <div>
-        
+
         <div class="mt-5 mb-5">
             <div class="d-flex align-items-center justify-content-center mb-3">
                 <a href="{{ route('admin') }}" class="text-nowrap logo-img">
@@ -16,7 +16,7 @@
                 </form>
             </div>
         </div>
-   
+
         <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
             <ul id="sidebarnav">
                 <li class="nav-small-cap">
@@ -167,7 +167,7 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="{{ route('admin.income.policy', ['mode' => 'referral']) }}" aria-expanded="false">
+                    <a class="sidebar-link" href="{{ route('admin.income.policy', ['mode' => 'rank']) }}" aria-expanded="false">
                         <span>
                             <i class="ti ti-gift-off"></i>
                         </span>
@@ -248,4 +248,4 @@
             </ul>
         </nav>
     </div>
-</aside>        
+</aside>

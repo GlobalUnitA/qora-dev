@@ -55,7 +55,11 @@
                                     <input type="hidden" name="id" value="{{ $val->id }}">
                                     <td class="text-center">{{ $val->node_amount }}</td>
                                     <td class="text-center">
-                                        <input type="text" name="max_depth" value="{{ $val->max_depth }}" class="form-control w-50">
+                                        <select name="max_depth" class="form-select">
+                                            @for($i=1; $i<31; $i++)
+                                                <option value="{{ $i }}" @selected($val->max_depth == $i)>{{ $i }}</option>
+                                            @endfor
+                                        </select>
                                     </td>
                                     <td class="text-center">
                                         <input type="text" name="referral_count" value="{{ $val->referral_count }}" class="form-control w-50">

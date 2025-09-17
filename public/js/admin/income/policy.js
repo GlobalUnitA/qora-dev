@@ -9,12 +9,15 @@ $(document).ready(function() {
                 const recoad = $(this).closest('.income_policy');
                 const formData = new FormData($('#updateForm')[0]);
 
-                recoad.find('input').each(function() {
+                recoad.find('input, select, textarea').each(function() {
                     const name = $(this).attr('name');
                     const value = $(this).val();
 
-                    formData.append(name, value);
+                    if (name) {
+                        formData.append(name, value);
+                    }
                 });
+
                 console.log(formData);
                 $.ajax({
                     url: $('#updateForm').attr('action'),
