@@ -3,7 +3,12 @@
 @section('content')
 <div class="body-wrapper">
     <div class="container-fluid">
-            <ul class="nav nav-tabs mt-3" id="tableTabs" role="tablist" style="margin-left: -300px; margin-right: -300px; width: calc(100% + 600px);">
+        <ul class="nav nav-tabs mt-3" id="tableTabs" role="tablist" style="margin-left: -300px; margin-right: -300px; width: calc(100% + 600px);">
+            <li class="nav-item" role="presentation">
+                <a href="{{ route('admin.income.policy', ['mode' => 'rank']) }}" class="nav-link">
+                    직급보너스
+                </a>
+            </li>
             <li class="nav-item" role="presentation">
                 <a href="{{ route('admin.income.policy', ['mode' => 'referral']) }}" class="nav-link">
                     추천보너스
@@ -15,8 +20,13 @@
                 </a>
             </li>
             <li class="nav-item" role="presentation">
-                <a href="{{ route('admin.income.policy', ['mode' => 'rank']) }}" class="nav-link">
-                    직급보너스
+                <a href="{{ route('admin.income.policy', ['mode' => 'level']) }}" class="nav-link">
+                    레벨보너스
+                </a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a href="{{ route('admin.income.policy', ['mode' => 'level_condition']) }}" class="nav-link">
+                    레벨조건
                 </a>
             </li>
         </ul>
