@@ -142,23 +142,14 @@ return [
             'permission' => 0664,
         ],
 
-        'wallet' => [
+        'mining' => [
             'driver' => 'daily',
-            'path' => storage_path('logs/wallet/wallet.log'),
+            'path' => storage_path('logs/mining/mining.log'),
             'level' => 'info',
             'days' => 14,
             'permission' => 0664,
         ],
 
-        'staking' => [
-            'driver' => 'daily',
-            'path' => storage_path('logs/staking/staking.log'),
-            'level' => 'info',
-            'days' => 14,
-            'permission' => 0664,
-        ],
-
-        
         'bonus' => [
             'driver' => 'daily',
             'path' => storage_path('logs/bonus/bonus.log'),

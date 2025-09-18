@@ -12,13 +12,13 @@ class MiningReward extends Model
 
     protected $fillable = [
         'user_id',
-        'staking_id',
+        'mining_id',
         'transfer_id',
-        'profit',
+        'reward',
     ];
-    
+
     protected $casts = [
-        'profit' => 'decimal:9',
+        'reward' => 'decimal:9',
     ];
 
     public function getStatusTextAttribute()
@@ -26,9 +26,9 @@ class MiningReward extends Model
         return '지급 완료';
     }
 
-    public function staking()
+    public function mining()
     {
-        return $this->belongsTo(Staking::class, 'staking_id', 'id');
+        return $this->belongsTo(Mining::class, 'mining_id', 'id');
     }
 
     public function transfer()
