@@ -54,12 +54,13 @@
         </div>
         <div class="bg-video">
             <video class="bg-video__content" autoplay muted loop playsinline>
-                <source src="{{ asset('images/video_03.mp4') }}" type="video/mp4" />
+                <source src="{{ asset('images/video_login.mp4') }}" type="video/mp4" />
             </video>
         </div>
     </div>
 </div>
 @endsection
+
 
 @push('script')
 <script src="{{ asset('js/auth/login.js') }}"></script>
