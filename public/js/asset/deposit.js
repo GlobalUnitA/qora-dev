@@ -1,6 +1,7 @@
 $(document).ready(function() {
 
     let presignedData = null;
+    let isSubmitting = false;
 
     $('#depositForm').submit(function (event) {
         event.preventDefault();
@@ -22,29 +23,25 @@ $(document).ready(function() {
 
     });
 
-    $('#confirmForm').submit(function (event) {
-
+    $('#confirmForm').submit(function(event) {
         event.preventDefault();
+        if (isSubmitting) return;
+        isSubmitting = true;
 
         const form = this;
         const file = $('#fileInput')[0].files[0];
 
-        if (!file || !presignedData) return alertModal(errorNotice);
+        if (!file || !presignedData) {
+            isSubmitting = false;
+            alertModal(errorNotice);
+            return;
+        }
 
-
-        $.ajax({
-            url: presignedData.uploadUrl,
-            type: 'PUT',
-            data: file,
-            processData: false,
-            contentType: file.type,
-            success: function() {
-                submitAjax(form);
-            },
-            error: function() {
-                alertModal(errorNotice);
-            }
-        });
+        uploadFile(file, presignedData.uploadUrl)
+            .then(() => submitFormAjax(form))
+            .finally(() => {
+                isSubmitting = false;
+            });
     });
 
     $('#fileInput').on('change', function() {
@@ -75,5 +72,20 @@ $(document).ready(function() {
     }).catch(err => {
         alertModal(errorNotice);
     });
-
 });
+
+function uploadFile(file, url) {
+    return $.ajax({
+        url: url,
+        type: 'PUT',
+        data: file,
+        processData: false,
+        contentType: file.type,
+    });
+}
+
+function submitFormAjax(form) {
+    return new Promise((resolve, reject) => {
+        submitAjax(form, resolve, reject);
+    });
+}
