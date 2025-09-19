@@ -67,12 +67,11 @@
                                         <th scope="col" class="text-center">이름</th>
                                         <th scope="col" class="text-center">등급</th>
                                         <th scope="col" class="text-center">종류</th>
-                                        <th scope="col" class="text-center">보너스</th>
-                                        <th scope="col" class="text-center">개인매출</th>
-                                        <th scope="col" class="text-center">그룹매출</th>
-                                        <th scope="col" class="text-center">직추천 수</th>
-                                        <th scope="col" class="text-center">보너스 등급</th>
-                                        <th scope="col" class="text-center">지급일자</th>
+                                        <th scope="col" class="text-center">매칭</th>
+                                        <th scope="col" class="text-center">상태</th>
+                                        <th scope="col" class="text-center">산하ID</th>
+                                        <th scope="col" class="text-center">산하보너스</th>
+                                        <th scope="col" class="text-center">일자</th>
                                     </tr>
                                 </thead>
                                 <tbody class="table-group-divider">
@@ -85,16 +84,32 @@
                                         <td scope="col" class="text-center">{{ $value->user->profile->grade->name }}</td>
                                         <td scope="col" class="text-center">{{ $value->income->coin->name }}</td>
                                         <td scope="col" class="text-center">{{ $value->amount }}</td>
-                                        <td scope="col" class="text-center">{{ $value->rankBonus->self_sales }}</td>
-                                        <td scope="col" class="text-center">{{ $value->rankBonus->group_sales }}</td>
-                                        <td scope="col" class="text-center">{{ $value->rankBonus->referral_count }}</td>
-                                        <td scope="col" class="text-center">{{ $value->rankBonus->policy->grade->name }}</td>
+                                        <td scope="col" class="text-center">
+                                            @switch($value->status)
+                                                @case('pending')
+                                                    {{ __('신청') }}
+                                                    @break
+                                                @case('waiting')
+                                                    {{ __('대기') }}
+                                                @break
+                                                @case('completed')
+                                                    {{ __('완료') }}
+                                                    @break
+                                                @case('canceled')
+                                                    {{ __('취소') }}
+                                                    @break
+                                                @default
+                                                    {{ __('환불') }}
+                                            @endswitch
+                                        </td>
+                                        <td scope="col" class="text-center">{{ $value->levelMatching->referrer_id }}</td>
+                                        <td scope="col" class="text-center">{{ number_format($value->levelMatching->bonus->bonus) }}</td>
                                         <td scope="col" class="text-center">{{ $value->created_at }}</td>
                                     </tr>
                                     @endforeach
                                     @else
                                     <tr>
-                                        <td class="text-center" colspan="11">No Data.</td>
+                                        <td class="text-center" colspan="9">No Data.</td>
                                     </tr>
                                     @endif
                                 </tbody>

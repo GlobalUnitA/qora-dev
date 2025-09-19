@@ -442,6 +442,136 @@ class UserProfile extends Model
         }
     }
 
+    public function levelBonus($reward)
+    {
+        try {
+
+            DB::beginTransaction();
+
+            $condition = $reward->checkLevelCondition();
+            $max_depth = $condition->max_depth;
+
+            $parents = $this->getParentTree($max_depth);
+
+            foreach ($parents as $level => $parent_profile) {
+
+                if ($parent_profile->is_valid === 'n') continue;
+
+                $policy = LevelPolicy::where('depth', $level)->first();
+
+                $bonus = $reward->reward * $policy->bonus / 100;
+
+                if ($bonus <= 0) continue;
+
+                $income = $reward->mining->income;
+
+                $transfer = IncomeTransfer::create([
+                    'user_id' => $parent_profile->user_id,
+                    'income_id' => $income->id,
+                    'type' => 'level_bonus',
+                    'status' => 'completed',
+                    'amount' => $bonus,
+                    'actual_amount' => $bonus,
+                    'before_balance' => $income->balance,
+                    'after_balance' => $income->balance + $bonus,
+                ]);
+
+                $level_bonus = LevelBonus::create([
+                    'user_id' => $parent_profile->user_id,
+                    'referrer_id' => $this->user_id,
+                    'transfer_id' => $transfer->id,
+                    'reward_id' => $reward->id,
+                    'bonus' => $bonus,
+                ]);
+
+                $income->increment('balance', $bonus);
+
+                Log::channel('bonus')->info('Success level bonus', [
+                    'user_id' => $parent_profile->user_id,
+                    'referrer_id' => $this->user_id,
+                    'level' => $level,
+                    'reward_id' => $reward->id,
+                    'bonus_id' => $level_bonus->id,
+                    'transfer_id' => $transfer->id,
+                    'bonus' => $bonus,
+                    'before_balance' => $transfer->before_balance,
+                    'after_balance' => $transfer->after_balance,
+                ]);
+
+                $this->levelMatching($level_bonus);
+            }
+
+            DB::commit();
+
+        }  catch (\Exception $e) {
+
+            DB::rollBack();
+
+            Log::channel('bonus')->error('Referral bonus transaction failed', [
+                'deposit_id' => $deposit->id,
+                'user_id' => $this->user_id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+        }
+    }
+
+    public function levelMatching($bonus)
+    {
+        $condition = $bonus->reward->checkLevelCondition();
+        $max_depth = $condition->max_depth;
+
+        $user = $bonus->user->profile;
+        $parents = $user->getParentTree($max_depth);
+
+        foreach ($parents as $level => $parent_profile) {
+
+            if ($parent_profile->is_valid === 'n') continue;
+
+            $policy = LevelPolicy::where('depth', $level)->first();
+
+            $matching = $bonus->bonus * $policy->matching / 100;
+
+            if ($matching <= 0) continue;
+
+            $income = $bonus->reward->mining->income;
+
+            $transfer = IncomeTransfer::create([
+                'user_id'   => $parent_profile->user_id,
+                'income_id'  => $income->id,
+                'type' => 'level_matching',
+                'status' => 'completed',
+                'amount'    => $matching,
+                'actual_amount' => $matching,
+                'before_balance' => $income->balance,
+                'after_balance' => $income->balance + $matching,
+            ]);
+
+            $level_matching = LevelMatching::create([
+                'user_id'   => $parent_profile->user_id,
+                'referrer_id' => $user->user_id,
+                'bonus_id'   => $bonus->id,
+                'transfer_id'  => $transfer->id,
+                'matching' => $matching,
+            ]);
+
+            $income->increment('balance', $matching);
+
+            Log::channel('bonus')->info('Success level matching', [
+                'user_id' => $parent_profile->user_id,
+                'referrer_id' => $user->user_id,
+                'level' => $level,
+                'bonus_id' => $bonus->id,
+                'matching_id' => $level_matching->id,
+                'transfer_id' => $transfer->id,
+                'matching' => $matching,
+                'before_balance' => $transfer->before_balance,
+                'after_balance' => $transfer->after_balance,
+            ]);
+        }
+    }
+
+
     public function checkUserValidity()
     {
         if ($this->is_valid === 'y') return;

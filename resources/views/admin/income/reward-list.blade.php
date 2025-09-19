@@ -5,30 +5,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
-                <div class="d-flex justify-content-between">
-                    <ul class="nav nav-tabs mt-3" id="tableTabs" role="tablist" >
-                        <li class="nav-item" role="presentation">
-                            <a href="{{ route('admin.income.list', array_merge(request()->query(), ['type' => 'deposit'])) }}" class="nav-link {{ Request('type') == 'deposit' ? 'active' : '' }}">내부이체</a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a href="{{ route('admin.income.list', array_merge(request()->query(), ['type' => 'withdrawal'])) }}" class="nav-link {{ Request('type') == 'withdrawal' ? 'active' : '' }}">외부출금</a>
-                        </li>
-                        {{--
-                        <li class="nav-item" role="presentation">
-                            <a href="{{ route('admin.income.list', array_merge(request()->query(), ['type' => 'staking_reward'])) }}" class="nav-link {{ Request('type') == 'staking_reward' ? 'active' : '' }}">스테이킹</a>
-                        </li>
-                        --}}
-                        <li class="nav-item" role="presentation">
-                            <a href="{{ route('admin.income.list', array_merge(request()->query(), ['type' => 'referral_bonus'])) }}" class="nav-link {{ Request('type') == 'referral_bonus' ? 'active' : '' }}">추천보너스</a>
-                        </li>   
-                        <li class="nav-item" role="presentation">
-                            <a href="{{ route('admin.income.list', array_merge(request()->query(), ['type' => 'referral_matching'])) }}" class="nav-link {{ Request('type') == 'referral_matching' ? 'active' : '' }}">추천매칭</a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a href="{{ route('admin.income.list', array_merge(request()->query(), ['type' => 'rank_bonus'])) }}" class="nav-link {{ Request('type') == 'rank_bonus' ? 'active' : '' }}">승급보너스</a>
-                        </li>
-                    </ul>
-                </div>
+                @include('admin.income.tabs')
                 <div class="card">
                     <div class="card-body">
                         <form action="{{ route('admin.income.list') }}" method="GET">
@@ -84,7 +61,7 @@
                         <div class="table-responsive">
                             <table class="table text-nowrap align-middle mb-0 table-striped table-hover">
                                 <thead>
-                                    <tr class="border-2 border-bottom border-primary border-0"> 
+                                    <tr class="border-2 border-bottom border-primary border-0">
                                         <th scope="col" class="text-center">번호</th>
                                         <th scope="col" class="text-center">UID</th>
                                         <th scope="col" class="text-center">이름</th>
@@ -104,8 +81,8 @@
                                         <td scope="col" class="text-center">{{ $value->user_id }}</td>
                                         <td scope="col" class="text-center">{{ $value->user->name }}</td>
                                         <td scope="col" class="text-center">{{ $value->income->coin->name }}</td>
-                                        <td scope="col" class="text-center">{{ $value->reward->staking->policy->staking_locale_name }}</td>
-                                        <td scope="col" class="text-center">{{ $value->reward->staking->amount }}</td>
+                                        <td scope="col" class="text-center">{{ $value->reward->mining->policy->mining_locale_name }}</td>
+                                        <td scope="col" class="text-center">{{ $value->reward->mining->coin_amount }}</td>
                                         <td scope="col" class="text-center">{{ $value->amount }}</td>
                                         <td scope="col" class="text-center">
                                             @switch($value->status)
@@ -125,7 +102,7 @@
                                                     {{ __('환불') }}
                                             @endswitch
                                         </td>
-                                        
+
                                         <td scope="col" class="text-center">{{ $value->created_at }}</td>
                                     </tr>
                                     @endforeach

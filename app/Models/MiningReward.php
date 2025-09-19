@@ -27,6 +27,11 @@ class MiningReward extends Model
         return '지급 완료';
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
     public function mining()
     {
         return $this->belongsTo(Mining::class, 'mining_id', 'id');
@@ -35,5 +40,22 @@ class MiningReward extends Model
     public function transfer()
     {
         return $this->belongsTo(IncomeTransfer::class, 'transfer_id', 'id');
+    }
+
+    public function checkLevelCondition()
+    {
+        $level_conditions = LevelConditionPolicy::orderBy('node_amount', 'desc')->get();
+        $user_referral_count = $this->user->profile->referral_count;
+
+        foreach ($level_conditions as $level_condition) {
+            $node_check = $this->mining->node_amount >= $level_condition->node_amount;
+            $referral_check = $level_condition->condition === 'and'
+                ? $user_referral_count >= $level_condition->referral_count && $node_check
+                : $user_referral_count >= $level_condition->referral_count || $node_check;
+
+            if ($referral_check) {
+                return $level_condition;
+            }
+        }
     }
 }

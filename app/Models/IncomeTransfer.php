@@ -72,6 +72,16 @@ class IncomeTransfer extends Model
         return $this->hasOne(ReferralMatching::class, 'transfer_id', 'id');
     }
 
+    public function levelBonus()
+    {
+        return $this->hasOne(LevelBonus::class, 'transfer_id', 'id');
+    }
+
+    public function levelMatching()
+    {
+        return $this->hasOne(LevelMatching::class, 'transfer_id', 'id');
+    }
+
     public function rankBonus()
     {
         return $this->hasOne(RankBonus::class, 'transfer_id', 'id');
@@ -79,7 +89,7 @@ class IncomeTransfer extends Model
 
     public function reward()
     {
-        return $this->hasOne(StakingReward::class, 'transfer_id', 'id');
+        return $this->hasOne(MiningReward::class, 'transfer_id', 'id');
     }
 
     public function getTypeTextAttribute()

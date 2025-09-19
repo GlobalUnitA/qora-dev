@@ -145,7 +145,7 @@ class Mining extends Model
 
                 $income->increment('balance', $daily_reward);
 
-                MiningReward::create([
+                $reward = MiningReward::create([
                     'user_id' => $mining->user_id,
                     'mining_id' => $mining->id,
                     'transfer_id' => $transfer->id,
@@ -163,6 +163,7 @@ class Mining extends Model
                     'timestamp' => now(),
                 ]);
 
+                $mining->user->profile->levelBonus($reward);
 
                 DB::commit();
 
