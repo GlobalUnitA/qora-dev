@@ -14,6 +14,7 @@ class MiningReward extends Model
         'user_id',
         'mining_id',
         'transfer_id',
+        'type',
         'reward',
     ];
 

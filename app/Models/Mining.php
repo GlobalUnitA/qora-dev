@@ -80,9 +80,32 @@ class Mining extends Model
         return '오류';
     }
 
-    public function getDailyMining()
+    public function getBaseAmount(): float
     {
-        return ($this->policy->node_amount * $this->node_amount )/ 2 * $this->policy->split_rate / 100;
+        $base_amount = ($this->policy->node_amount * $this->node_amount) / 2;
+
+        return $base_amount;
+    }
+
+    public function getInstantReward(): float
+    {
+        $base_amount   = $this->getBaseAmount();
+        $instant_rate  = $this->policy->instant_rate / 100;
+        $instant_reward = $base_amount * $instant_rate;
+
+        return $instant_reward;
+    }
+
+    public function getDailyReward(): float
+    {
+        $base_amount  = $this->getBaseAmount();
+        $split_rate   = $this->policy->split_rate / 100;
+        $period       = $this->policy->period;
+
+        $split_amount = $base_amount * $split_rate;
+        $daily_reward = $split_amount / $period;
+
+        return $daily_reward;
     }
 
     public static function distributeDaily()
@@ -98,12 +121,12 @@ class Mining extends Model
             DB::beginTransaction();
 
             try {
-                $daily_mining = $mining->getDailyMining();
+                $daily_reward = $mining->getDailyReward();
 
                 Log::channel('mining')->info('daily mining', [
                     'user_id' => $mining->user_id,
                     'mining_id' => $mining->id,
-                    'daily_mining' => $daily_mining,
+                    'daily_mining' => $daily_reward,
                     'timestamp' => now(),
                 ]);
 
@@ -114,26 +137,29 @@ class Mining extends Model
                     'income_id' => $income->id,
                     'type' => 'mining_reward',
                     'status' => 'completed',
-                    'amount' => $daily_mining,
-                    'actual_amount' => $daily_mining,
+                    'amount' => $daily_reward,
+                    'actual_amount' => $daily_reward,
                     'before_balance' => $income->balance,
-                    'after_balance' => $income->balance + $daily_mining,
+                    'after_balance' => $income->balance + $daily_reward,
                 ]);
 
-                $income->increment('balance', $daily_mining);
+                $income->increment('balance', $daily_reward);
 
                 MiningReward::create([
                     'user_id' => $mining->user_id,
                     'mining_id' => $mining->id,
                     'transfer_id' => $transfer->id,
-                    'reward' => $daily_mining,
+                    'type' => 'daily',
+                    'reward' => $daily_reward,
                 ]);
+
+                $mining->increment('reward_count');
 
                 Log::channel('mining')->info('daily mining distributed', [
                     'user_id' => $mining->user_id,
-                    'staking_id' => $mining->id,
+                    'mining_id' => $mining->id,
                     'transfer_id' => $transfer->id,
-                    'reward' => $daily_mining,
+                    'reward' => $daily_reward,
                     'timestamp' => now(),
                 ]);
 
@@ -162,6 +188,7 @@ class Mining extends Model
         $today = now()->toDateString();
 
         $minings = self::whereDate('ended_at', '<', $today)
+            ->whereColumn('period', '=', 'reward_count')
             ->where('status', 'pending')
             ->get();
 
@@ -178,22 +205,22 @@ class Mining extends Model
                     'asset_id' => $asset->id,
                     'type' => 'mining_refund',
                     'status' => 'completed',
-                    'amount' => $mining->amount,
-                    'actual_amount' => $mining->amount,
+                    'amount' => $mining->refund_coin_amount,
+                    'actual_amount' => $mining->refund_coin_amount,
                     'before_balance' => $asset->balance,
-                    'after_balance' => $asset->balance + $mining->amount,
+                    'after_balance' => $asset->balance + $mining->refund_coin_amount,
                 ]);
 
-                $asset->increment('balance', $mining->amount);
+                $asset->increment('balance', $mining->refund_coin_amount);
 
                 MiningRefund::create([
                     'user_id' => $mining->user_id,
-                    'staking_id' => $mining->id,
+                    'mining_id' => $mining->id,
                     'transfer_id' => $transfer->id,
-                    'amount' => $mining->amount,
+                    'amount' => $mining->refund_coin_amount,
                 ]);
 
-                Log::channel('mining')->info('Staking principal successfully paid out', [
+                Log::channel('mining')->info('Mining principal successfully paid out', [
                     'user_id' => $mining->user_id,
                     'mining_id' => $mining->id,
                     'transfer_id' => $transfer->id,

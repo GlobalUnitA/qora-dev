@@ -6,8 +6,10 @@ namespace App\Http\Controllers\Mining;
 use App\Models\Asset;
 use App\Models\AssetTransfer;
 use App\Models\Income;
+use App\Models\IncomeTransfer;
 use App\Models\Mining;
 use App\Models\MiningPolicy;
+use App\Models\MiningReward;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -109,6 +111,27 @@ class MiningController extends Controller
 
             $asset->update([
                 'balance' => $asset->balance - $request->coin_amount
+            ]);
+
+            $instant_reward = $mining->getInstantReward();
+
+            $transfer = IncomeTransfer::create([
+                'user_id' => $mining->user_id,
+                'income_id' => $reward->id,
+                'type' => 'mining_reward',
+                'status' => 'completed',
+                'amount' => $instant_reward,
+                'actual_amount' => $instant_reward,
+                'before_balance' => $reward->balance,
+                'after_balance' => $reward->balance + $instant_reward,
+            ]);
+
+            MiningReward::create([
+                'user_id' => $mining->user_id,
+                'mining_id' => $mining->id,
+                'transfer_id' => $transfer->id,
+                'type' => 'instant',
+                'reward' => $instant_reward,
             ]);
 
             DB::commit();
