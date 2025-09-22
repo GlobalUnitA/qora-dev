@@ -21,6 +21,7 @@ class MiningPolicy extends Model
         'period',
         'node_amount',
         'node_limit',
+        'waiting_period',
     ];
 
     protected $casts = [
@@ -90,6 +91,7 @@ class MiningPolicy extends Model
         'period' => '기간',
         'node_amount' => '채굴값',
         'node_limit' => '최대 노드 수량',
+        'waiting_period' => '대기 기간',
     ];
 
     public function getColumnComment($column)

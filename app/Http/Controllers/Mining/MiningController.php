@@ -58,7 +58,7 @@ class MiningController extends Controller
 
         $balance = $asset->balance;
 
-        $date = $this->getMiningDate($mining->period);
+        $date = $this->getMiningDate($mining);
 
         return view('mining.confirm', compact('mining', 'date', 'balance'));
     }
@@ -73,14 +73,17 @@ class MiningController extends Controller
         $reward = Income::where('user_id', auth()->id())->where('coin_id', $policy->reward_coin_id)->first();
 
         if ($asset->balance < $request->coin_amount) {
-            throw new \Exception(__('asset.lack_balance_notice'));
+            return response()->json([
+                'status' => 'error',
+                'message' =>  __('asset.lack_balance_notice'),
+            ]);
         }
 
         DB::beginTransaction();
 
         try {
 
-            $date = $this->getMiningDate($policy->period);
+            $date = $this->getMiningDate($policy);
 
             $mining = Mining::create([
                 'user_id' => auth()->id(),
@@ -154,12 +157,12 @@ class MiningController extends Controller
 
     }
 
-    private function getMiningDate($period)
+    private function getMiningDate($policy)
     {
-        $start = Carbon::today()->addDays(1);
+        $start = Carbon::today()->addDays($policy->waiting_period+1);
         return [
             'start' => $start,
-            'end' => $start->copy()->addDays($period-1),
+            'end' => $start->copy()->addDays($policy->period-1),
         ];
     }
 

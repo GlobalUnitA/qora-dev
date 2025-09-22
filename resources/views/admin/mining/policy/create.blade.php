@@ -85,6 +85,11 @@
                                     <input type="text" name="node_limit" class="form-control w-25">
                                     <div class="px-2 d-flex align-items-center">개</div>
                                 </td>
+                                <th class="text-center align-middle">대기 기간</th>
+                                <td class="align-middle d-flex" colspan="3">
+                                    <input type="text" name="waiting_period" class="form-control w-25">
+                                    <div class="px-2 d-flex align-items-center">일</div>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
