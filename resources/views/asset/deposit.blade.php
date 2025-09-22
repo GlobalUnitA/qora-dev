@@ -6,7 +6,7 @@
     <h6 class="text-white mb-4 px-1">{{ __('asset.deposit') }}</h6>
     <div class="m-0 px-1">
         <a href="{{ route('asset.deposit.list') }}">
-            <h5 class="btn btn-primary border-0 m-0 text-black" style="background: linear-gradient(to right, #00f2bc, #67eff9);">{{ __('asset.deposit_list') }}</h5>
+            <h5 class="btn btn-header text-white border-0 m-0">{{ __('asset.deposit_list') }}</h5>
         </a>
     </div>
 </header>
