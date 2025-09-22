@@ -8,7 +8,7 @@
 </header>
 <main class="container-fluid py-5 mb-5">
     <div class="px-3 mb-5">
-        <ul class="nav nav-underline mt-5 mb-3 fs-6" id="dashboard-tab" role="tablist">
+        <ul class="nav nav-underline mb-3 fs-6" id="dashboard-tab" role="tablist">
             <li class="nav-item" role="presentation">
                 <button class="nav-link @if(!request()->has('team')) active @endif" id="dashboard-mypage-tab" data-bs-toggle="pill" data-bs-target="#dashboard-mypage" type="button" role="tab" aria-controls="dashboard-mypage" aria-selected="true">{{ __('asset.my_info') }}</button>
             </li>
