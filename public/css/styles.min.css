@@ -3918,6 +3918,10 @@ textarea.form-control-lg {
   background: linear-gradient(to right, #5769ff, #363bf5);
 }
 
+.btn-components {
+  background: linear-gradient(to right, #5769ff, #363bf5);
+}
+
 .btn-outline-primary {
   --bs-btn-color: var(--bs-primary-theme);
   --bs-btn-border-color:  var(--bs-primary-theme);
