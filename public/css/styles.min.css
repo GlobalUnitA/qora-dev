@@ -5545,11 +5545,11 @@ textarea.form-control-lg {
 }
 
 .card.maincard:has(.nav-asset.active) {
-  background: linear-gradient(to right, #758eff, #5769ff);
+  background: linear-gradient(to right, #758eff, #363bf5);
 }
 
 .card.maincard:has(.nav-wallet.active) {
-  background: linear-gradient(to right, #22d0ee, #0899b2);
+  background: linear-gradient(to right, #9c88ff, #6a32f5);
 }
 
 .accordion {
