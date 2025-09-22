@@ -5,7 +5,7 @@ namespace App\Exports\Asset;
 use App\Exports\BaseAssetExport;
 use Illuminate\Support\Facades\DB;
 
-class AssetManualDepositExport extends BaseAssetExport
+class AssetMiningExport extends BaseAssetExport
 {
     public function collection()
     {
@@ -36,6 +36,6 @@ class AssetManualDepositExport extends BaseAssetExport
 
     public function headings(): array
     {
-        return ['번호', 'UID', '이름', '종류', '신청수량', '실제수량', '상태', '수수료', '세금', '일자'];
+        return ['번호', 'UID', '이름', '종류', '신청수량', '실제수량', '상태', '수수료', '세금', '참여일자'];
     }
 }

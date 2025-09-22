@@ -5,7 +5,7 @@ namespace App\Exports\Income;
 use App\Exports\BaseIncomeExport;
 use Illuminate\Support\Facades\DB;
 
-class IncomeStakingRewardExport extends BaseIncomeExport
+class IncomeMiningRewardExport extends BaseIncomeExport
 {
     public function collection()
     {
@@ -13,21 +13,21 @@ class IncomeStakingRewardExport extends BaseIncomeExport
             ->leftJoin('incomes', 'income_transfers.income_id', '=', 'incomes.id')
             ->leftJoin('coins', 'incomes.coin_id', '=', 'coins.id')
             ->leftJoin('users', 'income_transfers.user_id', '=', 'users.id')
-            ->leftJoin('staking_rewards', 'income_transfers.id', '=', 'staking_rewards.transfer_id')
-            ->leftJoin('stakings', 'staking_rewards.staking_id', '=', 'stakings.id')
-            ->leftJoin('staking_policies', 'stakings.staking_id', '=', 'staking_policies.id')
-            ->leftJoin('staking_policy_translations', 'staking_policies.id', '=', 'staking_policy_translations.policy_id')
-            ->where('staking_policy_translations.locale', 'ko')
-            ->select(
-                'users.id', 
+            ->leftjoin('mining_rewards', 'income_transfers.id', '=', 'mining_rewards.transfer_id')
+            ->leftjoin('minings', 'mining_rewards.mining_id', '=', 'minings.id')
+            ->leftjoin('mining_policies', 'minings.policy_id', '=', 'mining_policies.id')
+            ->leftjoin('mining_policy_translations', 'mining_policies.id', '=', 'mining_policy_translations.policy_id')
+            ->select([
+                'users.id',
                 'users.name',
                 'coins.name as coin_name',
-                'staking_policy_translations.name as staking_name',
-                'stakings.amount',
-                'income_transfers.amount as profit',
+                'mining_policy_translations.name as mining_name',
+                'minings.coin_amount',
+                'income_transfers.amount',
                 'income_transfers.status',
                 'income_transfers.created_at'
-            )
+            ])
+            ->where('mining_policy_translations.locale', 'ko')
             ->orderBy('income_transfers.created_at', 'asc');
 
         $statusMap = $this->getStatusMap();
@@ -37,8 +37,11 @@ class IncomeStakingRewardExport extends BaseIncomeExport
         return $this->formatExportRows($results);
     }
 
+
     public function headings(): array
     {
         return ['번호', 'UID', '이름', '종류', '상품이름', '참여수량', '수익', '상태', '일자'];
     }
 }
+
+

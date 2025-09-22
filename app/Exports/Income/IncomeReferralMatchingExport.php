@@ -5,7 +5,7 @@ namespace App\Exports\Income;
 use App\Exports\BaseIncomeExport;
 use Illuminate\Support\Facades\DB;
 
-class IncomeReferralBonusExport extends BaseIncomeExport
+class IncomeReferralMatchingExport extends BaseIncomeExport
 {
     public function collection()
     {
@@ -15,17 +15,17 @@ class IncomeReferralBonusExport extends BaseIncomeExport
             ->leftJoin('users', 'income_transfers.user_id', '=', 'users.id')
             ->leftJoin('user_profiles', 'income_transfers.user_id', '=', 'user_profiles.user_id')
             ->leftJoin('user_grades', 'user_profiles.grade_id', '=', 'user_grades.id')
-            ->leftJoin('referral_bonuses', 'income_transfers.id', '=', 'referral_bonuses.transfer_id')
-            ->leftJoin('asset_transfers', 'referral_bonuses.deposit_id', '=', 'asset_transfers.id')
+            ->leftJoin('referral_matchings', 'income_transfers.id', '=', 'referral_matchings.transfer_id')
+            ->leftJoin('referral_bonuses', 'referral_matchings.bonus_id', '=', 'referral_bonuses.id')
             ->select(
                 'users.id',
                 'users.name',
                 'user_grades.name as grade_name',
                 'coins.name as coin_name',
-                'income_transfers.amount as bonus',
-                'income_transfers.status as status',
-                'referral_bonuses.referrer_id',
-                'asset_transfers.amount as deposit_amount',
+                'income_transfers.amount as matching',
+                'income_transfers.status',
+                'referral_matchings.referrer_id',
+                'referral_bonuses.bonus',
                 'income_transfers.created_at',
             )
             ->orderBy('income_transfers.created_at', 'asc');
@@ -39,6 +39,6 @@ class IncomeReferralBonusExport extends BaseIncomeExport
 
     public function headings(): array
     {
-        return ['번호', 'UID', '이름', '등급', '종류', '보너스', '상태', '산하ID', '입금금액', '일자'];
+        return ['번호', 'UID', '이름', '등급', '종류', '매칭', '상태', '산하ID', '산하보너스', '일자'];
     }
 }

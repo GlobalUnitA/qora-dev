@@ -14,7 +14,10 @@
                             <a href="{{ route('admin.asset.list', array_merge(request()->query(), ['type' => 'withdrawal'])) }}" class="nav-link {{ Request('type') == 'withdrawal' ? 'active' : '' }}">출금</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a href="{{ route('admin.asset.list', array_merge(request()->query(), ['type' => 'staking_refund'])) }}" class="nav-link {{ Request('type') == 'staking_refund' ? 'active' : '' }}">원금상환</a>
+                            <a href="{{ route('admin.asset.list', array_merge(request()->query(), ['type' => 'mining'])) }}" class="nav-link {{ Request('type') == 'mining' ? 'active' : '' }}">마이닝</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a href="{{ route('admin.asset.list', array_merge(request()->query(), ['type' => 'mining_refund'])) }}" class="nav-link {{ Request('type') == 'mining_refund' ? 'active' : '' }}">원금상환</a>
                         </li>
                         <li class="nav-item" role="presentation">
                             <a href="{{ route('admin.asset.list', array_merge(request()->query(), ['type' => 'manual_deposit'])) }}" class="nav-link {{ Request('type') == 'manual_deposit' ? 'active' : '' }}">수동입금</a>
@@ -113,7 +116,7 @@
                         <div class="table-responsive">
                             <table class="table text-nowrap align-middle mb-0 table-striped table-hover">
                                 <thead>
-                                    <tr class="border-2 border-bottom border-primary border-0"> 
+                                    <tr class="border-2 border-bottom border-primary border-0">
                                         <th scope="col" class="text-center">번호</th>
                                         <th scope="col" class="text-center">UID</th>
                                         <th scope="col" class="text-center">이름</th>
