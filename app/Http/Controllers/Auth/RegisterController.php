@@ -49,8 +49,6 @@ class RegisterController extends Controller
     {
         $validated = $this->validator($request->all())->validate();
 
-        // Email verification temporarily disabled
-        /*
         if (session('verification_code') != $request->code) {
             return response()->json([
                 'status' => 'error',
@@ -59,7 +57,6 @@ class RegisterController extends Controller
         }
 
         session(['email_verified' => true]);
-        */
 
         try {
 
@@ -160,8 +157,7 @@ class RegisterController extends Controller
             'account' => ['required', 'string', 'min:4', 'max:20', 'regex:/^[a-zA-Z0-9_-]+$/', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'max:16', 'regex:/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_]).+$/', 'confirmed'],
             'email' => ['required', 'string', 'email', 'max:255'],
-            // Email verification temporarily disabled
-            //'code' => ['required', 'string'],
+            'code' => ['required', 'string'],
             'phone' => ['required', 'string', 'min:9', 'max:12', 'regex:/^[\d+]+$/'],
             'parentId' => ['required', 'integer'],
             'metaUid' => ['nullable', 'string', 'max:50', 'regex:/^[a-zA-Z0-9]+$/'],

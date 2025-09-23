@@ -47,15 +47,13 @@
                                     <label for="inputEmail" class="form-label required">{{ __('user.email') }}</label>
                                     <div class="input-group">
                                         <input type="email" name="email" id="inputEmail" class="form-control required" required>
-                                        <!-- Email verification temporarily disabled -->
-                                        <!--button type="button" id="verifyCode" class="btn btn-primary rounded-end-3">{{ __('system.send') }}</button-->
+                                        <button type="button" id="verifyCode" class="btn btn-primary rounded-end-3">{{ __('system.send') }}</button>
                                     </div>
                                 </div>
-                                <!-- Email verification temporarily disabled -->
-                                <!--div class="mb-4">
+                                <div class="mb-4">
                                     <label for="inputName" class="form-label required">{{ __('auth.verify_code') }}</label>
                                     <input type="text" name="code" class="form-control required" required>
-                                </div-->
+                                </div>
                                 <div class="mb-4">
                                     <label for="inputParentId" class="form-label required">{{ __('user.recommender_uid') }}</label>
                                     <input type="text" name="parentId" id="inputParentId" @if($mid)value="{{ $mid }}"@endif class="form-control required" required>
