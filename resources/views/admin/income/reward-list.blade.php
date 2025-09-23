@@ -69,6 +69,7 @@
                                         <th scope="col" class="text-center">상품이름</th>
                                         <th scope="col" class="text-center">참여수량</th>
                                         <th scope="col" class="text-center">수익</th>
+                                        <th scope="col" class="text-center">타입</th>
                                         <th scope="col" class="text-center">상태</th>
                                         <th scope="col" class="text-center">일자</th>
                                     </tr>
@@ -84,6 +85,15 @@
                                         <td scope="col" class="text-center">{{ $value->reward->mining->policy->mining_locale_name }}</td>
                                         <td scope="col" class="text-center">{{ $value->reward->mining->coin_amount }}</td>
                                         <td scope="col" class="text-center">{{ $value->amount }}</td>
+                                        <td scope="col" class="text-center">
+                                            @switch($value->status)
+                                                @case('instant')
+                                                    {{ __('즉시') }}
+                                                    @break
+                                                @default
+                                                    {{ __('분할') }}
+                                            @endswitch
+                                        </td>
                                         <td scope="col" class="text-center">
                                             @switch($value->status)
                                                 @case('pending')
@@ -102,7 +112,6 @@
                                                     {{ __('환불') }}
                                             @endswitch
                                         </td>
-
                                         <td scope="col" class="text-center">{{ $value->created_at }}</td>
                                     </tr>
                                     @endforeach
