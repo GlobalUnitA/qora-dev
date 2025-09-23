@@ -84,6 +84,13 @@ class Mining extends Model
     {
         $base_amount = ($this->policy->node_amount * $this->node_amount) / 2;
 
+        Log::channel('mining')->info('get base amount', [
+            'policy_node_amount' => $this->policy->node_amount,
+            'node_amount' => $this->node_amount,
+            'base_amount' => $base_amount,
+            'timestamp' => now(),
+        ]);
+
         return $base_amount;
     }
 
@@ -92,6 +99,13 @@ class Mining extends Model
         $base_amount   = $this->getBaseAmount();
         $instant_rate  = $this->policy->instant_rate / 100;
         $instant_reward = $base_amount * $instant_rate;
+
+        Log::channel('mining')->info('get instant amount', [
+            'base_amount' => $base_amount,
+            'instant_rate' => $instant_rate,
+            'instant_reward' => $instant_reward,
+            'timestamp' => now(),
+        ]);
 
         return $instant_reward;
     }
@@ -104,6 +118,15 @@ class Mining extends Model
 
         $split_amount = $base_amount * $split_rate;
         $daily_reward = $split_amount / $period;
+
+        Log::channel('mining')->info('get instant amount', [
+            'base_amount' => $base_amount,
+            'split_rate' => $split_rate,
+            'period' => $period,
+            'split_amount' => $split_amount,
+            'daily_reward' => $daily_reward,
+            'timestamp' => now(),
+        ]);
 
         return $daily_reward;
     }
