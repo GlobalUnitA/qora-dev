@@ -44,6 +44,7 @@ use App\Http\Controllers\Proc\FileUploadController;
 
 Route::get('test', [TestController::class, 'index'])->name('test');
 
+Route::get('register/terms', [RegisterController::class, 'terms'])->name('register.terms');
 Route::get('register/{mid?}', [RegisterController::class, 'index'])->name('register');
 Route::post('register', [RegisterController::class, 'register']);
 Route::post('register/account-check', [RegisterController::class, 'accountCheck'])->name('register.accountCheck');

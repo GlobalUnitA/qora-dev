@@ -62,12 +62,12 @@ class Mining extends Model
 
     public function refunds()
     {
-        return $this->hasMany(StakingRefund::class, 'staking_id', 'id');
+        return $this->hasMany(MiningRefund::class, 'mining_id', 'id');
     }
 
     public function rewards()
     {
-        return $this->hasMany(StakingReward::class, 'staking_id', 'id');
+        return $this->hasMany(MiningReward::class, 'mining_id', 'id');
     }
 
     public function getStatusTextAttribute()
@@ -171,7 +171,7 @@ class Mining extends Model
 
                 DB::rollBack();
 
-                Log::channel('staking')->error('Failed to distribute daily mining', [
+                Log::channel('mining')->error('Failed to distribute daily mining', [
                     'user_id' => $mining->user_id,
                     'mining_id' => $mining->id,
                     'error' => $e->getMessage(),
