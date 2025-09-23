@@ -23,10 +23,11 @@ class Mining extends Model
         'refund_coin_amount',
         'node_amount',
         'exchange_rate',
-        'period',
+        'split_period',
         'reward_count',
         'started_at',
         'ended_at',
+        'maturity_at',
     ];
 
     protected $casts = [
@@ -84,13 +85,6 @@ class Mining extends Model
     {
         $base_amount = ($this->policy->node_amount * $this->node_amount) / 2;
 
-        Log::channel('mining')->info('get base amount', [
-            'policy_node_amount' => $this->policy->node_amount,
-            'node_amount' => $this->node_amount,
-            'base_amount' => $base_amount,
-            'timestamp' => now(),
-        ]);
-
         return $base_amount;
     }
 
@@ -100,13 +94,6 @@ class Mining extends Model
         $instant_rate  = $this->policy->instant_rate / 100;
         $instant_reward = $base_amount * $instant_rate;
 
-        Log::channel('mining')->info('get instant amount', [
-            'base_amount' => $base_amount,
-            'instant_rate' => $instant_rate,
-            'instant_reward' => $instant_reward,
-            'timestamp' => now(),
-        ]);
-
         return $instant_reward;
     }
 
@@ -114,19 +101,10 @@ class Mining extends Model
     {
         $base_amount  = $this->getBaseAmount();
         $split_rate   = $this->policy->split_rate / 100;
-        $period       = $this->policy->period;
+        $period       = $this->policy->split_period;
 
         $split_amount = $base_amount * $split_rate;
         $daily_reward = $split_amount / $period;
-
-        Log::channel('mining')->info('get instant amount', [
-            'base_amount' => $base_amount,
-            'split_rate' => $split_rate,
-            'period' => $period,
-            'split_amount' => $split_amount,
-            'daily_reward' => $daily_reward,
-            'timestamp' => now(),
-        ]);
 
         return $daily_reward;
     }
@@ -211,8 +189,8 @@ class Mining extends Model
 
         $today = now()->toDateString();
 
-        $minings = self::whereDate('ended_at', '<', $today)
-            ->whereColumn('period', '=', 'reward_count')
+        $minings = self::whereDate('maturity_at', '<', $today)
+            ->whereColumn('split_period', '=', 'reward_count')
             ->where('status', 'pending')
             ->get();
 

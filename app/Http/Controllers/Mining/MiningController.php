@@ -95,10 +95,11 @@ class MiningController extends Controller
                 'refund_coin_amount' => $request->refund_coin_amount,
                 'node_amount' => $request->node_amount,
                 'exchange_rate' => $request->exchange_rate,
-                'period' => $policy->period,
+                'split_period' => $policy->split_period,
                 'reward_count' => 0,
                 'started_at' => $date['start'],
                 'ended_at' => $date['end'],
+                'maturity_at' => $date['maturity'],
             ]);
 
             AssetTransfer::create([
@@ -162,7 +163,8 @@ class MiningController extends Controller
         $start = Carbon::today()->addDays($policy->waiting_period+1);
         return [
             'start' => $start,
-            'end' => $start->copy()->addDays($policy->period-1),
+            'end' => $start->copy()->addDays($policy->split_period-1),
+            'maturity' => $start->copy()->addDays($policy->contract_period-1),
         ];
     }
 

@@ -48,10 +48,10 @@
                                         @endforeach
                                     </select>
                                 </td>
-                                <th class="text-center align-middle">기간</th>
-                                <td class="align-middle d-flex">
-                                    <input type="text" name="period" value="{{ $view->period }}" class="form-control w-25">
-                                    <div class="px-2 d-flex align-items-center">일</div>
+                                <th class="text-center align-middle">최대 노드 수량</th>
+                                <td class="align-middle d-flex" colspan="3">
+                                    <input type="text" name="node_limit" value="{{ $view->node_limit }}" class="form-control w-25">
+                                    <div class="px-2 d-flex align-items-center">개</div>
                                 </td>
                             </tr>
                             <tr>
@@ -87,14 +87,21 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th class="text-center align-middle">최대 노드 수량</th>
-                                <td class="align-middle d-flex" colspan="3">
-                                    <input type="text" name="node_limit" value="{{ $view->node_limit }}" class="form-control w-25">
-                                    <div class="px-2 d-flex align-items-center">개</div>
-                                </td>
                                 <th class="text-center align-middle">대기 기간</th>
                                 <td class="align-middle d-flex" colspan="3">
                                     <input type="text" name="waiting_period" value="{{ $view->waiting_period }}" class="form-control w-25">
+                                    <div class="px-2 d-flex align-items-center">일</div>
+                                </td>
+                                <th class="text-center align-middle">분할 기간</th>
+                                <td class="align-middle d-flex">
+                                    <input type="text" name="split_period" value="{{ $view->split_period }}" class="form-control w-25">
+                                    <div class="px-2 d-flex align-items-center">일</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-center align-middle">계약 기간</th>
+                                <td class="align-middle d-flex" colspan="3">
+                                    <input type="text" name="contract_period" value="{{ $view->contract_period }}" class="form-control w-25">
                                     <div class="px-2 d-flex align-items-center">일</div>
                                 </td>
                             </tr>

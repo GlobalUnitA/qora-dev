@@ -18,10 +18,11 @@ class MiningPolicy extends Model
         'instant_rate',
         'split_rate',
         'exchange_rate',
-        'period',
         'node_amount',
         'node_limit',
+        'split_period',
         'waiting_period',
+        'contract_period',
     ];
 
     protected $casts = [
@@ -88,10 +89,11 @@ class MiningPolicy extends Model
         'instant_rate' => '즉시 지급 비율',
         'split_rate' => '분할 지급 비율',
         'exchange_rate' => '환율',
-        'period' => '기간',
         'node_amount' => '채굴값',
         'node_limit' => '최대 노드 수량',
-        'waiting_period' => '대기 기간',
+        'split_period' => '분할기간',
+        'waiting_period' => '대기기간',
+        'contract_period' => '계약기간',
     ];
 
     public function getColumnComment($column)

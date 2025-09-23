@@ -13,7 +13,7 @@
         </div>
         <div class="my-4 mb-5">
             <label class="form-label">{{ __('system.period') }}</label>
-            <input type="text" value="{{ $mining->period }}" class="form-control mb-3" readonly>
+            <input type="text" value="{{ $mining->split_period }}" class="form-control mb-3" readonly>
         </div>
         <div class="p-4 rounded bg-light text-black mb-2">
             <div class="row g-3">

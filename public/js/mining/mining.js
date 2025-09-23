@@ -26,7 +26,7 @@ $(document).ready(function() {
 
                     $template.find('.mining-name').text(item.mining_locale_name);
                     $template.find('.mining-limit').text(item.node_limit);
-                    $template.find('.mining-period').text(item.period);
+                    $template.find('.mining-period').text(item.split_period);
                     $template.find('.mining-btn').attr('onclick', `location.href='${url}'`);
 
                     $('#miningDataContainer').append($template);

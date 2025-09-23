@@ -19,9 +19,9 @@ return new class extends Migration
             $table->decimal('instant_rate', 20, 9)->default(0)->comment('즉시 지급 비율');
             $table->decimal('split_rate', 20, 9)->default(0)->comment('분할 지급 비율');
             $table->decimal('exchange_rate', 20, 9)->default(0)->comment('환율');
-            $table->unsignedInteger('period')->default(0)->comment('기간');
             $table->decimal('node_amount', 20, 9)->default(0)->comment('채굴값');
             $table->unsignedInteger('node_limit')->default(0)->comment('최대 노드 수량');
+            $table->unsignedInteger('split_period')->default(0)->comment('분할기간');
             $table->timestamps();
         });
     }
