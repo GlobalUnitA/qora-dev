@@ -507,8 +507,8 @@ class UserProfile extends Model
 
             DB::rollBack();
 
-            Log::channel('bonus')->error('Referral bonus transaction failed', [
-                'deposit_id' => $deposit->id,
+            Log::channel('bonus')->error('Level bonus transaction failed', [
+                'reward_id' => $reward->id,
                 'user_id' => $this->user_id,
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
