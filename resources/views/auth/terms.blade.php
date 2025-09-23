@@ -1,7 +1,6 @@
 @extends('layouts.master')
 
 @section('content')
-
 <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed" style="transform: translateY(-71px);">
     <div class="position-relative overflow-hidden min-vh-100 d-flex align-items-center justify-content-center">
         <div class="d-flex align-items-center justify-content-center w-100">
@@ -94,17 +93,4 @@
         </div>
     </div>
 </div>
-<form method="POST" action="{{ route('register.accountCheck') }}"  id="accountCheckForm" >
-    @csrf
-    <input type="hidden" name="account" id="inputAccountCheck">
-</form>
-<form method="POST" action="{{ route('register.emailCheck') }}"  id="emailCheckForm" >
-    @csrf
-    <input type="hidden" name="email" id="inputEmailCheck">
-</form>
-<form method="POST" action="{{ route('register.parentCheck') }}"  id="parentCheckForm" >
-    @csrf
-    <input type="hidden" name="parentId" id="inputParentCheck">
-</form>
-
 @endsection
