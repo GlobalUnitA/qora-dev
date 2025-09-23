@@ -19,7 +19,7 @@
                             </div>                   
                             <div class="consent-form">
                                 <div class="mb-4">
-                                    <div class="form-check d-flex align-items-center">
+                                    <div class="form-check d-flex align-items-center mb-2">
                                         <input class="form-check-input" type="checkbox" id="agreeAll">
                                         <label class="form-check-label section-title fs-5 fw-semibold ms-2" for="agreeAll">
                                             전체 동의하기
@@ -33,8 +33,8 @@
                                     <div class="form-check d-flex justify-content-between align-items-center">
                                         <div class="d-flex align-items-center">
                                             <input class="form-check-input me-2" type="checkbox" id="terms" required>
-                                            <label class="form-check-label section-title fw-semibold" for="terms">
-                                                [필수]QORA 이용약관
+                                            <label class="form-check-label section-title fw-semibold fs-4" for="terms">
+                                                <span class="text-primary">[필수]</span> QORA 이용약관
                                             </label>
                                         </div>
                                         <a href="" class="btn btn-primary btn-sm">
@@ -49,8 +49,8 @@
                                     <div class="form-check d-flex justify-content-between align-items-center">
                                         <div class="d-flex align-items-center">
                                             <input class="form-check-input me-2" type="checkbox" id="terms" required>
-                                            <label class="form-check-label section-title fw-semibold" for="terms">
-                                                [필수]개인정보 수집 및 이용
+                                            <label class="form-check-label section-title fw-semibold fs-4" for="terms">
+                                                <span class="text-primary">[필수]</span> 개인정보 수집 및 이용
                                             </label>
                                         </div>
                                         <a href="" class="btn btn-primary btn-sm">
@@ -65,8 +65,8 @@
                                     <div class="form-check d-flex justify-content-between align-items-center">
                                         <div class="d-flex align-items-center">
                                             <input class="form-check-input me-2" type="checkbox" id="terms" required>
-                                            <label class="form-check-label section-title fw-semibold" for="terms">
-                                                [필수]이벤트 및 혜택정보수신
+                                            <label class="form-check-label section-title fw-semibold fs-4" for="terms">
+                                                <span class="text-primary">[필수]</span> 이벤트 및 혜택정보수신
                                             </label>
                                         </div>
                                         <a href="" class="btn btn-primary btn-sm">
