@@ -37,7 +37,7 @@
                                                 <span class="text-primary">[필수]</span> QORA 이용약관
                                             </label>
                                         </div>
-                                        <a href="" class="btn btn-primary btn-sm">
+                                        <a href="" class="btn btn-dark btn-sm">
                                             <span>전체보기</span>
                                         </a>
                                     </div>
@@ -53,7 +53,7 @@
                                                 <span class="text-primary">[필수]</span> 개인정보 수집 및 이용
                                             </label>
                                         </div>
-                                        <a href="" class="btn btn-primary btn-sm">
+                                        <a href="" class="btn btn-dark btn-sm">
                                             <span>전체보기</span>
                                         </a>
                                     </div>
@@ -69,7 +69,7 @@
                                                 <span class="text-primary">[필수]</span> 이벤트 및 혜택정보수신
                                             </label>
                                         </div>
-                                        <a href="" class="btn btn-primary btn-sm">
+                                        <a href="" class="btn btn-dark btn-sm">
                                             <span>전체보기</span>
                                         </a>
                                     </div>
