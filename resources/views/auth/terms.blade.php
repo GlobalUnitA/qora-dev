@@ -81,7 +81,7 @@
                                     안내사항: 전자서명 시 하단 서명란에 "정자"로 이름을 작성할 수 있도록 작성해주세요.
                                 </p>
                                 <div class="py-5 rounded bg-primary-subtle-75 text-primary text-center fs-7 mb-4">
-                                    이름 정자로 작성하세요.
+                                    <p class="m-0 py-3">이름 정자로 작성하세요.</p>
                                 </div>
                                 <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mt-4">
                                     다음

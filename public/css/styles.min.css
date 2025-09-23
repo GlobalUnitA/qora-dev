@@ -17406,7 +17406,7 @@ ul {
 }
 
 .scroll-container {
-  height: 100px;
+  height: 80px;
   overflow-y: auto;
   overflow-x: hidden;
   width: 100%;
