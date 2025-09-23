@@ -17404,3 +17404,10 @@ ul {
     padding-top: 71px;
   }
 }
+
+.scroll-container {
+  height: 100px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
+}
