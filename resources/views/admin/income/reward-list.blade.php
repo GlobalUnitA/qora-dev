@@ -86,7 +86,7 @@
                                         <td scope="col" class="text-center">{{ $value->reward->mining->coin_amount }}</td>
                                         <td scope="col" class="text-center">{{ $value->amount }}</td>
                                         <td scope="col" class="text-center">
-                                            @switch($value->type)
+                                            @switch($value->reward->type)
                                                 @case('instant')
                                                     {{ __('즉시') }}
                                                     @break
