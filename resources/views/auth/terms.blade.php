@@ -15,7 +15,7 @@
                         </div>
                         <div class="card-body py-0 px-3">
                             <div class="mb-5">
-                                <h3 class="text-center">회원약관</h3>
+                                <h3 class="text-center">이용약관</h3>
                             </div>                   
                             <div class="consent-form">
                                 <div class="mb-4">
