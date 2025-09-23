@@ -4,7 +4,7 @@
         <div class="mt-5 mb-5">
             <div class="d-flex align-items-center justify-content-center mb-3">
                 <a href="{{ route('admin') }}" class="text-nowrap logo-img">
-                    <img src="{{ asset('images/logos/emblem.png') }}">
+                    <img src="{{ asset('images/logos/symbol.png') }}">
                 </a>
             </div>
             <p class="mb-3 text-center">어서오세요, <a href="{{ route('admin.manager.view', ['id' => auth()->guard('admin')->user()->id])}}">{{ Auth::guard('admin')->user()->name }}</a>님</p>
