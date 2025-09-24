@@ -26,7 +26,7 @@ class GenerateMiningReward extends Command
      */
     public function handle()
     {
-        Mining::distributeDaily();
+        Mining::distributeReward();
         Mining::finalizePayout();
     }
 }
