@@ -459,9 +459,15 @@ class UserProfile extends Model
 
                 $policy = LevelPolicy::where('depth', $level)->first();
 
-                $bonus = $reward->reward * $policy->bonus / 100;
+                $amount = $reward->mining->getBaseAmount();
 
-                if ($bonus <= 0) continue;
+                $base_bonus = $amount * $policy->bonus / 100;
+
+                if ($base_bonus  <= 0) continue;
+
+                $payout_rate = $reward->getPayoutRate();
+
+                $bonus = $base_bonus * $payout_rate / 100;
 
                 $income = $reward->mining->income;
 
@@ -530,9 +536,13 @@ class UserProfile extends Model
 
             $policy = LevelPolicy::where('depth', $level)->first();
 
-            $matching = $bonus->bonus * $policy->matching / 100;
+            $base_matching = $bonus->bonus * $policy->matching / 100;
 
-            if ($matching <= 0) continue;
+            if ($base_matching <= 0) continue;
+
+            $payout_rate = $bonus->reward->getPayoutRate();
+
+            $matching = $base_matching * $payout_rate / 100;
 
             $income = $bonus->reward->mining->income;
 

@@ -81,27 +81,35 @@ class Mining extends Model
         return '오류';
     }
 
-    public function getBaseAmount(): float
+    public function hasInstantReward()
     {
-        $base_amount = ($this->policy->node_amount * $this->node_amount) / 2;
+        return $this->rewards()
+            ->where('type', 'instant')
+            ->exists();
+    }
+
+    public function getBaseAmount()
+    {
+        $base_amount = ($this->policy->node_amount * $this->node_amount);
 
         return $base_amount;
     }
 
-    public function getInstantReward(): float
+    public function getInstantReward()
     {
-        $base_amount   = $this->getBaseAmount();
+        $base_amount   = $this->getBaseAmount() / 2;
         $instant_rate  = $this->policy->instant_rate / 100;
         $instant_reward = $base_amount * $instant_rate;
 
         return $instant_reward;
     }
 
-    public function getDailyReward(): float
+    public function getDailyReward()
     {
-        $base_amount  = $this->getBaseAmount();
+        $base_amount  = $this->getBaseAmount() / 2;
         $split_rate   = $this->policy->split_rate / 100;
-        $period       = $this->policy->split_period;
+
+        $period = $this->policy->split_period;
 
         $split_amount = $base_amount * $split_rate;
         $daily_reward = $split_amount / $period;
@@ -109,7 +117,8 @@ class Mining extends Model
         return $daily_reward;
     }
 
-    public static function distributeDaily()
+
+    public static function distributeReward()
     {
         Log::channel('mining')->info('distributeDaily mining');
 
@@ -122,14 +131,14 @@ class Mining extends Model
             DB::beginTransaction();
 
             try {
-                $daily_reward = $mining->getDailyReward();
 
-                Log::channel('mining')->info('daily mining', [
-                    'user_id' => $mining->user_id,
-                    'mining_id' => $mining->id,
-                    'daily_mining' => $daily_reward,
-                    'timestamp' => now(),
-                ]);
+                if ($mining->hasInstantReward()) {
+                    $type = 'daily';
+                    $reward = $mining->getDailyReward();
+                } else {
+                    $type = 'instant';
+                    $reward = $mining->getInstantReward();
+                }
 
                 $income = $mining->income;
 
@@ -138,33 +147,34 @@ class Mining extends Model
                     'income_id' => $income->id,
                     'type' => 'mining_reward',
                     'status' => 'completed',
-                    'amount' => $daily_reward,
-                    'actual_amount' => $daily_reward,
+                    'amount' => $reward,
+                    'actual_amount' => $reward,
                     'before_balance' => $income->balance,
-                    'after_balance' => $income->balance + $daily_reward,
+                    'after_balance' => $income->balance + $reward,
                 ]);
 
-                $income->increment('balance', $daily_reward);
+                $income->increment('balance', $reward);
 
-                $reward = MiningReward::create([
+                $mining_reward = MiningReward::create([
                     'user_id' => $mining->user_id,
                     'mining_id' => $mining->id,
                     'transfer_id' => $transfer->id,
-                    'type' => 'daily',
-                    'reward' => $daily_reward,
+                    'type' => $type,
+                    'reward' => $reward,
                 ]);
-
-                $mining->increment('reward_count');
 
                 Log::channel('mining')->info('daily mining distributed', [
                     'user_id' => $mining->user_id,
                     'mining_id' => $mining->id,
                     'transfer_id' => $transfer->id,
-                    'reward' => $daily_reward,
+                    'type' => $type,
+                    'reward' => $reward,
                     'timestamp' => now(),
                 ]);
 
-                $mining->user->profile->levelBonus($reward);
+                if ($type === 'daily') $mining->increment('reward_count');
+
+                $mining->user->profile->levelBonus($mining_reward);
 
                 DB::commit();
 
@@ -185,7 +195,7 @@ class Mining extends Model
 
     public static function finalizePayout()
     {
-        Log::channel('mining')->error('finalizePayOut mining');
+        Log::channel('mining')->info('finalize Pay Out mining');
 
         $today = now()->toDateString();
 
@@ -226,6 +236,7 @@ class Mining extends Model
                     'user_id' => $mining->user_id,
                     'mining_id' => $mining->id,
                     'transfer_id' => $transfer->id,
+                    'amount' => $mining->refund_coin_amount,
                     'timestamp' => now(),
                 ]);
 

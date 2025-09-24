@@ -117,27 +117,6 @@ class MiningController extends Controller
                 'balance' => $asset->balance - $request->coin_amount
             ]);
 
-            $instant_reward = $mining->getInstantReward();
-
-            $transfer = IncomeTransfer::create([
-                'user_id' => $mining->user_id,
-                'income_id' => $reward->id,
-                'type' => 'mining_reward',
-                'status' => 'completed',
-                'amount' => $instant_reward,
-                'actual_amount' => $instant_reward,
-                'before_balance' => $reward->balance,
-                'after_balance' => $reward->balance + $instant_reward,
-            ]);
-
-            MiningReward::create([
-                'user_id' => $mining->user_id,
-                'mining_id' => $mining->id,
-                'transfer_id' => $transfer->id,
-                'type' => 'instant',
-                'reward' => $instant_reward,
-            ]);
-
             DB::commit();
 
             return response()->json([
