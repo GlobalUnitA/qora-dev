@@ -113,7 +113,7 @@
                                             @endswitch
                                         </td>
                                         <td scope="col" class="text-center">{{ $value->levelMatching->referrer_id }}</td>
-                                        <td scope="col" class="text-center">{{ number_format($value->levelMatching->bonus->bonus) }}</td>
+                                        <td scope="col" class="text-center">{{ $value->levelMatching->bonus->bonus }}</td>
                                         <td scope="col" class="text-center">{{ $value->created_at }}</td>
                                     </tr>
                                     @endforeach
