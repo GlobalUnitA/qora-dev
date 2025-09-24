@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('level_matchings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('bonus')->constrained('level_bonuses');
+            $table->foreignId('bonus_id')->constrained('level_bonuses');
             $table->foreignId('transfer_id')->constrained('income_transfers');
             $table->unsignedSmallInteger('referrer_id')->comment('산하 ID');
             $table->decimal('matching', 20, 9)->comment('레벨 매칭');

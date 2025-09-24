@@ -68,6 +68,7 @@
                                         <th scope="col" class="text-center">등급</th>
                                         <th scope="col" class="text-center">종류</th>
                                         <th scope="col" class="text-center">매칭</th>
+                                        <th scope="col" class="text-center">타입</th>
                                         <th scope="col" class="text-center">상태</th>
                                         <th scope="col" class="text-center">산하ID</th>
                                         <th scope="col" class="text-center">산하보너스</th>
@@ -84,6 +85,15 @@
                                         <td scope="col" class="text-center">{{ $value->user->profile->grade->name }}</td>
                                         <td scope="col" class="text-center">{{ $value->income->coin->name }}</td>
                                         <td scope="col" class="text-center">{{ $value->amount }}</td>
+                                        <td scope="col" class="text-center">
+                                            @switch($value->levelMatching?->reward->type)
+                                                @case('instant')
+                                                    {{ __('즉시') }}
+                                                    @break
+                                                @default
+                                                    {{ __('분할') }}
+                                            @endswitch
+                                        </td>
                                         <td scope="col" class="text-center">
                                             @switch($value->status)
                                                 @case('pending')
