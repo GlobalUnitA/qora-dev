@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('bonus_id')->constrained('level_bonuses');
             $table->foreignId('transfer_id')->constrained('income_transfers');
-            $table->unsignedSmallInteger('referrer_id')->comment('산하 ID');
+            $table->unsignedBigInteger('referrer_id')->comment('산하 ID');
             $table->decimal('matching', 20, 9)->comment('레벨 매칭');
             $table->timestamps();
         });

@@ -42,11 +42,18 @@ class MiningReward extends Model
         return $this->belongsTo(IncomeTransfer::class, 'transfer_id', 'id');
     }
 
-    public function getPayoutRate(): float
+    public function getPayoutRate()
     {
         return $this->type === 'daily'
             ? $this->mining->policy->split_rate
             : $this->mining->policy->instant_rate;
+    }
+
+    public function getSplitDays()
+    {
+        return $this->type === 'daily'
+            ? $this->mining->policy->split_period
+            : 1;
     }
 
     public function checkLevelCondition()

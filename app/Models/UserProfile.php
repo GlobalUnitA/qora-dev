@@ -451,6 +451,13 @@ class UserProfile extends Model
             $condition = $reward->checkLevelCondition();
             $max_depth = $condition->max_depth;
 
+            Log::channel('bonus')->info('start level bonus', [
+                'reward_id' => $reward->id,
+                'reard' => $reward->reawrd,
+                'user_id' => $reward->user_id,
+                'max_depth' => $max_depth,
+            ]);
+
             $parents = $this->getParentTree($max_depth);
 
             foreach ($parents as $level => $parent_profile) {
@@ -463,11 +470,12 @@ class UserProfile extends Model
 
                 $base_bonus = $amount * $policy->bonus / 100;
 
-                if ($base_bonus  <= 0) continue;
+                if ($base_bonus <= 0) continue;
 
                 $payout_rate = $reward->getPayoutRate();
+                $split_days = $reward->getSplitDays();
 
-                $bonus = $base_bonus * $payout_rate / 100;
+                $bonus = $base_bonus * $payout_rate / 100 / $split_days;
 
                 $income = $reward->mining->income;
 
