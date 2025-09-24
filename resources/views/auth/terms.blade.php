@@ -43,7 +43,7 @@
                                         </a>
                                     </div>
                                     <div class="bg-body-tertiary rounded-3 mt-3 scroll-container">
-                                        <p class="p-4 text-gray">QORA 이용약관, 개인정보 수집 및 이용, 이벤트 및 혜택정보수신 동의를 포함합니다. QORA 이용약관, 개인정보 수집 및 이용, 이벤트 및 혜택정보수신 동의를 포함합니다.QORA 이용약관, 개인정보 수집 및 이용, 이벤트 및 혜택정보수신 동의를 포함합니다.</p>
+                                        <p class="m-0 p-4 text-gray">QORA 이용약관, 개인정보 수집 및 이용, 이벤트 및 혜택정보수신 동의를 포함합니다. QORA 이용약관, 개인정보 수집 및 이용, 이벤트 및 혜택정보수신 동의를 포함합니다.QORA 이용약관, 개인정보 수집 및 이용, 이벤트 및 혜택정보수신 동의를 포함합니다.</p>
                                     </div>                                    
                                 </div>  
                                 
@@ -61,7 +61,7 @@
                                         </a>
                                     </div>
                                     <div class="bg-body-tertiary rounded-3 mt-3 scroll-container">
-                                        <p class="p-4 text-gray">QORA 이용약관, 개인정보 수집 및 이용, 이벤트 및 혜택정보수신 동의를 포함합니다. QORA 이용약관, 개인정보 수집 및 이용, 이벤트 및 혜택정보수신 동의를 포함합니다.QORA 이용약관, 개인정보 수집 및 이용, 이벤트 및 혜택정보수신 동의를 포함합니다.</p>
+                                        <p class="m-0 p-4 text-gray">QORA 이용약관, 개인정보 수집 및 이용, 이벤트 및 혜택정보수신 동의를 포함합니다. QORA 이용약관, 개인정보 수집 및 이용, 이벤트 및 혜택정보수신 동의를 포함합니다.QORA 이용약관, 개인정보 수집 및 이용, 이벤트 및 혜택정보수신 동의를 포함합니다.</p>
                                     </div>                                    
                                 </div>  
                                 
@@ -79,7 +79,7 @@
                                         </a>
                                     </div>
                                     <div class="bg-body-tertiary rounded-3 mt-3 scroll-container">
-                                        <p class="p-4 text-gray">QORA 이용약관, 개인정보 수집 및 이용, 이벤트 및 혜택정보수신 동의를 포함합니다. QORA 이용약관, 개인정보 수집 및 이용, 이벤트 및 혜택정보수신 동의를 포함합니다.QORA 이용약관, 개인정보 수집 및 이용, 이벤트 및 혜택정보수신 동의를 포함합니다.</p>
+                                        <p class="m-0 p-4 text-gray">QORA 이용약관, 개인정보 수집 및 이용, 이벤트 및 혜택정보수신 동의를 포함합니다. QORA 이용약관, 개인정보 수집 및 이용, 이벤트 및 혜택정보수신 동의를 포함합니다.QORA 이용약관, 개인정보 수집 및 이용, 이벤트 및 혜택정보수신 동의를 포함합니다.</p>
                                     </div>                                    
                                 </div>  
                             </div>
@@ -90,9 +90,9 @@
                                 </p>
                                 
                                 <div class="signature-container position-relative text-start mb-4">
-                                    <div class="position-relative w-100" style="margin: 0 auto;">
+                                    <div class="position-relative bg-primary-subtle-50 rounded w-100" style="margin: 0 auto;">
                                         <button type="button" class="btn btn-sm btn-outline-primary mb-2 clear-btn position-absolute" style="top:16px; right: 16px;" onclick="clearSignature()">지우기</button>
-                                        <canvas id="signatureCanvas" height="200" class="rounded bg-primary-subtle-50 w-100">
+                                        <canvas id="signatureCanvas" height="200" class="w-100">
                                             <!-- 브라우저가 Canvas를 지원하지 않습니다. -->
                                         </canvas>
                                         <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" id="placeholderText" style="pointer-events: none;">
@@ -140,15 +140,6 @@
 
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
-
-    function testPlaceholderHide() {
-        console.log('테스트: 플레이스홀더 숨기기');
-        const placeholder = document.getElementById('placeholderText');
-        placeholder.style.display = 'none';
-        placeholder.style.visibility = 'hidden';
-        placeholder.style.opacity = '0';
-        hasSignature = true;
-    }
 
     function getCoordinates(e) {
         const rect = canvas.getBoundingClientRect();
@@ -230,7 +221,6 @@
         placeholder.style.visibility = 'visible';
         placeholder.style.opacity = '1';
         hasSignature = false;
-        console.log('서명 지우기 - 플레이스홀더 표시 완료');
     }
 
     document.getElementById('agreeAll').addEventListener('change', function() {
