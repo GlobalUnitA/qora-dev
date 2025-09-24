@@ -90,7 +90,7 @@
                                 </p>
                                 
                                 <div class="signature-container position-relative text-start mb-4">
-                                    <div class="position-relative bg-primary-subtle-50 rounded w-100" style="margin: 0 auto;">
+                                    <div class="position-relative bg-body-tertiary-50 rounded w-100" style="margin: 0 auto; border: 1px solid #eee;">
                                         <button type="button" class="btn btn-sm btn-outline-primary mb-2 clear-btn position-absolute" style="top:16px; right: 16px;" onclick="clearSignature()">지우기</button>
                                         <canvas id="signatureCanvas" height="200" class="w-100">
                                             <!-- 브라우저가 Canvas를 지원하지 않습니다. -->
