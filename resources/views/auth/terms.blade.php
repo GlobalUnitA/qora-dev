@@ -42,7 +42,7 @@
                                             <span>전체보기</span>
                                         </a>
                                     </div>
-                                    <div class="bg-body-tertiary rounded-3 mt-3 scroll-container">
+                                    <div class="bg-light rounded-3 mt-3 scroll-container">
                                         <p class="m-0 p-4 text-gray">QORA 이용약관, 개인정보 수집 및 이용, 이벤트 및 혜택정보수신 동의를 포함합니다. QORA 이용약관, 개인정보 수집 및 이용, 이벤트 및 혜택정보수신 동의를 포함합니다.QORA 이용약관, 개인정보 수집 및 이용, 이벤트 및 혜택정보수신 동의를 포함합니다.</p>
                                     </div>                                    
                                 </div>  
@@ -60,7 +60,7 @@
                                             <span>전체보기</span>
                                         </a>
                                     </div>
-                                    <div class="bg-body-tertiary rounded-3 mt-3 scroll-container">
+                                    <div class="bg-light rounded-3 mt-3 scroll-container">
                                         <p class="m-0 p-4 text-gray">QORA 이용약관, 개인정보 수집 및 이용, 이벤트 및 혜택정보수신 동의를 포함합니다. QORA 이용약관, 개인정보 수집 및 이용, 이벤트 및 혜택정보수신 동의를 포함합니다.QORA 이용약관, 개인정보 수집 및 이용, 이벤트 및 혜택정보수신 동의를 포함합니다.</p>
                                     </div>                                    
                                 </div>  
@@ -78,7 +78,7 @@
                                             <span>전체보기</span>
                                         </a>
                                     </div>
-                                    <div class="bg-body-tertiary rounded-3 mt-3 scroll-container">
+                                    <div class="bg-light rounded-3 mt-3 scroll-container">
                                         <p class="m-0 p-4 text-gray">QORA 이용약관, 개인정보 수집 및 이용, 이벤트 및 혜택정보수신 동의를 포함합니다. QORA 이용약관, 개인정보 수집 및 이용, 이벤트 및 혜택정보수신 동의를 포함합니다.QORA 이용약관, 개인정보 수집 및 이용, 이벤트 및 혜택정보수신 동의를 포함합니다.</p>
                                     </div>                                    
                                 </div>  
@@ -90,7 +90,7 @@
                                 </p>
                                 
                                 <div class="signature-container position-relative text-start mb-4">
-                                    <div class="position-relative bg-body-tertiary-50 rounded w-100" style="margin: 0 auto; border: 1px solid #eee;">
+                                    <div class="position-relative bg-light rounded w-100" style="margin: 0 auto; border: 1px solid #eee;">
                                         <button type="button" class="btn btn-sm btn-outline-primary mb-2 clear-btn position-absolute" style="top:16px; right: 16px;" onclick="clearSignature()">지우기</button>
                                         <canvas id="signatureCanvas" height="200" class="w-100">
                                             <!-- 브라우저가 Canvas를 지원하지 않습니다. -->
@@ -135,7 +135,7 @@
         ctx.lineWidth = 3;
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
-        ctx.strokeStyle = '#222';
+        ctx.strokeStyle = '#777';
     }
 
     resizeCanvas();
@@ -189,7 +189,7 @@
         
         ctx.beginPath();
         ctx.arc(coords.x, coords.y, 1, 0, Math.PI * 2);
-        ctx.fillStyle = '#222';
+        ctx.fillStyle = '#777';
         ctx.fill();
         
         e.preventDefault();
