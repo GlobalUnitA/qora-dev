@@ -100,4 +100,14 @@ class MiningPolicy extends Model
     {
         return static::$columnDescriptions[$column];
     }
+
+    public function setDailyStat()
+    {
+        MiningDailyStat::updateOrCreate([
+            'policy_id' => $this->id,
+            'stat_date' => today(),
+            'exchange_rate' => $this->exchange_rate,
+            'node_amount' => $this->node_amount,
+        ]);
+    }
 }

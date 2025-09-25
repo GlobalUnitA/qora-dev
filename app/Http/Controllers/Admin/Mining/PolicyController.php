@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin\Mining;
 use App\Exports\StakingPolicyExport;
 use App\Models\Coin;
 use App\Models\Mining;
+use App\Models\MiningDailyStat;
+use App\Models\MiningReward;
 use App\Models\MiningPolicy;
 use App\Models\MiningPolicyTranslation;
 use App\Models\LevelPolicy;
@@ -34,7 +36,7 @@ class PolicyController extends Controller
         $coins = Coin::all();
         $locale = LanguagePolicy::where('type', 'locale')->first()->content;
 
-        switch  ($request->mode) {
+        switch ($request->mode) {
             case 'create' :
 
                 return view('admin.mining.policy.create', compact('coins', 'locale'));
@@ -44,7 +46,7 @@ class PolicyController extends Controller
                 $policy = MiningPolicy::find($request->id);
                 $view = MiningPolicyTranslation::where('policy_id', $policy->id)->get();
 
-                return view('admin.mining.policy.view-translation', compact( 'policy','view'));
+                return view('admin.mining.policy.view-translation', compact('policy', 'view'));
 
             case 'policy' :
 
@@ -65,16 +67,20 @@ class PolicyController extends Controller
 
                 $view = MiningPolicy::find($request->id);
 
-                $modify_logs = PolicyModifyLog::join('mining_policies', 'mining_policies.id', '=', 'policy_modify_logs.policy_id')
-                    ->join('admins', 'admins.id', '=', 'policy_modify_logs.admin_id')
-                    ->select('admins.name', 'policy_modify_logs.*')
-                    ->where('policy_modify_logs.policy_type', 'mining_policies')
-                    ->where('policy_modify_logs.policy_id', $request->id)
-                    ->whereIn('policy_modify_logs.column_name', ['exchange_rate', 'node_amount'])
-                    ->orderBy('policy_modify_logs.created_at', 'desc')
-                    ->get();
+                $mining_daily_stats = MiningDailyStat::where('policy_id', $request->id)->get();
 
-                return view('admin.mining.policy.view-mining', compact( 'view' , 'modify_logs'));
+                foreach ($mining_daily_stats as $mining_daily_stat) {
+
+                    $minings = Mining::where('policy_id', $request->id)->get();
+
+                    $date = $mining_daily_stat->stat_date->format('Y-m-d');
+
+                    $list[$date] = $this->getMiningData($minings, $mining_daily_stat->node_amount);
+                    $list[$date]['exchange_rate'] = $mining_daily_stat->exchange_rate;
+                    $list[$date]['node_amount'] = $mining_daily_stat->node_amount;
+                }
+
+                return view('admin.mining.policy.view-mining', compact('view', 'list'));
 
         }
     }
@@ -83,59 +89,7 @@ class PolicyController extends Controller
     {
         $minings = Mining::where('policy_id', $request->id)->get();
 
-        $total_node_amount = 0;
-        $total_mining_amount = 0;
-        $total_level_bonus = 0;
-        $total_level_matching = 0;
-
-        foreach ($minings as $mining) {
-
-            if ($mining->hasInstantReward()){
-                $payout_rate = $mining->policy->split_rate;
-                $split_days = $mining->policy->split_period;
-            } else {
-                $payout_rate =  $mining->policy->instant_rate;
-                $split_days = 1;
-            }
-
-            $node_amount = ($request->check_node_amount * $mining->node_amount);
-            $total_node_amount += $node_amount;
-
-            $base_amount  = $node_amount / 2;
-
-            $mining_reward = $base_amount * $payout_rate / 100 / $split_days;
-            $total_mining_amount += $mining_reward;
-
-            $condition = $mining->checkLevelCondition();
-            $max_depth = $condition->max_depth;
-
-            $user = $mining->user->profile;
-
-            $parents = $user->getParentTree($max_depth);
-
-            foreach ($parents as $level => $parent_profile) {
-
-                if ($parent_profile->is_valid === 'n') continue;
-
-                $policy = LevelPolicy::where('depth', $level)->first();
-
-                $base_bonus = $node_amount * $policy->bonus / 100;
-
-                if ($base_bonus <= 0) continue;
-
-                $bonus = $base_bonus * $payout_rate / 100 / $split_days;
-
-                $total_level_bonus += $bonus;
-                $total_level_matching += $bonus * $policy->matching / 100;
-            }
-        }
-
-        return response()->json([
-            'total_node_amount' => $total_node_amount,
-            'total_mining_amount' => $total_mining_amount,
-            'total_level_bonus' => $total_level_bonus,
-            'total_level_matching' => $total_level_matching,
-        ]);
+        return response()->json($this->getMiningData($minings, $request->check_node_amount));
     }
 
     public function store(Request $request)
@@ -184,12 +138,19 @@ class PolicyController extends Controller
     {
         try {
             return DB::transaction(function () use ($request) {
+
                 $mining_policy = MiningPolicy::findOrFail($request->id);
+
+                $mining_daily_stat = MiningDailyStat::where('policy_id', $mining_policy->id)
+                    ->where('stat_date',  today())
+                    ->first();
 
                 switch ($request->mode) {
                     case 'exchange' :
 
                         $mining_policy->update(['exchange_rate' => $request->exchange_rate]);
+                        $mining_daily_stat->update(['exchange_rate' => $request->exchange_rate]);
+
 
                         return response()->json([
                             'status' => 'success',
@@ -200,6 +161,7 @@ class PolicyController extends Controller
                     case 'node' :
 
                         $mining_policy->update(['node_amount' => $request->node_amount]);
+                        $mining_daily_stat->update(['node_amount' => $request->node_amount]);
 
                         return response()->json([
                             'status' => 'success',
@@ -257,6 +219,64 @@ class PolicyController extends Controller
     {
         $current = now()->toDateString();
 
-        return Excel::download(new StakingPolicyExport(), '스테이킹 상품 내역 '.$current.'.xlsx');
+        return Excel::download(new StakingPolicyExport(), '스테이킹 상품 내역 ' . $current . '.xlsx');
+    }
+
+    private function getMiningData($minings, $check_amount)
+    {
+        $total_node_amount = 0;
+        $total_mining_amount = 0;
+        $total_level_bonus = 0;
+        $total_level_matching = 0;
+
+        foreach ($minings as $mining) {
+
+
+            if ($mining->hasInstantReward()) {
+                $payout_rate = $mining->policy->split_rate;
+                $split_days = $mining->policy->split_period;
+            } else {
+                $payout_rate = $mining->policy->instant_rate;
+                $split_days = 1;
+            }
+
+            $node_amount = ($check_amount * $mining->node_amount);
+            $total_node_amount += $node_amount;
+
+            $base_amount = $node_amount / 2;
+
+            $mining_reward = $base_amount * $payout_rate / 100 / $split_days;
+            $total_mining_amount += $mining_reward;
+
+            $condition = $mining->checkLevelCondition();
+            $max_depth = $condition->max_depth;
+
+            $user = $mining->user->profile;
+
+            $parents = $user->getParentTree($max_depth);
+
+            foreach ($parents as $level => $parent_profile) {
+
+                if ($parent_profile->is_valid === 'n') continue;
+
+                $policy = LevelPolicy::where('depth', $level)->first();
+
+                $base_bonus = $node_amount * $policy->bonus / 100;
+
+                if ($base_bonus <= 0) continue;
+
+                $bonus = $base_bonus * $payout_rate / 100 / $split_days;
+
+                $total_level_bonus += $bonus;
+                $total_level_matching += $bonus * $policy->matching / 100;
+            }
+        }
+
+        return [
+            'total_node_amount' => $total_node_amount,
+            'total_mining_amount' => $total_mining_amount,
+            'total_level_bonus' => $total_level_bonus,
+            'total_level_matching' => $total_level_matching,
+        ];
     }
 }
