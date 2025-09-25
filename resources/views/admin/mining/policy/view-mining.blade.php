@@ -69,10 +69,10 @@
                         </thead>
                         <tbody class="table-group-divider">
                             <tr>
-                                <td class="text-center">0</td>
-                                <td class="text-center">0</td>
-                                <td class="text-center">0</td>
-                                <td class="text-center">0</td>
+                                <td class="text-center" id="totalNodeAmount">0</td>
+                                <td class="text-center" id="totalMiningAmount">0</td>
+                                <td class="text-center" id="totalLevelBonus">0</td>
+                                <td class="text-center" id="totalLevelMatching">0</td>
                             </tr>
                         </tbody>
                     </table>
@@ -120,6 +120,11 @@
         @endif
     </div>
 </div>
+<form method="POST" action="{{ route('admin.mining.policy.check') }}" id="miningCheckForm">
+    @csrf
+    <input type="hidden" name="id" value="{{ $view->id }}">
+    <input type="hidden" name="check_node_amount" value="">
+</form>
 @endsection
 @push('script')
 <script src="{{ asset('js/admin/mining/policy.js') }}"></script>

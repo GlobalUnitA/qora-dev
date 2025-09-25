@@ -156,6 +156,7 @@ Route::middleware(['admin.auth', 'otp'])->group(function () {
                 Route::prefix('policy')->group(function () {
                     Route::get('/', [MiningPolicyController::class, 'index'])->name('admin.mining.policy');
                     Route::get('export', [MiningPolicyController::class, 'export'])->name('admin.mining.policy.export');
+                    Route::post('check', [MiningPolicyController::class, 'check'])->name('admin.mining.policy.check');
                     Route::get('{mode}/{id?}', [MiningPolicyController::class, 'view'])->name('admin.mining.policy.view');
                     Route::post('store', [MiningPolicyController::class, 'store'])->name('admin.mining.policy.store');
                     Route::post('update', [MiningPolicyController::class, 'update'])->name('admin.mining.policy.update');

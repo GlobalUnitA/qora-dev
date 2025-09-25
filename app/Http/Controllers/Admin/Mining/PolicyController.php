@@ -7,6 +7,7 @@ use App\Models\Coin;
 use App\Models\Mining;
 use App\Models\MiningPolicy;
 use App\Models\MiningPolicyTranslation;
+use App\Models\LevelPolicy;
 use App\Models\LanguagePolicy;
 use App\Models\PolicyModifyLog;
 use App\Http\Controllers\Controller;
@@ -76,6 +77,65 @@ class PolicyController extends Controller
                 return view('admin.mining.policy.view-mining', compact( 'view' , 'modify_logs'));
 
         }
+    }
+
+    public function check(Request $request)
+    {
+        $minings = Mining::where('policy_id', $request->id)->get();
+
+        $total_node_amount = 0;
+        $total_mining_amount = 0;
+        $total_level_bonus = 0;
+        $total_level_matching = 0;
+
+        foreach ($minings as $mining) {
+
+            if ($mining->hasInstantReward()){
+                $payout_rate = $mining->policy->split_rate;
+                $split_days = $mining->policy->split_period;
+            } else {
+                $payout_rate =  $mining->policy->instant_rate;
+                $split_days = 1;
+            }
+
+            $node_amount = ($request->check_node_amount * $mining->node_amount);
+            $total_node_amount += $node_amount;
+
+            $base_amount  = $node_amount / 2;
+
+            $mining_reward = $base_amount * $payout_rate / 100 / $split_days;
+            $total_mining_amount += $mining_reward;
+
+            $condition = $mining->checkLevelCondition();
+            $max_depth = $condition->max_depth;
+
+            $user = $mining->user->profile;
+
+            $parents = $user->getParentTree($max_depth);
+
+            foreach ($parents as $level => $parent_profile) {
+
+                if ($parent_profile->is_valid === 'n') continue;
+
+                $policy = LevelPolicy::where('depth', $level)->first();
+
+                $base_bonus = $node_amount * $policy->bonus / 100;
+
+                if ($base_bonus <= 0) continue;
+
+                $bonus = $base_bonus * $payout_rate / 100 / $split_days;
+
+                $total_level_bonus += $bonus;
+                $total_level_matching += $bonus * $policy->matching / 100;
+            }
+        }
+
+        return response()->json([
+            'total_node_amount' => $total_node_amount,
+            'total_mining_amount' => $total_mining_amount,
+            'total_level_bonus' => $total_level_bonus,
+            'total_level_matching' => $total_level_matching,
+        ]);
     }
 
     public function store(Request $request)

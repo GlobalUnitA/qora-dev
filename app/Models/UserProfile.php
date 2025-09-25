@@ -448,7 +448,7 @@ class UserProfile extends Model
 
             DB::beginTransaction();
 
-            $condition = $reward->checkLevelCondition();
+            $condition = $reward->mining->checkLevelCondition();
             $max_depth = $condition->max_depth;
 
             Log::channel('bonus')->info('start level bonus', [
@@ -532,7 +532,7 @@ class UserProfile extends Model
 
     public function levelMatching($bonus)
     {
-        $condition = $bonus->reward->checkLevelCondition();
+        $condition = $bonus->reward->mining->checkLevelCondition();
         $max_depth = $condition->max_depth;
 
         $user = $bonus->user->profile;

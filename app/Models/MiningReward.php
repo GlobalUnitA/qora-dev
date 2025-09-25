@@ -56,20 +56,4 @@ class MiningReward extends Model
             : 1;
     }
 
-    public function checkLevelCondition()
-    {
-        $level_conditions = LevelConditionPolicy::orderBy('node_amount', 'desc')->get();
-        $user_referral_count = $this->user->profile->referral_count;
-
-        foreach ($level_conditions as $level_condition) {
-            $node_check = $this->mining->node_amount >= $level_condition->node_amount;
-            $referral_check = $level_condition->condition === 'and'
-                ? $user_referral_count >= $level_condition->referral_count && $node_check
-                : $user_referral_count >= $level_condition->referral_count || $node_check;
-
-            if ($referral_check) {
-                return $level_condition;
-            }
-        }
-    }
 }

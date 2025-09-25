@@ -29,6 +29,39 @@ $(document).ready(function() {
         });
     });
 
+    $('#checkBtn').click(function(e) {
+
+        e.preventDefault();
+
+        const nodeAmount = $('input[name="node_amount"]').val();
+
+        $('input[name="check_node_amount"]').val(nodeAmount);
+
+        const miningCheckForm = $('#miningCheckForm')[0];
+        const miningCheckFormData = new FormData(miningCheckForm);
+
+        $.ajax({
+            url: $(miningCheckForm).attr('action'),
+            type: 'POST',
+            data: miningCheckFormData,
+            processData: false,
+            contentType: false,
+            success: function(checkData) {
+                console.log(checkData);
+
+                $('#totalNodeAmount').html(checkData.total_node_amount);
+                $('#totalMiningAmount').html(checkData.total_mining_amount);
+                $('#totalLevelBonus').html(checkData.total_level_bonus);
+                $('#totalLevelMatching').html(checkData.total_level_matching);
+
+            },
+            error: function(response) {
+                console.log(response);
+                alertModal(errorNotice);
+            }
+        });
+    });
+
     $('#nodeBtn').click(function(e) {
         e.preventDefault();
 
