@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Mining;
+use App\Models\MiningPolicy;
 use App\Models\User;
 use App\Models\KakaoApi;
 use App\Models\UserOtp;
@@ -38,7 +39,10 @@ class TestController extends Controller
     }
    public function index()
     {
-        Mining::distributeReward();
-        Mining::finalizePayout();
+        $policies = MiningPolicy::all();
+
+        foreach ($policies as $policy) {
+            $policy->setDailyStat();
+        }
     }
 }
