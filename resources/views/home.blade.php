@@ -31,7 +31,7 @@
         @isset($notice)
         <a href="{{ route('board.view', ['code' => $notice->board->board_code, 'mode' => 'view', 'id' => $notice->id]) }}" >
             <div class="alert alert-light d-flex" role="alert">
-                <img src="{{ asset('images/icon_notice.svg') }}">
+                <img src="{{ asset('images/icon/icon_notice.svg') }}">
                 <p class="fs-3 ms-2 mb-0 flex-grow-1">{{ $notice->subject }}</p>
             </div>
         </a>
