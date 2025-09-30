@@ -67,7 +67,7 @@ return array (
   'external_withdrawal' => '外部出金',
   'subscription_bonus_list' => 'DAOインセンティブ内訳',
   'deposit_notice' => '入金注意事項',
-  'deposit_min_amount' => '最低入金額は100 USDTです。',
+  'deposit_min_amount' => '最低入金額は1,000 USDTです。',
   'deposit_arrival_period_guide' => '入金申請日から1日目に入金額が反映されます。',
   'deposit_trading_period_guide' => '入金後1日目からトレーディング可能です。',
   'group_sales_expected' => 'グループ売上予定',

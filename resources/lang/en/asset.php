@@ -67,7 +67,7 @@ return array (
   'external_withdrawal' => 'External Transfer',
   'subscription_bonus_list' => 'DAO Incentives History',
   'deposit_notice' => 'Deposit Notices',
-  'deposit_min_amount' => 'The minimum deposit amount is 100 USDT.',
+  'deposit_min_amount' => 'The minimum deposit amount is 1,000 USDT.',
   'deposit_arrival_period_guide' => 'The deposit amount will be reflected on the 1th day from the deposit application date.',
   'deposit_trading_period_guide' => 'Trading is available from the 1th day after the deposit.',
   'group_sales_expected' => 'Expected Group ales',

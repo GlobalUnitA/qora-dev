@@ -67,7 +67,7 @@ return array (
   'external_withdrawal' => '外部提币',
   'subscription_bonus_list' => 'DAO奖金明细',
   'deposit_notice' => '充值注意事项',
-  'deposit_min_amount' => '最少充值数量为 100 USDT',
+  'deposit_min_amount' => '最少充值数量为 1,000 USDT',
   'deposit_arrival_period_guide' => '从充值申请日起第1天反映到账',
   'deposit_trading_period_guide' => '充值后第1天开始可进行交易',
   'group_sales_expected' => '团队预期销售额',
