@@ -11105,8 +11105,8 @@ textarea.form-control-lg {
   height: 100%;
   width: 100%;
   z-index: 0;
-  opacity: 44%;
-  filter: hue-rotate(40deg);
+  opacity: 46%;
+  filter: hue-rotate(50deg);
 }
 
 .bg-video__content {
