@@ -67,7 +67,7 @@ return array (
   'external_withdrawal' => 'Chuyển tiền bên ngoài',
   'subscription_bonus_list' => 'Lịch sử DAO Incentives',
   'deposit_notice' => 'Lưu ý nạp tiền',
-  'deposit_min_amount' => 'Số tiền nạp tối thiểu là 100 USDT.',
+  'deposit_min_amount' => 'Số tiền nạp tối thiểu là 1,000 USDT.',
   'deposit_arrival_period_guide' => 'Số tiền nạp sẽ được nhận vào ngày thứ 1 kể từ ngày đăng ký nạp tiền.',
   'deposit_trading_period_guide' => 'Có thể tham gia trading từ ngày thứ 1 sau khi nạp tiền.',
   'group_sales_expected' => 'Doanh thu nhóm dự kiến',

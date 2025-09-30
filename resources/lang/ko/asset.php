@@ -67,7 +67,7 @@ return array (
   'external_withdrawal' => '외부 출금',
   'subscription_bonus_list' => 'DAO 인센티브 내역',
   'deposit_notice' => '입금 주의사항',
-  'deposit_min_amount' => '최소 입금 금액은 100 USDT',
+  'deposit_min_amount' => '최소 입금 금액은 1,000 USDT',
   'deposit_arrival_period_guide' => '입금 신청일부터 1일차에 입금액 반영',
   'deposit_trading_period_guide' => '입금 후 1일차부터 노드마이닝 가능',
   'group_sales_expected' => '그룹 매출 예정',
