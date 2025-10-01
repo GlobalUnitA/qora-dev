@@ -131,6 +131,32 @@ class PostController extends Controller
 
         try{
 
+            if ($board->is_popup === 'y') {
+
+                preg_match_all('/\/storage\/uploads\/tmp\/([^"\']+)/', $content, $matches);
+
+                if (!empty($matches[1])) {
+                    foreach ($matches[1] as $file) {
+                        $tmp_path  = "uploads/tmp/{$file}";
+                        $post_path = "uploads/post/{$file}";
+
+                        if (Storage::disk('public')->exists($tmp_path)) {
+                            Storage::disk('public')->move($tmp_path, $post_path);
+
+                            $new_url = "/storage/{$post_path}";
+
+                            $content = str_replace("/storage/{$tmp_path}", $new_url, $content);
+
+                            $content = preg_replace(
+                                '/<img(.*?)src=["\']' . preg_quote($new_url, '/') . '["\'](.*?)>/i',
+                                '<img$1src="' . $new_url . '"$2 style="width:100%">',
+                                $content
+                            );
+                        }
+                    }
+                }
+            }
+
             $is_popup = $request->has('is_popup') ? $request->is_popup : 'n';
             $is_banner = $request->has('is_banner') ? $request->is_banner : 'n';
 
@@ -175,41 +201,31 @@ class PostController extends Controller
             DB::beginTransaction();
 
             try {
-                $existing_images = $post->image_urls;
                 $content = $request->input('content');
-                $used_content = $this->extractImageUrlsFromContent($content);
-                $final_images = [];
+                $file_url = array_filter($request->input('file_key', []));
 
-                foreach ($used_content as $url) {
-                    if (str_contains($url, '/uploads/tmp/')) {
+                if ($board->is_popup === 'y') {
 
-                        $relative_tmp = str_replace(asset('storage') . '/', '', $url);
-                        $new_path = str_replace('uploads/tmp/', 'uploads/post/', $relative_tmp);
+                    preg_match_all('/\/storage\/uploads\/tmp\/([^"\']+)/', $content, $matches);
 
-                        if (Storage::disk('public')->exists($relative_tmp)) {
-                            Storage::disk('public')->move($relative_tmp, $new_path);
-                        }
+                    if (!empty($matches[1])) {
+                        foreach ($matches[1] as $file) {
+                            $tmp_path  = "uploads/tmp/{$file}";
+                            $post_path = "uploads/post/{$file}";
 
-                        $new_url = asset('storage/' . $new_path);
+                            if (Storage::disk('public')->exists($tmp_path)) {
+                                Storage::disk('public')->move($tmp_path, $post_path);
 
-                        $content = str_replace($url, $new_url, $content);
+                                $new_url = "/storage/{$post_path}";
 
-                        $content = preg_replace('/<img(.*?)src=["\']' . preg_quote($new_url, '/') . '["\'](.*?)>/',
-                        '<img$1src="' . $new_url . '"$2 style="width:100%">', $content);
+                                $content = str_replace("/storage/{$tmp_path}", $new_url, $content);
 
-                        $final_images[] = $new_url;
-                    } else {
-                        $final_images[] = $url;
-                    }
-                }
-
-                if ($existing_images) {
-                    $images_to_delete = array_diff($existing_images, $final_images);
-
-                    foreach ($images_to_delete as $image_to_delete) {
-                        $relative_path = str_replace(asset('storage'), 'public', $image_to_delete);
-                        if (Storage::exists($relative_path)) {
-                            Storage::delete($relative_path);
+                                $content = preg_replace(
+                                    '/<img(.*?)src=["\']' . preg_quote($new_url, '/') . '["\'](.*?)>/i',
+                                    '<img$1src="' . $new_url . '"$2 style="width:100%">',
+                                    $content
+                                );
+                            }
                         }
                     }
                 }
@@ -220,7 +236,7 @@ class PostController extends Controller
                 $post->update([
                     'subject' => $request->subject,
                     'content' => $content,
-                    'image_urls' => $final_images,
+                    'image_urls' => $file_url,
                     'is_popup' => $is_popup,
                     'is_banner' => $is_banner,
                 ]);

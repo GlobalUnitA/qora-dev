@@ -57,9 +57,9 @@
                                 <th class="text-center align-middle">배너</th>
                                 <td colspan=3 class="align-middle">
                                 @if(isset($view))
-                                    <input type="radio" name="is_banner" value="y" id="is_banner" class="form-check-input" @if($view->is_popup == 'y') checked @endif>
+                                    <input type="radio" name="is_banner" value="y" id="is_banner" class="form-check-input" @if($view->is_banner == 'y') checked @endif>
                                     <label class="form-check-label me-3" for="is_banner">활성</label>
-                                    <input type="radio" name="is_banner" value="n" id="is_not_banner" class="form-check-input" @if($view->is_popup == 'n') checked @endif>
+                                    <input type="radio" name="is_banner" value="n" id="is_not_banner" class="form-check-input" @if($view->is_banner == 'n') checked @endif>
                                     <label class="form-check-label" for="is_not_banner">비활성</label>
                                 @else
                                     <input type="radio" name="is_banner" value="y" id="is_banner" class="form-check-input">
