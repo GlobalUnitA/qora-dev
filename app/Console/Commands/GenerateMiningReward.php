@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Mining;
+use App\Models\MiningReward;
 use Illuminate\Console\Command;
 
 class GenerateMiningReward extends Command
@@ -26,7 +27,8 @@ class GenerateMiningReward extends Command
      */
     public function handle()
     {
-        Mining::distributeReward();
+        Mining::storeMiningReward();
+        MiningReward::distributeProfit();
         Mining::finalizePayout();
     }
 }
