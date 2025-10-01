@@ -12,9 +12,9 @@ class LevelBonus extends Model
 
     protected $fillable = [
         'user_id',
-        'reward_id',
-        'transfer_id',
         'referrer_id',
+        'transfer_id',
+        'profit_id',
         'bonus',
     ];
 
@@ -27,9 +27,9 @@ class LevelBonus extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function reward()
+    public function profit()
     {
-        return $this->belongsTo(MiningReward::class, 'reward_id', 'id');
+        return $this->belongsTo(MiningProfit::class, 'profit_id', 'id');
     }
 
     public function transfer()

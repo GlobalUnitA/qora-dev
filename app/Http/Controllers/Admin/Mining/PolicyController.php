@@ -69,6 +69,7 @@ class PolicyController extends Controller
 
                 $mining_daily_stats = MiningDailyStat::where('policy_id', $request->id)->get();
 
+                /*
                 foreach ($mining_daily_stats as $mining_daily_stat) {
 
                     $minings = Mining::where('policy_id', $request->id)->get();
@@ -79,7 +80,9 @@ class PolicyController extends Controller
                     $list[$date]['exchange_rate'] = $mining_daily_stat->exchange_rate;
                     $list[$date]['node_amount'] = $mining_daily_stat->node_amount;
                 }
+                */
 
+                $list = [];
                 return view('admin.mining.policy.view-mining', compact('view', 'list'));
 
         }

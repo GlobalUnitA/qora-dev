@@ -52,11 +52,6 @@ class IncomeTransfer extends Model
         return $this->belongsTo(Income::class, 'income_id', 'id');
     }
 
-    public function profit()
-    {
-        return $this->hasOne(TradingProfit::class, 'transfer_id', 'id');
-    }
-
     public function subscriptionBonus()
     {
         return $this->hasOne(SubscriptionBonus::class, 'transfer_id', 'id');
@@ -87,9 +82,9 @@ class IncomeTransfer extends Model
         return $this->hasOne(RankBonus::class, 'transfer_id', 'id');
     }
 
-    public function reward()
+    public function miningProfit()
     {
-        return $this->hasOne(MiningReward::class, 'transfer_id', 'id');
+        return $this->hasOne(MiningProfit::class, 'transfer_id', 'id');
     }
 
     public function getTypeTextAttribute()

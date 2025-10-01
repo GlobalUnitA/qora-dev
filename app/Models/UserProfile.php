@@ -442,19 +442,26 @@ class UserProfile extends Model
         }
     }
 
-    public function levelBonus($reward)
+    public function levelBonus($profit)
     {
         try {
 
             DB::beginTransaction();
 
-            $condition = $reward->mining->checkLevelCondition();
+            $mining = $profit->reward->mining;
+
+            if (!$mining) {
+                Log::channel('bonus')->warning('Missing mining for profit', ['profit_id' => $profit->id]);
+                return;
+            }
+
+            $condition = $mining->checkLevelCondition();
             $max_depth = $condition->max_depth;
 
             Log::channel('bonus')->info('start level bonus', [
-                'reward_id' => $reward->id,
-                'reard' => $reward->reawrd,
-                'user_id' => $reward->user_id,
+                'profit_id' => $profit->id,
+                'profit' => $profit->profit,
+                'user_id' => $profit->user_id,
                 'max_depth' => $max_depth,
             ]);
 
@@ -466,18 +473,18 @@ class UserProfile extends Model
 
                 $policy = LevelPolicy::where('depth', $level)->first();
 
-                $amount = $reward->mining->getBaseAmount();
+                $amount = $profit->reward->reward;
 
                 $base_bonus = $amount * $policy->bonus / 100;
 
                 if ($base_bonus <= 0) continue;
 
-                $payout_rate = $reward->getPayoutRate();
-                $split_days = $reward->getSplitDays();
+                $payout_rate = $profit->reward_rate;
+                $split_days = $mining->split_period;
 
                 $bonus = $base_bonus * $payout_rate / 100 / $split_days;
 
-                $income = $reward->mining->income;
+                $income = $mining->income;
 
                 $transfer = IncomeTransfer::create([
                     'user_id' => $parent_profile->user_id,
@@ -494,7 +501,7 @@ class UserProfile extends Model
                     'user_id' => $parent_profile->user_id,
                     'referrer_id' => $this->user_id,
                     'transfer_id' => $transfer->id,
-                    'reward_id' => $reward->id,
+                    'profit_id' => $profit->id,
                     'bonus' => $bonus,
                 ]);
 
@@ -504,7 +511,7 @@ class UserProfile extends Model
                     'user_id' => $parent_profile->user_id,
                     'referrer_id' => $this->user_id,
                     'level' => $level,
-                    'reward_id' => $reward->id,
+                    'profit_id' => $profit->id,
                     'bonus_id' => $level_bonus->id,
                     'transfer_id' => $transfer->id,
                     'bonus' => $bonus,
@@ -522,7 +529,7 @@ class UserProfile extends Model
             DB::rollBack();
 
             Log::channel('bonus')->error('Level bonus transaction failed', [
-                'reward_id' => $reward->id,
+                'profit_id' => $profit->id,
                 'user_id' => $this->user_id,
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
@@ -532,7 +539,14 @@ class UserProfile extends Model
 
     public function levelMatching($bonus)
     {
-        $condition = $bonus->reward->mining->checkLevelCondition();
+        $mining = $bonus->profit->reward->mining;
+
+        if (!$mining) {
+            Log::channel('bonus')->warning('Missing mining for bonus', ['bonus_id' => $bonus->id]);
+            return;
+        }
+
+        $condition = $mining->checkLevelCondition();
         $max_depth = $condition->max_depth;
 
         $user = $bonus->user->profile;
@@ -548,7 +562,7 @@ class UserProfile extends Model
 
             if ($matching <= 0) continue;
 
-            $income = $bonus->reward->mining->income;
+            $income = $mining->income;
 
             $transfer = IncomeTransfer::create([
                 'user_id'   => $parent_profile->user_id,

@@ -86,7 +86,7 @@
                                         <td scope="col" class="text-center">{{ $value->income->coin->name }}</td>
                                         <td scope="col" class="text-center">{{ $value->amount }}</td>
                                         <td scope="col" class="text-center">
-                                            @switch($value->levelMatching?->bonus->reward->type)
+                                            @switch($value->levelMatching?->bonus->profit->type)
                                                 @case('instant')
                                                     {{ __('즉시') }}
                                                     @break

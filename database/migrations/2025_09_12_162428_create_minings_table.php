@@ -22,15 +22,16 @@ return new class extends Migration
             $table->enum('status', ['pending', 'completed'])->default('pending')->comment('상태');
 
             $table->decimal('coin_amount', 20, 9)->default(0)->comment('참여수량');
-            $table->decimal('refund_coin_amount', 20, 9)->default(0)->comment('상환 수량');
-            $table->decimal('node_amount', 20, 9)->default(0)->comment('노드 수량');
+            $table->decimal('refund_coin_amount', 20, 9)->default(0)->comment('상환수량');
+            $table->decimal('node_amount', 20, 9)->default(0)->comment('노드 참여수량');
             $table->decimal('exchange_rate', 20, 9)->default(0)->comment('환율');
 
-            $table->unsignedInteger('period')->default(0)->comment('기간');
+            $table->unsignedInteger('split_period')->default(0)->comment('분할기간');
             $table->unsignedInteger('reward_count')->default(0)->comment('수익 지급 횟수');
 
             $table->timestamp('started_at')->nullable()->comment('시작일');
             $table->timestamp('ended_at')->nullable()->comment('종료일');
+            $table->timestamp('maturity_at')->nullable()->comment('상환 예정일');
 
             $table->timestamps();
         });

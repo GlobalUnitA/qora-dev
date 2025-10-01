@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::statement("ALTER TABLE income_transfers MODIFY COLUMN type ENUM('deposit','withdrawal', 'mining_reward', 'rank_bonus', 'referral_bonus', 'referral_matching', 'level_bonus', 'level_matching') DEFAULT NULL");
+        DB::statement("ALTER TABLE income_transfers MODIFY COLUMN type ENUM('deposit','withdrawal', 'mining_profit', 'rank_bonus', 'referral_bonus', 'referral_matching', 'level_bonus', 'level_matching') DEFAULT NULL");
     }
 
     /**

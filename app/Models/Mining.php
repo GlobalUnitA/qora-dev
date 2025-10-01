@@ -35,10 +35,12 @@ class Mining extends Model
         'refund_coin_amount' => 'decimal:9',
         'node_amount' => 'decimal:9',
         'exchange_rate' => 'decimal:9',
+        'maturity_at' => 'datetime:Y-m-d',
     ];
 
     protected $appends = [
         'status_text',
+        'has_reward_today',
     ];
 
     public function user()
@@ -81,62 +83,16 @@ class Mining extends Model
         return '오류';
     }
 
-    public function hasInstantReward()
+    public function getHasRewardTodayAttribute()
     {
-        return $this->rewards()
-            ->where('type', 'instant')
-            ->exists();
-    }
-
-    public function getBaseAmount()
-    {
-        $base_amount = ($this->policy->node_amount * $this->node_amount);
-
-        return $base_amount;
-    }
-
-    public function getInstantReward()
-    {
-        $base_amount   = $this->getBaseAmount() / 2;
-        $instant_rate  = $this->policy->instant_rate / 100;
-        $instant_reward = $base_amount * $instant_rate;
-
-        return $instant_reward;
-    }
-
-    public function getDailyReward()
-    {
-        $base_amount  = $this->getBaseAmount() / 2;
-        $split_rate   = $this->policy->split_rate / 100;
-
-        $period = $this->policy->split_period;
-
-        $split_amount = $base_amount * $split_rate;
-        $daily_reward = $split_amount / $period;
-
-        return $daily_reward;
-    }
-
-    public function getMiningReward()
-    {
-        if ($this->hasInstantReward()) {
-            $type = 'daily';
-            $reward = $this->getDailyReward();
-        } else {
-            $type = 'instant';
-            $reward = $this->getInstantReward();
-        }
-
-        return [
-            'type'   => $type,
-            'reward' => $reward,
-        ];
+        $today = now()->toDateString();
+        return $this->rewards()->whereDate('reward_date', $today)->exists();
     }
 
     public function checkLevelCondition()
     {
         $level_conditions = LevelConditionPolicy::orderBy('node_amount', 'desc')->get();
-        $user_referral_count = $this->user->profile->referral_count;
+        $user_referral_count = optional($this->user->profile)->referral_count;
 
         foreach ($level_conditions as $level_condition) {
             $node_check = $this->node_amount >= $level_condition->node_amount;
@@ -150,9 +106,9 @@ class Mining extends Model
         }
     }
 
-    public static function distributeReward()
+    public static function storeMiningReward()
     {
-        Log::channel('mining')->info('distributeDaily mining');
+        Log::channel('mining')->info('store mining rewards');
 
         $today = now()->toDateString();
         $minings = self::whereDate('started_at', '<=', $today)
@@ -160,63 +116,36 @@ class Mining extends Model
             ->get();
 
         foreach ($minings as $mining) {
+
+            if ($mining->has_reward_today) {
+                continue;
+            }
+
             DB::beginTransaction();
 
             try {
 
-                $mining_reward = $mining->getMiningReward();
+                $reward = ($mining->policy->node_amount * $mining->node_amount);
 
-                $type = $mining_reward['type'];
-                $reward = $mining_reward['reward'];
-
-                $income = $mining->income;
-
-                $transfer = IncomeTransfer::create([
-                    'user_id' => $mining->user_id,
-                    'income_id' => $income->id,
-                    'type' => 'mining_reward',
-                    'status' => 'completed',
-                    'amount' => $reward,
-                    'actual_amount' => $reward,
-                    'before_balance' => $income->balance,
-                    'after_balance' => $income->balance + $reward,
-                ]);
-
-                $income->increment('balance', $reward);
-
-                $mining_reward = MiningReward::create([
-                    'user_id' => $mining->user_id,
+                MiningReward::create([
+                    'user_id'   => $mining->user_id,
                     'mining_id' => $mining->id,
-                    'transfer_id' => $transfer->id,
-                    'type' => $type,
                     'reward' => $reward,
+                    'reward_date' => $today,
                 ]);
-
-                Log::channel('mining')->info('daily mining distributed', [
-                    'user_id' => $mining->user_id,
-                    'mining_id' => $mining->id,
-                    'transfer_id' => $transfer->id,
-                    'type' => $type,
-                    'reward' => $reward,
-                    'timestamp' => now(),
-                ]);
-
-                if ($type === 'daily') $mining->increment('reward_count');
-
-                $mining->user->profile->levelBonus($mining_reward);
 
                 DB::commit();
 
-            } catch (\Throwable $e) {
+            } catch (\Exception $e) {
 
                 DB::rollBack();
 
-                Log::channel('mining')->error('Failed to distribute daily mining', [
+                Log::channel('mining')->error('Failed to store mining reward', [
                     'user_id' => $mining->user_id,
                     'mining_id' => $mining->id,
+                    'reward_date' => $today,
                     'error' => $e->getMessage(),
                 ]);
-
             }
         }
 

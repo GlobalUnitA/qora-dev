@@ -15,10 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('mining_id')->constrained('minings');
-            $table->foreignId('transfer_id')->constrained('income_transfers');
-            $table->enum('type', ['daily', 'instant'])->comment('지급 방식');
-            $table->decimal('reward', 20, 9)->default(0)->comment('수익');
+            $table->decimal('reward', 20, 9)->default(0)->comment('채굴량');
+            $table->date('reward_date')->comment('채굴 날짜');
             $table->timestamps();
+
+            $table->unique(['mining_id', 'reward_date']);
         });
     }
 

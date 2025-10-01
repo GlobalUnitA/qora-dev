@@ -86,7 +86,7 @@
                                         <td scope="col" class="text-center">{{ $value->income->coin->name }}</td>
                                         <td scope="col" class="text-center">{{ $value->amount }}</td>
                                         <td scope="col" class="text-center">
-                                            @switch($value->levelBonus?->reward->type)
+                                            @switch($value->levelBonus?->profit->type)
                                                 @case('instant')
                                                     {{ __('즉시') }}
                                                     @break
@@ -113,7 +113,7 @@
                                             @endswitch
                                         </td>
                                         <td scope="col" class="text-center">{{ $value->levelBonus?->referrer_id }}</td>
-                                        <td scope="col" class="text-center">{{ $value->levelBonus?->reward->reward }}</td>
+                                        <td scope="col" class="text-center">{{ $value->levelBonus?->profit->profit }}</td>
                                         <td scope="col" class="text-center">{{ $value->created_at }}</td>
                                     </tr>
                                     @endforeach

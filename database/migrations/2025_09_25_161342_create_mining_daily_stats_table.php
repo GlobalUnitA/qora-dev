@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('mining_daily_stats', function (Blueprint $table) {
             $table->id();
             $table->foreignId('policy_id')->constrained('mining_policies');
-            $table->date('stat_date');
+            $table->date('stat_date')->comment('적용날짜');
             $table->decimal('exchange_rate', 20, 9)->default(0)->comment('환율');
             $table->decimal('node_amount', 20, 9)->default(0)->comment('1일 채굴값');
             $table->timestamps();
