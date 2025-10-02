@@ -5,7 +5,7 @@
             $tabs = [
                 'deposit'          => '내부이체',
                 'withdrawal'       => '외부출금',
-                'mining_reward'       => '마이닝',
+                'mining_profit'       => '마이닝',
                 'referral_bonus'   => '추천보너스',
                 'referral_matching'=> '추천매칭',
                 'level_bonus'      => '레벨보너스',

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin\Income;
 
 use App\Exports\Income\IncomeDepositExport;
 use App\Exports\Income\IncomeWithdrawalExport;
-use App\Exports\Income\IncomeMiningRewardExport;
+use App\Exports\Income\IncomeMiningProfitExport;
 use App\Exports\Income\IncomeReferralBonusExport;
 use App\Exports\Income\IncomeReferralMatchingExport;
 use App\Exports\Income\IncomeLevelBonusExport;
@@ -76,7 +76,7 @@ class IncomeController extends Controller
 
         return match ($request->type) {
             'withdrawal' => view('admin.income.withdrawal-list', compact('list')),
-            'mining_reward' => view('admin.income.reward-list', compact('list')),
+            'mining_profit' => view('admin.income.mining-profit-list', compact('list')),
             'referral_bonus' => view('admin.income.referral-list', compact('list')),
             'referral_matching' => view('admin.income.referral-matching-list', compact('list')),
             'level_bonus' => view('admin.income.level-list', compact('list')),
@@ -133,7 +133,7 @@ class IncomeController extends Controller
         $exports = [
             'deposit'           => IncomeDepositExport::class,
             'withdrawal'        => IncomeWithdrawalExport::class,
-            'mining_reward'     => IncomeMiningRewardExport::class,
+            'mining_profit'     => IncomeMiningProfitExport::class,
             'referral_bonus'    => IncomeReferralBonusExport::class,
             'referral_matching' => IncomeReferralMatchingExport::class,
             'level_bonus'       => IncomeLevelBonusExport::class,
@@ -144,7 +144,7 @@ class IncomeController extends Controller
         $file_names = [
             'deposit'           => '수익 내부이체 내역',
             'withdrawal'        => '수익 외부출금 내역',
-            'mining_reward'     => '수익 노드채굴 내역',
+            'mining_profit'     => '수익 마이닝 수익 내역',
             'referral_bonus'    => '수익 추천 보너스 내역',
             'referral_matching' => '수익 추천 매칭 내역',
             'level_bonus'       => '수익 레벨 보너스 내역',
