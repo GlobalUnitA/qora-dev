@@ -7,50 +7,39 @@ use App\Models\IncomeTransfer;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 
 class WithdrawalController extends Controller
 {
     public function __construct()
     {
-        
+
     }
 
     public function update(Request $request)
     {
-       
+
         DB::beginTransaction();
 
         try {
-            
+
             $withdrawal = IncomeTransfer::find($request->id);
             $income = Income::find($withdrawal->income_id);
- 
-            switch ($request->status) {
-               
-                case 'completed' :
-                    
-                    $income->user->profile->subscriptionBonus($withdrawal);
 
-                    break;
-
-                case 'canceled' : 
-                
-                    $income->increment('balance', $withdrawal->amount);
-                    $withdrawal->update([ 
-                        'after_balance' => $withdrawal->before_balance,
-                    ]);
-
-                    break;
-            } 
+            if ($request->status === 'canceled') {
+                $income->increment('balance', $withdrawal->amount);
+                $withdrawal->update([
+                    'after_balance' => $withdrawal->before_balance,
+                ]);
+            }
 
             $withdrawal->update([
-                'status' => $request->status ?? $withdrawal->status, 
+                'status' => $request->status ?? $withdrawal->status,
                 'memo' => $request->memo
             ]);
 
-            DB::commit(); 
+            DB::commit();
 
             return response()->json([
                 'status' => 'success',
@@ -62,13 +51,13 @@ class WithdrawalController extends Controller
 
             DB::rollBack();
 
-            \Log::error('Failed to update withdrawal info', ['error' => $e->getMessage()]);
+            Log::error('Failed to update withdrawal info', ['error' => $e->getMessage()]);
 
             return response()->json([
                 'status' => 'error',
                 'message' => '예기치 못한 오류가 발생했습니다.',
             ]);
         }
-        
+
     }
 }

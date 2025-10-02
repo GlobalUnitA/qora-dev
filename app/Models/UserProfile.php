@@ -30,7 +30,6 @@ class UserProfile extends Model
 
     protected $appends = [
         'referral_count',
-        'total_bonus',
         'is_referral',
     ];
 
@@ -52,16 +51,6 @@ class UserProfile extends Model
     public function grade()
     {
         return $this->belongsTo(UserGrade::class, 'grade_id', 'id');
-    }
-
-    public function getReferralCountAttribute()
-    {
-        return $this->children()->where('is_valid', 'y')->count();
-    }
-
-    public function getTotalBonusAttribute()
-    {
-        return SubscriptionBonus::where('user_id', $this->user_id)->sum('bonus');
     }
 
     public function getIsReferralAttribute()
@@ -154,54 +143,6 @@ class UserProfile extends Model
         }
 
         return $group_sales;
-    }
-
-    public function subscriptionBonus($withdrawal)
-    {
-        $parents = $this->getParentTree(20);
-
-        foreach ($parents as $level => $parent_profile) {
-
-            if ($parent_profile->is_valid === 'n') {
-                continue;
-            }
-
-            $policy = subscriptionPolicy::where('grade_id', $parent_profile->grade->id)->first();
-
-            $rate_key = "level_{$level}_rate";
-
-            $bonus = $withdrawal->fee * $policy->$rate_key / 100;
-
-            if ($bonus <= 0) {
-                continue;
-            }
-
-            $income = Income::where('user_id', $parent_profile->user_id)->where('coin_id', $withdrawal->income->coin_id)->first();
-
-            $transfer = IncomeTransfer::create([
-                'user_id'   => $parent_profile->user_id,
-                'income_id'  => $income->id,
-                'type' => 'subscription_bonus',
-                'status' => 'completed',
-                'amount'    => $bonus,
-                'actual_amount' => $bonus,
-                'before_balance' => $income->balance,
-                'after_balance' => $income->balance + $bonus,
-            ]);
-
-            SubscriptionBonus::create([
-                'user_id'   => $parent_profile->user_id,
-                'referrer_id'   => $this->user_id,
-                'transfer_id'  => $transfer->id,
-                'withdrawal_id' => $withdrawal->id,
-                'bonus' => $bonus,
-            ]);
-
-            $income->increment('balance', $bonus);
-
-            Log::channel('bonus')->info('Success subscription bonus', ['user_id' => $this->user_id, 'bonus' => $bonus, 'transfer_id' => $transfer->id]);
-        }
-
     }
 
     public function referralBonus($deposit)
