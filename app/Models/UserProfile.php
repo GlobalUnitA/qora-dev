@@ -31,6 +31,7 @@ class UserProfile extends Model
     protected $appends = [
         'referral_count',
         'is_referral',
+        'has_mining',
     ];
 
     public function user()
@@ -53,6 +54,11 @@ class UserProfile extends Model
         return $this->belongsTo(UserGrade::class, 'grade_id', 'id');
     }
 
+    public function getReferralCountAttribute()
+    {
+        return $this->children()->where('is_valid', 'y')->count();
+    }
+
     public function getIsReferralAttribute()
     {
         $is_valid = 'n';
@@ -69,6 +75,14 @@ class UserProfile extends Model
         }
 
         return $is_valid;
+    }
+
+    public function getHasMiningAttribute()
+    {
+        return DB::table('minings')
+            ->where('user_id', $this->user_id)
+            ->where('status', 'pending')
+            ->exists();
     }
 
     public function getParentTree($max_level = 20)
@@ -412,6 +426,8 @@ class UserProfile extends Model
 
                 if ($parent_profile->is_valid === 'n') continue;
 
+                if (!$parent_profile->has_mining) continue;
+
                 $policy = LevelPolicy::where('depth', $level)->first();
 
                 $amount = $profit->reward->reward;
@@ -496,6 +512,8 @@ class UserProfile extends Model
         foreach ($parents as $level => $parent_profile) {
 
             if ($parent_profile->is_valid === 'n') continue;
+
+            if (!$parent_profile->has_mining) continue;
 
             $policy = LevelPolicy::where('depth', $level)->first();
 

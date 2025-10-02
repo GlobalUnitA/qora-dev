@@ -95,8 +95,9 @@ class MiningReward extends Model
     {
         Log::channel('mining')->info('distribute Daily Mining Profit');
 
-        $today = now()->toDateString();
-        $rewards = self::where('reward_date', '=', $today)
+        $today = now();
+        $rewards = self::whereDate('started_at', '<=', $today)
+            ->whereDate('ended_at', '>=', $today)
             ->get();
 
         foreach ($rewards as $reward) {
@@ -135,6 +136,8 @@ class MiningReward extends Model
                     'node_amount' => $reward->mining->policy->node_amount,
                     'reward_rate' => $rate,
                 ]);
+
+                $reward->increment('profit_count');
 
                 Log::channel('mining')->info('daily mining distributed', [
                     'user_id' => $reward->user_id,

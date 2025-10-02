@@ -110,16 +110,14 @@ class Mining extends Model
     {
         Log::channel('mining')->info('store mining rewards');
 
-        $today = now()->toDateString();
+        $today = now();
         $minings = self::whereDate('started_at', '<=', $today)
             ->whereDate('ended_at', '>=', $today)
             ->get();
 
         foreach ($minings as $mining) {
 
-            if ($mining->has_reward_today) {
-                continue;
-            }
+            if ($mining->has_reward_today) continue;
 
             DB::beginTransaction();
 
@@ -132,6 +130,8 @@ class Mining extends Model
                     'mining_id' => $mining->id,
                     'reward' => $reward,
                     'reward_date' => $today,
+                    'started_at' => $today,
+                    'ended_at' => $today->copy()->addDays($mining->split_period-1),
                 ]);
 
                 DB::commit();
@@ -148,7 +148,6 @@ class Mining extends Model
                 ]);
             }
         }
-
     }
 
     public static function finalizePayout()

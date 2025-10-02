@@ -71,6 +71,7 @@
                                         <th scope="col" class="text-center">수익</th>
                                         <th scope="col" class="text-center">타입</th>
                                         <th scope="col" class="text-center">상태</th>
+                                        <th scope="col" class="text-center">채굴일</th>
                                         <th scope="col" class="text-center">일자</th>
                                     </tr>
                                 </thead>
@@ -112,6 +113,7 @@
                                                     {{ __('환불') }}
                                             @endswitch
                                         </td>
+                                        <td scope="col" class="text-center">{{ $value->miningProfit->reward->reward_date }}</td>
                                         <td scope="col" class="text-center">{{ $value->created_at }}</td>
                                     </tr>
                                     @endforeach

@@ -27,7 +27,7 @@ return new class extends Migration
             $table->decimal('exchange_rate', 20, 9)->default(0)->comment('환율');
 
             $table->unsignedInteger('split_period')->default(0)->comment('분할기간');
-            $table->unsignedInteger('reward_count')->default(0)->comment('수익 지급 횟수');
+            $table->unsignedInteger('reward_count')->default(0)->comment('채굴 횟수');
 
             $table->timestamp('started_at')->nullable()->comment('시작일');
             $table->timestamp('ended_at')->nullable()->comment('종료일');
