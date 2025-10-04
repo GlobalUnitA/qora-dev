@@ -17,6 +17,9 @@ class MiningReward extends Model
         'mining_id',
         'reward',
         'reward_date',
+        'profit_count',
+        'started_at',
+        'ended_at',
     ];
 
     protected $casts = [
