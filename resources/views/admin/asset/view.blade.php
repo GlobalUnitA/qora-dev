@@ -147,7 +147,7 @@
                         <tbody class="table-group-divider">
                             @foreach ($referral_bonus as $bonus )
                             <tr>
-                                <td class="text-center">1</td>
+                                <td class="text-center">{{ $loop->iteration }}</td>
                                 <td class="text-center">{{ $bonus->user_id }}</td>
                                 <td class="text-center">{{ $bonus->user->name }}</td>
                                 <td class="text-center">{{ $bonus->user->profile->grade->name }}</td>
