@@ -1,6 +1,8 @@
 const copyNotice = $('#msg_copy').data('label');
 const errorNotice = $('#msg_error').data('label');
 
+let isSubmitting = false;
+
 // number format
 function number_format(number) {
 
@@ -67,6 +69,13 @@ function confirmModal(message, url) {
 
 // ajax submit
 function submitAjax(form) {
+
+    if (isSubmitting) return;
+    isSubmitting = true;
+
+    const submitBtn = $(form).find('[type="submit"]');
+    submitBtn.prop('disabled', true);
+
     const formData = new FormData(form);
     $.ajax({
         url: $(form).attr('action'),
@@ -100,9 +109,13 @@ function submitAjax(form) {
                 alertModal($('#msg_error').data('label'));
                 return;
             }
+        },
+        complete: function() {
+            isSubmitting = false;
+            submitBtn.prop('disabled', false);
         }
     });
-};
+}
 
 function logout() {
     const form = $('#logoutForm')[0];
