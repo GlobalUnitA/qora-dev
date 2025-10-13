@@ -7,8 +7,7 @@ use App\Exports\Asset\AssetWithdrawalExport;
 use App\Exports\Asset\AssetMiningExport;
 use App\Exports\Asset\AssetMiningRefundExport;
 use App\Exports\Asset\AssetManualDepositExport;
-use App\Models\UserProfile;
-use App\Models\Asset;
+use App\Models\ReferralBonus;
 use App\Models\AssetTransfer;
 use App\Http\Controllers\Controller;
 use App\Services\S3Service;
@@ -82,11 +81,18 @@ class AssetController extends Controller
     {
         $view = AssetTransfer::find($id);
 
-        if ($view->image_urls[0]) {
+        $download_url = null;
+        $referral_bonus = null;
+
+        if (!empty($view->image_urls) && isset($view->image_urls[0])) {
             $download_url = $this->s3Service->generateDownloadUrl($view->image_urls[0], 600);
         }
 
-        return view('admin.asset.view', compact('view', 'download_url'));
+        if ($view->type == 'deposit' && $view->status == 'completed') {
+            $referral_bonus = ReferralBonus::where('deposit_id', $view->id)->get();
+        }
+
+        return view('admin.asset.view', compact('view', 'download_url', 'referral_bonus'));
     }
 
 

@@ -16,7 +16,7 @@ class ReferralBonus extends Model
         'referrer_id',
         'bonus',
     ];
-    
+
     protected $casts = [
         'bonus' => 'decimal:9',
     ];
@@ -39,6 +39,11 @@ class ReferralBonus extends Model
     public function referrer()
     {
         return $this->belongsTo(User::class, 'referrer_id', 'id');
+    }
+
+    public function matchings()
+    {
+        return $this->hasMany(ReferralMatching::class, 'bonus_id', 'id');
     }
 
 }
