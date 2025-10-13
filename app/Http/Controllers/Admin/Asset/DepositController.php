@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class DepositController extends Controller
 {
@@ -75,7 +76,7 @@ class DepositController extends Controller
 
             DB::rollBack();
 
-            \Log::error('Failed to deposit by admin', ['error' => $e->getMessage()]);
+            Log::channel('asset')->error('Failed to deposit by admin', ['error' => $e->getMessage()]);
 
             return response()->json([
                 'status' => 'error',
@@ -98,13 +99,6 @@ class DepositController extends Controller
         try {
 
             $deposit = AssetTransfer::find($request->id);
-            $asset = Asset::find($deposit->asset_id);
-
-            $user = User::find($deposit->user_id);
-
-            if ($request->status === 'completed') {
-                $deposit->processDeposit();
-            }
 
             $deposit->update([
                 'status' => $request->status ?? $deposit->status,
@@ -112,6 +106,10 @@ class DepositController extends Controller
                 'actual_amount' => $request->amount ?? $deposit->actual_amount,
                 'memo' => $request->memo
             ]);
+
+            if ($request->status === 'completed') {
+                $deposit->processDeposit();
+            }
 
             DB::commit();
 
@@ -125,7 +123,7 @@ class DepositController extends Controller
 
             DB::rollBack();
 
-            \Log::error('Failed to update deposit info', ['error' => $e->getMessage()]);
+            Log::channel('asset')->error('Failed to update deposit info', ['error' => $e->getMessage()]);
 
             return response()->json([
                 'status' => 'error',
