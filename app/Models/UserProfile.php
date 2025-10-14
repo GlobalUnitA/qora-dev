@@ -409,24 +409,39 @@ class UserProfile extends Model
                 Log::channel('bonus')->warning('Missing mining for profit', ['profit_id' => $profit->id]);
                 return;
             }
-
-            $condition = $mining->checkLevelCondition();
-            $max_depth = $condition->max_depth;
-
-            Log::channel('bonus')->info('start level bonus', [
-                'profit_id' => $profit->id,
-                'profit' => $profit->profit,
-                'user_id' => $profit->user_id,
-                'max_depth' => $max_depth,
-            ]);
-
-            $parents = $this->getParentTree($max_depth);
+            $user = $profit->user->profile;
+            $parents = $user->getParentTree(20);
 
             foreach ($parents as $level => $parent_profile) {
 
                 if ($parent_profile->is_valid === 'n') continue;
 
                 if (!$parent_profile->has_mining) continue;
+
+                $condition = $parent_profile->checkLevelCondition();
+
+                if (!$condition) {
+                    Log::channel('bonus')->warning('No Level Condition matched for level bonus', [
+                        'profit_id' => $profit->id,
+                        'user_id'   => $parent_profile->user_id,
+                        'level'     => $level,
+                    ]);
+                    continue;
+                }
+
+                $max_depth = $condition->max_depth;
+
+                if ($max_depth < $level) {
+                    Log::channel('bonus')->warning('Not Condition for level bonus', [
+                        'profit_id' => $profit->id,
+                        'parent_id' => $parent_profile->id,
+                        'referrer_id' => $profit->user->id,
+                        'parent_level' => $level,
+                        'max_depth' => $max_depth,
+                    ]);
+
+                    continue;
+                }
 
                 $policy = LevelPolicy::where('depth', $level)->first();
 
@@ -437,7 +452,7 @@ class UserProfile extends Model
                 if ($base_bonus <= 0) continue;
 
                 $payout_rate = $profit->reward_rate;
-                $split_days = $mining->split_period;
+                $split_days = $profit->type === 'daily' ? $mining->split_period : 1;
 
                 $bonus = $base_bonus * $payout_rate / 100 / $split_days;
 
@@ -503,17 +518,38 @@ class UserProfile extends Model
             return;
         }
 
-        $condition = $mining->checkLevelCondition();
-        $max_depth = $condition->max_depth;
-
         $user = $bonus->user->profile;
-        $parents = $user->getParentTree($max_depth);
+        $parents = $user->getParentTree(20);
 
         foreach ($parents as $level => $parent_profile) {
 
             if ($parent_profile->is_valid === 'n') continue;
 
             if (!$parent_profile->has_mining) continue;
+
+            $condition = $parent_profile->checkLevelCondition();
+
+            if (!$condition) {
+                Log::channel('bonus')->warning('No Level Condition matched for level matching', [
+                    'bonus_id' => $bonus->id,
+                    'user_id'   => $parent_profile->user_id,
+                    'level'     => $level,
+                ]);
+                continue;
+            }
+
+            $max_depth = $condition->max_depth;
+
+            if ($max_depth < $level) {
+                Log::channel('bonus')->warning('Not Condition for level matching', [
+                    'bonus_id' => $bonus->id,
+                    'parent_id' => $parent_profile->id,
+                    'parent_level' => $level,
+                    'max_depth' => $max_depth,
+                ]);
+
+                continue;
+            }
 
             $policy = LevelPolicy::where('depth', $level)->first();
 
@@ -619,6 +655,26 @@ class UserProfile extends Model
         $this->checkLevelUp($this->grade->level, $this->referral_count, $self_sales, $group_sales);
     }
 
+
+    public function checkLevelCondition()
+    {
+        $level_conditions = LevelConditionPolicy::orderBy('node_amount', 'desc')->get();
+        $user_referral_count = $this->referral_count;
+        $total_node_amount = Mining::where('user_id', $this->user_id)->sum('node_amount');
+
+        foreach ($level_conditions as $level_condition) {
+            $node_check = $total_node_amount >= $level_condition->node_amount;
+            $referral_check = $level_condition->condition === 'and'
+                ? $user_referral_count >= $level_condition->referral_count && $node_check
+                : $user_referral_count >= $level_condition->referral_count || $node_check;
+
+            if ($referral_check) {
+                return $level_condition;
+            }
+        }
+        return null;
+    }
+
     private function checkLevelUp($current_level, $referral_count, $self_sales, $group_sales)
     {
 
@@ -650,5 +706,4 @@ class UserProfile extends Model
 
         return;
     }
-
 }

@@ -57,4 +57,11 @@ class MiningController extends Controller
         return view('admin.mining.list', compact('list'));
     }
 
+    public function view($id)
+    {
+        $view = Mining::find($id);
+
+        return view('admin.mining.view', compact('view'));
+    }
+
 }

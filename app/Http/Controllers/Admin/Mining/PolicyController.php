@@ -6,7 +6,6 @@ use App\Exports\StakingPolicyExport;
 use App\Models\Coin;
 use App\Models\Mining;
 use App\Models\MiningDailyStat;
-use App\Models\MiningReward;
 use App\Models\MiningPolicy;
 use App\Models\MiningPolicyTranslation;
 use App\Models\LevelPolicy;
@@ -90,9 +89,7 @@ class PolicyController extends Controller
 
     public function check(Request $request)
     {
-        $minings = Mining::where('policy_id', $request->id)->get();
-
-        return response()->json($this->getMiningData($minings, $request->check_node_amount));
+        return response()->json($this->getMiningData($request));
     }
 
     public function store(Request $request)
@@ -104,6 +101,13 @@ class PolicyController extends Controller
 
             $data = $request->except('translation');
             $mining_policy = MiningPolicy::create($data);
+
+            MiningDailyStat::updateOrCreate([
+                'policy_id' => $mining_policy->id,
+                'stat_date' => today(),
+                'exchange_rate' => $data['exchange_rate'],
+                'node_amount' => $data['node_amount'],
+            ]);
 
             $locales = $request->translation;
 
@@ -225,8 +229,10 @@ class PolicyController extends Controller
         return Excel::download(new StakingPolicyExport(), '스테이킹 상품 내역 ' . $current . '.xlsx');
     }
 
-    private function getMiningData($minings, $check_amount)
+    private function getMiningData($data)
     {
+        $minings = Mining::where('policy_id', $data->id)->get();
+
         $total_node_amount = 0;
         $total_mining_amount = 0;
         $total_level_bonus = 0;
@@ -234,41 +240,31 @@ class PolicyController extends Controller
 
         foreach ($minings as $mining) {
 
-
-            if ($mining->hasInstantReward()) {
-                $payout_rate = $mining->policy->split_rate;
-                $split_days = $mining->policy->split_period;
-            } else {
-                $payout_rate = $mining->policy->instant_rate;
-                $split_days = 1;
-            }
-
-            $node_amount = ($check_amount * $mining->node_amount);
+            $node_amount = ($data->check_node_amount * $mining->node_amount);
             $total_node_amount += $node_amount;
 
-            $base_amount = $node_amount / 2;
-
-            $mining_reward = $base_amount * $payout_rate / 100 / $split_days;
+            $mining_reward = $node_amount / 2;
             $total_mining_amount += $mining_reward;
-
-            $condition = $mining->checkLevelCondition();
-            $max_depth = $condition->max_depth;
 
             $user = $mining->user->profile;
 
-            $parents = $user->getParentTree($max_depth);
+            $parents = $user->getParentTree(20);
 
             foreach ($parents as $level => $parent_profile) {
+
+                $condition = $parent_profile->checkLevelCondition();
+
+                if (!$condition) continue;
+
+                $max_depth = $condition->max_depth;
+
+                if ($max_depth < $level) continue;
 
                 if ($parent_profile->is_valid === 'n') continue;
 
                 $policy = LevelPolicy::where('depth', $level)->first();
 
-                $base_bonus = $node_amount * $policy->bonus / 100;
-
-                if ($base_bonus <= 0) continue;
-
-                $bonus = $base_bonus * $payout_rate / 100 / $split_days;
+                $bonus = $node_amount * $policy->bonus / 100;
 
                 $total_level_bonus += $bonus;
                 $total_level_matching += $bonus * $policy->matching / 100;

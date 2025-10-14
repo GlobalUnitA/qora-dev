@@ -70,7 +70,7 @@
                             <tr>
                                 <th class="text-center align-middle">채굴량</th>
                                 <td class="align-middle d-flex">
-                                    <input type="text" name="node_reward" class="form-control w-25">
+                                    <input type="text" name="node_amount" class="form-control w-25">
                                     <div class="px-2 d-flex align-items-center">1 노드 당 채굴량(1일)</div>
                                 </td>
                                 <th class="text-center align-middle">환율</th>

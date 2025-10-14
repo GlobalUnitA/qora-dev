@@ -35,6 +35,8 @@ class Mining extends Model
         'refund_coin_amount' => 'decimal:9',
         'node_amount' => 'decimal:9',
         'exchange_rate' => 'decimal:9',
+        'started_at' => 'datetime:Y-m-d',
+        'ended_at' => 'datetime:Y-m-d',
         'maturity_at' => 'datetime:Y-m-d',
     ];
 
@@ -87,23 +89,6 @@ class Mining extends Model
     {
         $today = now()->toDateString();
         return $this->rewards()->whereDate('reward_date', $today)->exists();
-    }
-
-    public function checkLevelCondition()
-    {
-        $level_conditions = LevelConditionPolicy::orderBy('node_amount', 'desc')->get();
-        $user_referral_count = optional($this->user->profile)->referral_count;
-
-        foreach ($level_conditions as $level_condition) {
-            $node_check = $this->node_amount >= $level_condition->node_amount;
-            $referral_check = $level_condition->condition === 'and'
-                ? $user_referral_count >= $level_condition->referral_count && $node_check
-                : $user_referral_count >= $level_condition->referral_count || $node_check;
-
-            if ($referral_check) {
-                return $level_condition;
-            }
-        }
     }
 
     public static function storeMiningReward()
