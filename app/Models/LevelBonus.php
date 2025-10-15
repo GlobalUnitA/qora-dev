@@ -42,4 +42,9 @@ class LevelBonus extends Model
         return $this->belongsTo(User::class, 'referrer_id', 'id');
     }
 
+    public function matchings()
+    {
+        return $this->hasMany(LevelMatching::class, 'bonus_id', 'id');
+    }
+
 }

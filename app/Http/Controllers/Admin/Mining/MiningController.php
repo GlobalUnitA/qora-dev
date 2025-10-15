@@ -61,7 +61,16 @@ class MiningController extends Controller
     {
         $view = Mining::find($id);
 
-        return view('admin.mining.view', compact('view'));
+        $level_bonus = collect();
+        foreach ($view->rewards as $reward) {
+            foreach ($reward->profits as $profit) {
+                if ($profit->levelBonus) {
+                    $level_bonus->push($profit->levelBonus);
+                }
+            }
+        }
+
+        return view('admin.mining.view', compact('view', 'level_bonus'));
     }
 
 }

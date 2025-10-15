@@ -16,8 +16,8 @@
 
         @foreach ($tabs as $type => $label)
             <li class="nav-item" role="presentation">
-                <a href="{{ route('admin.income.list', array_merge(request()->query(), ['type' => $type])) }}"
-                   class="nav-link {{ Request('type') === $type ? 'active' : '' }}">
+                <a href="{{ route('admin.income.list', array_merge(Arr::except(request()->query(), ['page']), ['type' => $type])) }}"
+                   class="nav-link {{ request('type') === $type ? 'active' : '' }}">
                     {{ $label }}
                 </a>
             </li>

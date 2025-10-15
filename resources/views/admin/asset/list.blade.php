@@ -8,19 +8,19 @@
                 <div class="d-flex justify-content-between">
                     <ul class="nav nav-tabs mt-3" id="tableTabs" role="tablist" >
                         <li class="nav-item" role="presentation">
-                            <a href="{{ route('admin.asset.list', array_merge(request()->query(), ['type' => 'deposit'])) }}" class="nav-link {{ Request('type') == 'deposit' ? 'active' : '' }}">입금</a>
+                            <a href="{{ route('admin.asset.list', array_merge(Arr::except(request()->query(), ['page']), ['type' => 'deposit'])) }}" class="nav-link {{ Request('type') == 'deposit' ? 'active' : '' }}">입금</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a href="{{ route('admin.asset.list', array_merge(request()->query(), ['type' => 'withdrawal'])) }}" class="nav-link {{ Request('type') == 'withdrawal' ? 'active' : '' }}">출금</a>
+                            <a href="{{ route('admin.asset.list', array_merge(Arr::except(request()->query(), ['page']), ['type' => 'withdrawal'])) }}" class="nav-link {{ Request('type') == 'withdrawal' ? 'active' : '' }}">출금</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a href="{{ route('admin.asset.list', array_merge(request()->query(), ['type' => 'mining'])) }}" class="nav-link {{ Request('type') == 'mining' ? 'active' : '' }}">마이닝</a>
+                            <a href="{{ route('admin.asset.list', array_merge(Arr::except(request()->query(), ['page']), ['type' => 'mining'])) }}" class="nav-link {{ Request('type') == 'mining' ? 'active' : '' }}">마이닝</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a href="{{ route('admin.asset.list', array_merge(request()->query(), ['type' => 'mining_refund'])) }}" class="nav-link {{ Request('type') == 'mining_refund' ? 'active' : '' }}">원금상환</a>
+                            <a href="{{ route('admin.asset.list', array_merge(Arr::except(request()->query(), ['page']), ['type' => 'mining_refund'])) }}" class="nav-link {{ Request('type') == 'mining_refund' ? 'active' : '' }}">원금상환</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a href="{{ route('admin.asset.list', array_merge(request()->query(), ['type' => 'manual_deposit'])) }}" class="nav-link {{ Request('type') == 'manual_deposit' ? 'active' : '' }}">수동입금</a>
+                            <a href="{{ route('admin.asset.list', array_merge(Arr::except(request()->query(), ['page']), ['type' => 'manual_deposit'])) }}" class="nav-link {{ Request('type') == 'manual_deposit' ? 'active' : '' }}">수동입금</a>
                         </li>
                     </ul>
                 </div>

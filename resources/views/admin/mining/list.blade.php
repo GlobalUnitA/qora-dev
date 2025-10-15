@@ -84,7 +84,7 @@
                                 <tbody class="table-group-divider">
                                     @if($list->isNotEmpty())
                                     @foreach ($list as $key => $value)
-                                    <tr onclick="window.location='{{ route('admin.mining.view', ['id' => $value->id]) }}';">>
+                                    <tr style="cursor:pointer;" onclick="window.location='{{ route('admin.mining.view', ['id' => $value->id]) }}';">
                                         <td scope="col" class="text-center">{{ $list->firstItem() + $key }}</td>
                                         <td scope="col" class="text-center">{{ $value->user_id }}</td>
                                         <td scope="col" class="text-center">{{ $value->user->name }}</td>

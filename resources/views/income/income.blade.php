@@ -92,7 +92,7 @@
                             <option value="referral_bonus" {{ request('type') == 'referral_bonus' ? 'selected' : '' }}>{{ __('asset.referral_bonus') }}</option>
                             <option value="referral_matching" {{ request('type') == 'referral_matching' ? 'selected' : '' }}>{{ __('asset.referral_bonus_matching') }}</option>
                             <option value="rank_bonus" {{ request('type') == 'rank_bonus' ? 'selected' : '' }}>{{ __('asset.rank_bonus') }}</option>
-                        <select>
+                        </select>
                     </th>
                 </tr>
             </thead>
@@ -110,6 +110,10 @@
                             {{ $val->referralBonus ? 'C' . $val->referralBonus->referrer_id : '' }}
                         @elseif ($val->type === 'referral_matching')
                             {{ $val->referralMatching ? 'C' . $val->referralMatching->referrer_id : '' }}
+                        @elseif ($val->type === 'level_bonus')
+                            {{ $val->levelBonus ? 'C' . $val->levelBonus->referrer_id : '' }}
+                        @elseif ($val->type === 'level_matching')
+                            {{ $val->levelMatching ? 'C' . $val->levelMatching->referrer_id : '' }}
                         @else
                             {{ '' }}
                         @endif
@@ -121,13 +125,13 @@
                     <tr>
                         <td class="text-center" colspan="5">No data.</td>
                     </tr>
+                @endif
             </tbody>
         </table>
         @if($has_more)
         <a href="{{ route('income.list',['id' => $data['encrypted_id']]) }}" class="btn btn-outline-primary w-100 py-2 my-4 fs-4">{{ __('system.load_more') }}</a>
         @endif
     </div>
-    @endif
 </main>
 @endsection
 

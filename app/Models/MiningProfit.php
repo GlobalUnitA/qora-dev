@@ -48,6 +48,11 @@ class MiningProfit extends Model
         return $this->belongsTo(IncomeTransfer::class, 'transfer_id', 'id');
     }
 
+    public function levelBonus()
+    {
+        return $this->hasOne(LevelBonus::class, 'profit_id', 'id');
+    }
+
     public function getPayoutRate()
     {
         return $this->type === 'daily'

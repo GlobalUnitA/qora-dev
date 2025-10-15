@@ -92,10 +92,16 @@ class IncomeTransfer extends Model
         switch ($this->type) {
             case 'withdrawal' :
                 return __('asset.external_withdrawal');
+            case 'mining_profit' :
+                return __('mining.mining_profit');
             case 'referral_bonus' :
                 return __('asset.referral_bonus');
             case 'referral_matching' :
                 return __('asset.referral_bonus_matching');
+            case 'level_bonus' :
+                return __('mining.level_bonus');
+            case 'level_matching' :
+                return __('mining.matching_bonus');
             case 'rank_bonus' :
                 return __('asset.rank_bonus');
             default :
