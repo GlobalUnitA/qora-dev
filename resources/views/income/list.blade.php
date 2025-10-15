@@ -10,19 +10,19 @@
                 <tr>
                     <th>{{ __('system.date') }}</th>
                     <th>{{ __('system.amount') }}</th>
-                    <th>{{ __('asset.profit_rate') }}</th>
                     <th>{{ __('user.child_id') }}</th>
                     <th>
                         <select id="incomeTypeSelect" name="type" class="form-select form-select-sm">
                             <option value="">{{ __('system.category') }}</option>
-                            <option value="deposit" {{ request('type') == 'deposit' ? 'selected' : '' }}>{{ __('asset.internal_transfer') }}</option>
+                            {{--<option value="deposit" {{ request('type') == 'deposit' ? 'selected' : '' }}>{{ __('asset.internal_transfer') }}</option>--}}
                             <option value="withdrawal" {{ request('type') == 'withdrawal' ? 'selected' : '' }}>{{ __('asset.external_withdrawal') }}</option>
-                            <option value="trading_profit" {{ request('type') == 'trading_profit' ? 'selected' : '' }}>{{ __('asset.trading_profit') }}</option>
-                            <option value="subscription_bonus" {{ request('type') == 'subscription_bonus' ? 'selected' : '' }}>{{ __('asset.subscription_bonus') }}</option>
-                            <option value="referral_bonus" {{ request('type') == 'referral_bonus' ? 'selected' : '' }}>{{ __('asset.referral_bonus') }}</option>
+                            <option value="mining_profit" {{ request('type') == 'mining_profit' ? 'selected' : '' }}>{{ __('mining.mining_profit') }}</option>
                             <option value="rank_bonus" {{ request('type') == 'rank_bonus' ? 'selected' : '' }}>{{ __('asset.rank_bonus') }}</option>
-                            <option value="staking_reward" {{ request('type') == 'staking_reward' ? 'selected' : '' }}>{{ __('asset.staking_profit') }}</option>
-                        <select>
+                            <option value="referral_bonus" {{ request('type') == 'referral_bonus' ? 'selected' : '' }}>{{ __('asset.referral_bonus') }}</option>
+                            <option value="referral_matching" {{ request('type') == 'referral_matching' ? 'selected' : '' }}>{{ __('asset.referral_bonus_matching') }}</option>
+                            <option value="level_bonus" {{ request('type') == 'level_bonus' ? 'selected' : '' }}>{{ __('mining.mining_level_bonus') }}</option>
+                            <option value="level_matching" {{ request('type') == 'level_matching' ? 'selected' : '' }}>{{ __('mining.mining_matching_bonus') }}</option>
+                        </select>
                     </th>
                 </tr>
             </thead>
@@ -32,20 +32,17 @@
                 <tr>
                     <td>{{ $value->created_at->format('Y-m-d') }}</td>
                     <td>{{ $value->amount }}</td>
-                    <td>  
-                        @if ($value->profit)
-                            {{ $value->profit->trading->profit_rate }}%
-                        @elseif ($value->reward)
-                            {{ $value->reward->staking->policy->daily }}%
-                        @else
-                            {{ '' }}
-                        @endif
-                    </td>
                     <td>
                         @if ($value->type === 'subscription_bonus')
                             {{ $value->subscriptionBonus ? 'C' . $value->subscriptionBonus->referrer_id : '' }}
                         @elseif ($value->type === 'referral_bonus')
                             {{ $value->referralBonus ? 'C' . $value->referralBonus->referrer_id : '' }}
+                        @elseif ($value->type === 'referral_matching')
+                            {{ $value->referralMatching ? 'C' . $value->referralMatching->referrer_id : '' }}
+                        @elseif ($value->type === 'level_bonus')
+                            {{ $value->levelBonus ? 'C' . $value->levelBonus->referrer_id : '' }}
+                        @elseif ($value->type === 'level_matching')
+                            {{ $value->levelMatching ? 'C' . $value->levelMatching->referrer_id : '' }}
                         @else
                             {{ '' }}
                         @endif
@@ -79,7 +76,6 @@
     <tr>
         <td>{{created_at}}</td>
         <td>{{amount}}</td>
-        <td>{{trading_profit}}</td>
         <td>{{referrer_id}}</td>
         <td>{{type_text}}</td>
     </tr>

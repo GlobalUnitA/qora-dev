@@ -82,16 +82,18 @@
                 <tr>
                     <th>{{ __('system.date') }}</th>
                     <th>{{ __('system.amount') }}</th>
-                    <th>{{ __('asset.profit_rate') }}</th>
                     <th>{{ __('user.child_id') }}</th>
                     <th>
                         <select id="incomeTypeSelect" name="type" class="form-select form-select-sm">
                             <option value="">{{ __('system.category') }}</option>
                             {{--<option value="deposit" {{ request('type') == 'deposit' ? 'selected' : '' }}>{{ __('asset.internal_transfer') }}</option>--}}
                             <option value="withdrawal" {{ request('type') == 'withdrawal' ? 'selected' : '' }}>{{ __('asset.external_withdrawal') }}</option>
+                            <option value="mining_profit" {{ request('type') == 'mining_profit' ? 'selected' : '' }}>{{ __('mining.mining_profit') }}</option>
+                            <option value="rank_bonus" {{ request('type') == 'rank_bonus' ? 'selected' : '' }}>{{ __('asset.rank_bonus') }}</option>
                             <option value="referral_bonus" {{ request('type') == 'referral_bonus' ? 'selected' : '' }}>{{ __('asset.referral_bonus') }}</option>
                             <option value="referral_matching" {{ request('type') == 'referral_matching' ? 'selected' : '' }}>{{ __('asset.referral_bonus_matching') }}</option>
-                            <option value="rank_bonus" {{ request('type') == 'rank_bonus' ? 'selected' : '' }}>{{ __('asset.rank_bonus') }}</option>
+                            <option value="level_bonus" {{ request('type') == 'level_bonus' ? 'selected' : '' }}>{{ __('mining.mining_level_bonus') }}</option>
+                            <option value="level_matching" {{ request('type') == 'level_matching' ? 'selected' : '' }}>{{ __('mining.mining_matching_bonus') }}</option>
                         </select>
                     </th>
                 </tr>
@@ -102,9 +104,6 @@
                 <tr>
                     <td>{{ date_format($val->created_at, 'Y-m-d') }}</td>
                     <td>{{ $val->amount }}</td>
-                    <td>
-                        {{ '' }}
-                    </td>
                     <td>
                         @if ($val->type === 'referral_bonus')
                             {{ $val->referralBonus ? 'C' . $val->referralBonus->referrer_id : '' }}

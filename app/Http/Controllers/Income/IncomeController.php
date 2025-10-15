@@ -112,6 +112,8 @@ class IncomeController extends Controller
                 'referrer_id' => match ($item->type) {
                     'referral_bonus' => optional($item->referralBonus)->referrer_id,
                     'referral_matching' => optional($item->referralMatching)->referrer_id,
+                    'level_bonus' => optional($item->levelBonus)->referrer_id,
+                    'level_matching' => optional($item->levelMatching)->referrer_id,
                     default => null,
                 },
                 'type_text' => $item->type_text,
