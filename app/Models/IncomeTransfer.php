@@ -99,9 +99,9 @@ class IncomeTransfer extends Model
             case 'referral_matching' :
                 return __('asset.referral_bonus_matching');
             case 'level_bonus' :
-                return __('mining.level_bonus');
+                return __('mining.mining_level_bonus');
             case 'level_matching' :
-                return __('mining.matching_bonus');
+                return __('mining.mining_matching_bonus');
             case 'rank_bonus' :
                 return __('asset.rank_bonus');
             default :
