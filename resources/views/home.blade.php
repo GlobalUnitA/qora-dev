@@ -216,7 +216,7 @@
         </div>
     </div>
     --}}
-    <div class="d-flex card text-center rounded-0" style="background: #070707; margin-bottom: 100px;">
+    <!-- <div class="d-flex card text-center rounded-0" style="background: #070707; margin-bottom: 100px;">
         <div class="card-body p-4 position-relative" style="background: url('images/mockup.png') center bottom no-repeat; background-size: 620px; height: 640px;">
             <h5 class="text-white pt-4 opacity-50">Building Decentralized</h5>
             <h3 class="text-white pb-4">Innovation<br>Together</</h3>
@@ -226,6 +226,15 @@
             </a>
             --}}
         </div>
+    </div> -->
+    <div class="position-relative" style="height: 600px; margin-bottom: 100px;">
+        <div class="position-absolute w-100 text-center">
+            <h5 class="text-white pt-5 opacity-50">Building Decentralized</h5>
+            <h3 class="text-white pb-4">Innovation<br>Together</</h3>
+        </div>
+        <video class="bg-video__content" autoplay="" muted="" loop="" playsinline="">
+            <source src="{{ asset('images/main_video.mp4') }}" type="video/mp4" />
+        </video>
     </div>
 </main>
 @isset($popup)
