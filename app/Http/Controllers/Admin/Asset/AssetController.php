@@ -88,11 +88,7 @@ class AssetController extends Controller
             $download_url = $this->s3Service->generateDownloadUrl($view->image_urls[0], 600);
         }
 
-        if ($view->type == 'deposit' && $view->status == 'completed') {
-            $referral_bonus = ReferralBonus::where('deposit_id', $view->id)->get();
-        }
-
-        return view('admin.asset.view', compact('view', 'download_url', 'referral_bonus'));
+        return view('admin.asset.view', compact('view', 'download_url'));
     }
 
 
