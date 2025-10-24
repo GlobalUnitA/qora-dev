@@ -23,7 +23,7 @@ class MiningController extends Controller
 
     }
 
-    public function index()
+    public function index($id)
     {
         $assets = Asset::where('user_id', auth()->id())
             ->whereHas('coin', function ($query) {
@@ -36,7 +36,9 @@ class MiningController extends Controller
 
     public function data(Request $request)
     {
-        $Mining = MiningPolicy::where('coin_id', $request->coin)->get();
+        $Mining = MiningPolicy::where('coin_id', $request->coin)
+            ->where('marketing_id', $request->marketing)
+            ->get();
 
         return response()->json($Mining->toArray());
     }
@@ -66,6 +68,7 @@ class MiningController extends Controller
     public function store(Request $request)
     {
 
+        $user = auth()->user();
         $policy = MiningPolicy::find($request->policy);
 
         $asset = Asset::where('user_id', auth()->id())->where('coin_id', $policy->coin_id)->first();
@@ -86,7 +89,7 @@ class MiningController extends Controller
             $date = $this->getMiningDate($policy);
 
             $mining = Mining::create([
-                'user_id' => auth()->id(),
+                'user_id' => $user->id,
                 'asset_id' => $asset->id,
                 'refund_id' => $refund->id,
                 'reward_id' => $reward->id,
@@ -116,6 +119,8 @@ class MiningController extends Controller
             $asset->update([
                 'balance' => $asset->balance - $request->coin_amount
             ]);
+
+            $user->profile->referralBonus($mining);
 
             DB::commit();
 

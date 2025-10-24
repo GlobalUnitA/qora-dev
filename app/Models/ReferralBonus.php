@@ -12,7 +12,7 @@ class ReferralBonus extends Model
 
     protected $fillable = [
         'user_id',
-        'deposit_id',
+        'mining_id',
         'transfer_id',
         'referrer_id',
         'bonus',
@@ -27,9 +27,9 @@ class ReferralBonus extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function deposit()
+    public function mining()
     {
-        return $this->belongsTo(AssetTransfer::class, 'deposit_id', 'id');
+        return $this->belongsTo(Mining::class, 'mining_id', 'id');
     }
 
     public function transfer()

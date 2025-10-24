@@ -28,6 +28,8 @@ use App\Http\Controllers\Admin\Income\PolicyController as IncomePolicyController
 use App\Http\Controllers\Admin\Trading\TradingController;
 use App\Http\Controllers\Admin\Trading\PolicyController as TradingPolicyController;
 
+use App\Http\Controllers\Admin\Marketing\MarketingController;
+
 use App\Http\Controllers\Admin\Mining\MiningController;
 use App\Http\Controllers\Admin\Mining\PolicyController as MiningPolicyController;
 
@@ -137,6 +139,13 @@ Route::middleware(['admin.auth', 'otp'])->group(function () {
         });
     });
 
+    Route::prefix('marketing')->group(function () {
+        Route::get('list', [MarketingController::class, 'list'])->name('admin.marketing.list');
+        Route::get('{mode}/{id?}', [MarketingController::class, 'view'])->name('admin.marketing.view');
+        Route::post('store', [MarketingController::class, 'store'])->name('admin.marketing.store');
+        Route::post('update', [MarketingController::class, 'update'])->name('admin.marketing.update');
+    });
+
     Route::middleware(['check_admin_level:2'])->group(function () {
         Route::prefix('trading')->group(function () {
             Route::get('list', [TradingController::class, 'list'])->name('admin.trading.list');
@@ -158,6 +167,7 @@ Route::middleware(['admin.auth', 'otp'])->group(function () {
                     Route::get('/', [MiningPolicyController::class, 'index'])->name('admin.mining.policy');
                     Route::get('export', [MiningPolicyController::class, 'export'])->name('admin.mining.policy.export');
                     Route::post('check', [MiningPolicyController::class, 'check'])->name('admin.mining.policy.check');
+                    Route::post('marketing-benefit-rules/{id}/get', [MiningPolicyController::class, 'getMarketingBenefitRules'])->name('admin.mining.policy.marketing-benefit-get');
                     Route::get('{mode}/{id?}', [MiningPolicyController::class, 'view'])->name('admin.mining.policy.view');
                     Route::post('store', [MiningPolicyController::class, 'store'])->name('admin.mining.policy.store');
                     Route::post('update', [MiningPolicyController::class, 'update'])->name('admin.mining.policy.update');

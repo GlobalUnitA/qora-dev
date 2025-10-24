@@ -159,8 +159,14 @@ class UserProfile extends Model
         return $group_sales;
     }
 
-    public function referralBonus($deposit)
+    public function referralBonus($mining)
     {
+
+        if ( $mining->getBenefitRule('referral_bonus') === 'n' ){
+            Log::channel('bonus')->warning('This marketing does not allow a referral bonus.', ['mining_id' => $mining->id, 'marketing_id' => $mining->policy->marketing_id]);
+            return;
+        }
+
         try {
 
             DB::beginTransaction();
@@ -177,7 +183,7 @@ class UserProfile extends Model
 
                 $rate_key = "level_{$level}_rate";
 
-                $bonus = $deposit->amount * $policy->$rate_key / 100;
+                $bonus = $mining->coin_amount * $policy->$rate_key / 100;
 
                 if ($bonus <= 0) continue;
 
@@ -197,7 +203,7 @@ class UserProfile extends Model
                 $referral_bonus = ReferralBonus::create([
                     'user_id'   => $parent_profile->user_id,
                     'referrer_id' => $this->user_id,
-                    'deposit_id'   => $deposit->id,
+                    'mining_id'   => $mining->id,
                     'transfer_id'  => $transfer->id,
                     'bonus' => $bonus,
                 ]);
@@ -208,7 +214,7 @@ class UserProfile extends Model
                     'user_id' => $parent_profile->user_id,
                     'referrer_id' => $this->user_id,
                     'level' => $level,
-                    'deposit_id' => $deposit->id,
+                    'mining_id' => $mining->id,
                     'bonus_id' => $referral_bonus->id,
                     'transfer_id' => $transfer->id,
                     'bonus' => $bonus,
@@ -226,7 +232,7 @@ class UserProfile extends Model
             DB::rollBack();
 
             Log::channel('bonus')->error('Referral bonus transaction failed', [
-                'deposit_id' => $deposit->id,
+                'mining_id' => $mining->id,
                 'user_id' => $this->user_id,
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
@@ -236,6 +242,11 @@ class UserProfile extends Model
 
     public function referralMatching($bonus)
     {
+        if ( $bonus->mining->getBenefitRule('referral_matching') === 'n' ){
+            Log::channel('bonus')->warning('This marketing does not allow a referral matching.', ['bonus_id' => $bonus->id, 'marketing_id' => $bonus->mining->policy->marketing_id]);
+            return;
+        }
+
         $user = $bonus->user->profile;
         $parents = $user->getParentTree(20);
 
@@ -399,16 +410,23 @@ class UserProfile extends Model
 
     public function levelBonus($profit)
     {
+
+        $mining = $profit->reward->mining;
+
+        if (!$mining) {
+            Log::channel('bonus')->warning('Missing mining for profit', ['profit_id' => $profit->id]);
+            return;
+        }
+
+        if ( $mining->getBenefitRule('level_bonus') === 'n' ){
+            Log::channel('bonus')->warning('This marketing does not allow a level bonus.', ['profit_id' => $profit->id, 'marketing_id' => $mining->policy->marketing_id]);
+            return;
+        }
+
         try {
 
             DB::beginTransaction();
 
-            $mining = $profit->reward->mining;
-
-            if (!$mining) {
-                Log::channel('bonus')->warning('Missing mining for profit', ['profit_id' => $profit->id]);
-                return;
-            }
             $user = $profit->user->profile;
             $parents = $user->getParentTree(20);
 
@@ -513,6 +531,11 @@ class UserProfile extends Model
     public function levelMatching($bonus)
     {
         $mining = $bonus->profit->reward->mining;
+
+        if ( $mining->getBenefitRule('level_matching') === 'n' ){
+            Log::channel('bonus')->warning('This marketing does not allow a level matching.', ['bonus_id' => $bonus->id, 'marketing_id' => $mining->policy->marketing_id]);
+            return;
+        }
 
         if (!$mining) {
             Log::channel('bonus')->warning('Missing mining for bonus', ['bonus_id' => $bonus->id]);

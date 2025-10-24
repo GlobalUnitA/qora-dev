@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Mining;
 
 use App\Exports\StakingPolicyExport;
 use App\Models\Coin;
+use App\Models\Marketing;
 use App\Models\Mining;
 use App\Models\MiningDailyStat;
 use App\Models\MiningPolicy;
@@ -51,6 +52,12 @@ class PolicyController extends Controller
 
                 $view = MiningPolicy::find($request->id);
 
+                $marketings = Marketing::all();
+
+                $all_days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+
+                $selected_days = explode(',', $view->reward_days ?? '');
+
                 $modify_logs = PolicyModifyLog::join('mining_policies', 'mining_policies.id', '=', 'policy_modify_logs.policy_id')
                     ->join('admins', 'admins.id', '=', 'policy_modify_logs.admin_id')
                     ->select('admins.name', 'policy_modify_logs.*')
@@ -60,7 +67,7 @@ class PolicyController extends Controller
                     ->orderBy('policy_modify_logs.created_at', 'desc')
                     ->get();
 
-                return view('admin.mining.policy.view-policy', compact('coins', 'view', 'modify_logs'));
+                return view('admin.mining.policy.view-policy', compact('coins','marketings', 'view', 'all_days', 'selected_days', 'modify_logs'));
 
             default :
 
@@ -199,7 +206,10 @@ class PolicyController extends Controller
 
                     default :
 
-                        $data = $request->except(['exchange_rate', 'node_amount', 'mode']);
+                        $days = $request->input('reward_days', []);
+                        $data = $request->except(['exchange_rate', 'node_amount', 'mode', 'reward_days']);
+
+                        $data['reward_days'] = implode(',', $days);
 
                         $mining_policy->update($data);
 
@@ -227,6 +237,13 @@ class PolicyController extends Controller
         $current = now()->toDateString();
 
         return Excel::download(new StakingPolicyExport(), '스테이킹 상품 내역 ' . $current . '.xlsx');
+    }
+
+    public function getMarketingBenefitRules($id)
+    {
+        $marketing = Marketing::find($id);
+
+        return $marketing->benefit_rules_text;
     }
 
     private function getMiningData($data)

@@ -140,7 +140,7 @@ class MiningReward extends Model
                     'reward_rate' => $rate,
                 ]);
 
-                $reward->increment('profit_count');
+                if ($type === 'daily') $reward->increment('profit_count');
 
                 Log::channel('mining')->info('daily mining distributed', [
                     'user_id' => $reward->user_id,
@@ -150,8 +150,6 @@ class MiningReward extends Model
                     'profit' => $profit,
                     'timestamp' => now(),
                 ]);
-
-                if ($type === 'daily') $reward->mining->increment('reward_count');
 
                 $user = $reward->user;
                 $profile = $user->profile;

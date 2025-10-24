@@ -2,24 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+
 use App\Models\Asset;
 use App\Models\Income;
+use App\Models\Marketing;
 use App\Models\Post;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
 
 class HomeController extends Controller
 {
- 
+
     public function __construct()
     {
-        
+
     }
 
-   
+
     public function index()
     {
         $notice = Post::where('board_id', 1)->latest()->first();
@@ -34,9 +32,11 @@ class HomeController extends Controller
         })
         ->get();
 
+        $marketings = Marketing::all();
+
         $popups = Post::where('is_popup', 'y')->get();
-        
-        return view('home', compact('notice', 'assets', 'incomes', 'popups'));
+
+        return view('home', compact('notice', 'assets', 'incomes', 'marketings', 'popups'));
     }
 
 }

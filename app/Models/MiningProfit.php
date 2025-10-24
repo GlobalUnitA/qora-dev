@@ -118,8 +118,6 @@ class MiningProfit extends Model
                     'timestamp' => now(),
                 ]);
 
-                if ($type === 'daily') $mining->increment('reward_count');
-
                 $mining->user->profile->levelBonus($mining_profit);
 
                 DB::commit();

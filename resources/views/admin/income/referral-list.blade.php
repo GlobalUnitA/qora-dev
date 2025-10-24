@@ -70,7 +70,7 @@
                                         <th scope="col" class="text-center">보너스</th>
                                         <th scope="col" class="text-center">상태</th>
                                         <th scope="col" class="text-center">산하ID</th>
-                                        <th scope="col" class="text-center">입금금액</th>
+                                        <th scope="col" class="text-center">참여금액</th>
                                         <th scope="col" class="text-center">일자</th>
                                     </tr>
                                 </thead>
@@ -103,7 +103,7 @@
                                             @endswitch
                                         </td>
                                         <td scope="col" class="text-center">{{ $value->referralBonus->referrer_id }}</td>
-                                        <td scope="col" class="text-center">{{ $value->referralBonus->deposit->amount }}</td>
+                                        <td scope="col" class="text-center">{{ $value->referralBonus->mining->coin_amount }}</td>
                                         <td scope="col" class="text-center">{{ $value->created_at }}</td>
                                     </tr>
                                     @endforeach

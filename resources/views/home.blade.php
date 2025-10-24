@@ -185,12 +185,16 @@
                 </div>
             </a>
             --}}
-            <a href="{{ route('mining') }}" class="link-body-emphasis w-100" style="max-width: 25%">
-                <div class="d-flex align-items-center flex-column">
-                <img src="{{ asset('/images/icon/icon_main_mining.png') }}" width="44" class="mb-1">
-                    <p class="m-0 fw-medium fs-3 text-center">{{ __('mining.mining') }}</p>
-                </div>
-            </a>
+            @if(isset($marketings))
+                @foreach($marketings as $marketing)
+                <a href="{{ route('mining', ['id' => $marketing->id]) }}" class="link-body-emphasis w-100" style="max-width: 25%">
+                    <div class="d-flex align-items-center flex-column">
+                    <img src="{{ $marketing->image_urls[0] }}" width="44" class="mb-1">
+                        <p class="m-0 fw-medium fs-3 text-center">{{ $marketing->marketing_locale_name  }}</p>
+                    </div>
+                </a>
+                @endforeach
+            @endif
         </div>
     </div>
     {{--
@@ -230,7 +234,7 @@
     <div class="position-relative" style="height: 600px; margin-bottom: 100px;">
         <div class="position-absolute w-100 text-center">
             <h5 class="text-white pt-5 opacity-50">Building Decentralized</h5>
-            <h3 class="text-white pb-4">Innovation<br>Together</</h3>
+            <h3 class="text-white pb-4">Innovation<br>Together</h3>
         </div>
         <video class="bg-video__content" autoplay="" muted="" loop="" playsinline="">
             <source src="{{ asset('images/main_video.mp4') }}" type="video/mp4" />

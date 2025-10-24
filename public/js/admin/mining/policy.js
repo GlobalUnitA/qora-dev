@@ -91,4 +91,30 @@ $(document).ready(function() {
             }
         });
     });
+
+    $('#marketingSelect').change(function(e) {
+        e.preventDefault();
+
+        const beforeId = $('#beforeMarketingId').val();
+        const selectedId = $(this).val();
+
+        if (!selectedId || beforeId == selectedId) {
+            $('#afterBenefitRules').html('');
+            return;
+        }
+
+        $.ajax({
+            url: '/admin/mining/policy/marketing-benefit-rules/' + selectedId + '/get',
+            type: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (response) {
+                $('#afterBenefitRules').html(' => ' + response);
+            },
+            error: function () {
+                alertModal('예기치 못한 오류가 발생했습니다.');
+            }
+        });
+    });
 });

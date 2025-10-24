@@ -168,12 +168,12 @@ Route::middleware(['auth', 'session.timeout'])->group(function () {
     });
 
     Route::prefix('mining')->group(function () {
-        Route::get('/', [MiningController::class, 'index'])->name('mining');
-
         Route::post('data', [MiningController::class, 'data'])->name('mining.data');
         Route::get('confirm/{id}', [MiningController::class, 'confirm'])->name('mining.confirm');
         Route::post('store', [MiningController::class, 'store'])->name('mining.store');
         Route::get('list', [MiningController::class, 'list'])->name('mining.list');
+
+        Route::get('{id}', [MiningController::class, 'index'])->name('mining');
         /*
         Route::get('detail', [MiningController::class, 'detail'])->name('mining.detail');
         Route::get('profit/{id}', [MiningController::class, 'profit'])->name('mining.profit');

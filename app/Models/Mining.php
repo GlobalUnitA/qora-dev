@@ -42,7 +42,6 @@ class Mining extends Model
 
     protected $appends = [
         'status_text',
-        'has_reward_today',
     ];
 
     public function user()
@@ -75,6 +74,11 @@ class Mining extends Model
         return $this->hasMany(MiningReward::class, 'mining_id', 'id');
     }
 
+    public function referralBonus()
+    {
+        return $this->hasMany(ReferralBonus::class, 'mining_id', 'id');
+    }
+
     public function getStatusTextAttribute()
     {
         if ($this->status === 'pending') {
@@ -85,10 +89,34 @@ class Mining extends Model
         return '오류';
     }
 
-    public function getHasRewardTodayAttribute()
+    public function getIsRewardAvaliableToday()
     {
         $today = now()->toDateString();
-        return $this->rewards()->whereDate('reward_date', $today)->exists();
+
+        if ($this->rewards()->whereDate('reward_date', $today)->exists()) {
+
+            return false;
+        }
+
+        $reward_days = $this->policy->reward_days;
+
+        if (empty($reward_days)) {
+
+            return true;
+        }
+
+        $days = array_map('trim', explode(',', strtolower($reward_days)));
+
+        $today_day = strtolower(now()->format('D'));
+
+        return in_array($today_day, $days);
+    }
+
+    public function getBenefitRule($type)
+    {
+        $benefit_rules = $this->policy->marketing->benefit_rules;
+
+        return $benefit_rules[$type];
     }
 
     public static function storeMiningReward()
@@ -96,13 +124,13 @@ class Mining extends Model
         Log::channel('mining')->info('store mining rewards');
 
         $today = now();
-        $minings = self::whereDate('started_at', '<=', $today)
-            ->whereDate('ended_at', '>=', $today)
+        $minings = self::whereColumn('reward_count', '<', 'split_period')
+            ->where('status','pending')
             ->get();
 
         foreach ($minings as $mining) {
 
-            if ($mining->has_reward_today) continue;
+            if (!$mining->getIsRewardAvaliableToday()) continue;
 
             DB::beginTransaction();
 
@@ -118,6 +146,8 @@ class Mining extends Model
                     'started_at' => $today,
                     'ended_at' => $today->copy()->addDays($mining->split_period-1),
                 ]);
+
+                $mining->increment('reward_count');
 
                 DB::commit();
 

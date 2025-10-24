@@ -42,6 +42,7 @@
     <form method="POST" action="{{ route('mining.data')}}" id="miningDataForm">
     @csrf
     <input type="hidden" name="coin" value="">
+    <input type="hidden" name="marketing" value="{{ request()->route('id') }}">
     </form>
 </main>
 @endsection
