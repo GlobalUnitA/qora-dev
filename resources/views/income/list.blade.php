@@ -62,6 +62,7 @@
             @csrf
             <input type="hidden" name="offset" value="10">
             <input type="hidden" name="limit" value="10">
+            <input type="hidden" name="id" value="{{ request('id') }}">
             <input type="hidden" name="type" value="{{ request('type') }}">
             <button type="submit" class="btn btn-outline-primary w-100 py-2 my-4 fs-4">{{ __('system.load_more') }}</button>
         </form>
