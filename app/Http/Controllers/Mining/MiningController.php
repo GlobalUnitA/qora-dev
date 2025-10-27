@@ -83,7 +83,7 @@ class MiningController extends Controller
             ]);
         }
 
-        if ($policy->marketing->is_required == 'n') {
+        if ($policy->marketing->is_required === 'n') {
 
             $marketing = Marketing::where('is_required', 'y')->first();
 
@@ -91,7 +91,7 @@ class MiningController extends Controller
                 ->where('policy_id', $marketing->policy?->id)
                 ->sum('coin_amount');
 
-            if ($request->coin_amount < 0 && $request->coin_amount > $sum_coin_amount * 10) {
+            if ($sum_coin_amount < 0 && $request->coin_amount > $sum_coin_amount * 10) {
                 return response()->json([
                     'status' => 'error',
                     'message' =>  __('마이닝 참여가 불가합니다.'),
