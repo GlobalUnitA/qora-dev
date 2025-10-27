@@ -58,6 +58,15 @@
                                 </td>
                             </tr>
                             <tr>
+                                <th class="text-center align-middle">필수 참여 여부</th>
+                                <td class="align-middle">
+                                    <input type="radio" name="is_required" id="is_required" value="y" class="form-check-input">
+                                    <label class="form-check-label me-3" for="is_required">활성</label>
+                                    <input type="radio" name="is_required" id="is_not_required" value="n" class="form-check-input">
+                                    <label class="form-check-label" for="is_not_required">비활성</label>
+                                </td>
+                            </tr>
+                            <tr>
                                 <th class="text-center align-middle">추천 보너스</th>
                                 <td class="align-middle">
                                     <input type="radio" name="benefit_rules[referral_bonus]" id="is_referral_bonus" value="y" class="form-check-input">

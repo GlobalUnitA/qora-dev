@@ -66,6 +66,7 @@ class MarketingController extends Controller
             $file_path = $file->storeAs('uploads/marketing', $file_name, 'public');
             $file_url[] = asset('storage/uploads/marketing/' . $file_name);
 
+            $data['is_required'] = $request->is_required;
             $data['image_urls'] = $file_url;
             $data['benefit_rules'] = $request->benefit_rules;
 
@@ -117,6 +118,11 @@ class MarketingController extends Controller
                 ]);
             }
         }
+
+        return response()->json([
+            'status' => 'error',
+            'message' => '예기치 못한 오류가 발생했습니다.',
+        ]);
     }
 
     public function update(Request $request)
