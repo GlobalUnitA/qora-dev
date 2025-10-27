@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Income;
+namespace App\Http\Controllers\Admin\Marketing;
 
-use App\Models\UserGrade;
-use App\Models\SubscriptionPolicy;
+use App\Models\Marketing;
 use App\Models\ReferralPolicy;
 use App\Models\ReferralMatchingPolicy;
-use App\Models\RankPolicy;
 use App\Models\LevelPolicy;
 use App\Models\LevelConditionPolicy;
 use App\Models\PolicyModifyLog;
@@ -14,83 +12,73 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Maatwebsite\Excel\Facades\Excel;
 
 class PolicyController extends Controller
 {
 
     public function index(Request $request)
     {
+        $marketing = Marketing::find($request->id);
+
         switch ($request->mode) {
-
-            case 'referral' :
-
-                $policies = ReferralPolicy::all();
-
-                $modify_logs = PolicyModifyLog::join('referral_policies', 'referral_policies.id', '=', 'policy_modify_logs.policy_id')
-                    ->join('user_grades', 'user_grades.id', '=', 'referral_policies.grade_id')
-                    ->join('admins', 'admins.id', '=', 'policy_modify_logs.admin_id')
-                    ->select('user_grades.name as grade_name', 'admins.name', 'policy_modify_logs.*')
-                    ->where('policy_modify_logs.policy_type', 'referral_policies')
-                    ->orderBy('policy_modify_logs.created_at', 'desc')
-                    ->get();
-
-                return view('admin.income.policy.referral', compact('policies', 'modify_logs'));
 
             case 'referral_matching' :
 
-                $policies = ReferralMatchingPolicy::all();
+                $policies = ReferralMatchingPolicy::where('marketing_id', $request->id)->get();
 
                 $modify_logs = PolicyModifyLog::join('referral_matching_policies', 'referral_matching_policies.id', '=', 'policy_modify_logs.policy_id')
                     ->join('user_grades', 'user_grades.id', '=', 'referral_matching_policies.grade_id')
                     ->join('admins', 'admins.id', '=', 'policy_modify_logs.admin_id')
                     ->select('user_grades.name as grade_name', 'admins.name', 'policy_modify_logs.*')
+                    ->where('referral_matching_policies.marketing_id', $marketing->id)
                     ->where('policy_modify_logs.policy_type', 'referral_matching_policies')
                     ->orderBy('policy_modify_logs.created_at', 'desc')
                     ->get();
 
-                return view('admin.income.policy.referral-matching', compact('policies', 'modify_logs'));
+                return view('admin.marketing.policy.referral-matching', compact('marketing', 'policies', 'modify_logs'));
 
-            case 'level' :
+            case 'level_bonus' :
 
-                $policies = LevelPolicy::all();
+                $policies = LevelPolicy::where('marketing_id', $request->id)->get();
 
                 $modify_logs = PolicyModifyLog::join('level_policies', 'level_policies.id', '=', 'policy_modify_logs.policy_id')
                     ->join('admins', 'admins.id', '=', 'policy_modify_logs.admin_id')
                     ->select('level_policies.depth', 'admins.name', 'policy_modify_logs.*')
+                    ->where('level_policies.marketing_id', $marketing->id)
                     ->where('policy_modify_logs.policy_type', 'level_policies')
                     ->orderBy('policy_modify_logs.created_at', 'desc')
                     ->get();
 
-                return view('admin.income.policy.level', compact('policies', 'modify_logs'));
+                return view('admin.marketing.policy.level', compact('marketing', 'policies', 'modify_logs'));
 
             case 'level_condition' :
 
-                $policies = LevelConditionPolicy::all();
+                $policies = LevelConditionPolicy::where('marketing_id', $request->id)->get();
 
                 $modify_logs = PolicyModifyLog::join('level_condition_policies', 'level_condition_policies.id', '=', 'policy_modify_logs.policy_id')
                     ->join('admins', 'admins.id', '=', 'policy_modify_logs.admin_id')
                     ->select('level_condition_policies.node_amount', 'admins.name', 'policy_modify_logs.*')
+                    ->where('level_condition_policies.marketing_id', $marketing->id)
                     ->where('policy_modify_logs.policy_type', 'level_condition_policies')
                     ->orderBy('policy_modify_logs.created_at', 'desc')
                     ->get();
 
-                return view('admin.income.policy.level-condition', compact('policies', 'modify_logs'));
+                return view('admin.marketing.policy.level-condition', compact('marketing', 'policies', 'modify_logs'));
 
             default :
 
-                $policies = RankPolicy::all();
-                $user_grades = UserGrade::all();
+                $policies = ReferralPolicy::where('marketing_id', $request->id)->get();
 
-                $modify_logs = PolicyModifyLog::join('rank_policies', 'rank_policies.id', '=', 'policy_modify_logs.policy_id')
-                    ->join('user_grades', 'user_grades.id', '=', 'rank_policies.grade_id')
+                $modify_logs = PolicyModifyLog::join('referral_policies', 'referral_policies.id', '=', 'policy_modify_logs.policy_id')
+                    ->join('user_grades', 'user_grades.id', '=', 'referral_policies.grade_id')
                     ->join('admins', 'admins.id', '=', 'policy_modify_logs.admin_id')
                     ->select('user_grades.name as grade_name', 'admins.name', 'policy_modify_logs.*')
-                    ->where('policy_modify_logs.policy_type', 'rank_policies')
+                    ->where('referral_policies.marketing_id', $marketing->id)
+                    ->where('policy_modify_logs.policy_type', 'referral_policies')
                     ->orderBy('policy_modify_logs.created_at', 'desc')
                     ->get();
 
-                return view('admin.income.policy.rank', compact('policies', 'user_grades', 'modify_logs'));
+                return view('admin.marketing.policy.referral', compact('marketing', 'policies', 'modify_logs'));
 
         }
     }
@@ -100,30 +88,8 @@ class PolicyController extends Controller
         try {
             switch ($request->mode) {
 
-                case 'rank' :
-                    if (RankPolicy::where('grade_id', $request->grade_id)->exists()) {
-                        return response()->json([
-                            'status' => 'error',
-                            'message' => '이미 해당 등급에 대한 정책이 존재합니다.',
-                        ]);
-                    }
-
-                    DB::transaction(function () use ($request) {
-                        RankPolicy::create([
-                            'grade_id' => $request->grade_id,
-                            'bonus' => $request->bonus,
-                            'conditions' => $request->conditions,
-                        ]);
-                    });
-
-                    return response()->json([
-                        'status' => 'success',
-                        'message' => '정책이 추가되었습니다.',
-                        'url' => route('admin.income.policy', ['mode' => 'rank']),
-                    ]);
-
-                case 'level' :
-                    if (LevelPolicy::where('depth', $request->depth)->exists()) {
+                case 'level_bonus' :
+                    if (LevelPolicy::where('marketing_id', $request->marketing_id)->where('depth', $request->depth)->exists()) {
                         return response()->json([
                             'status' => 'error',
                             'message' => '이미 해당 뎁스에 대한 정책이 존재합니다.',
@@ -132,6 +98,7 @@ class PolicyController extends Controller
 
                     DB::transaction(function () use ($request) {
                         LevelPolicy::create([
+                            'marketing_id' => $request->marketing_id,
                             'depth' => $request->depth,
                             'bonus' => $request->bonus ?? 0,
                             'matching' => $request->matching ?? 0,
@@ -141,13 +108,14 @@ class PolicyController extends Controller
                     return response()->json([
                         'status' => 'success',
                         'message' => '정책이 추가되었습니다.',
-                        'url' => route('admin.income.policy', ['mode' => 'level']),
+                        'url' => route('admin.marketing.policy', ['id' => $request->marketing_id, 'mode' => 'level_bonus']),
                     ]);
 
                 case 'level_condition' :
 
                     DB::transaction(function () use ($request) {
                         LevelConditionPolicy::create([
+                            'marketing_id' => $request->marketing_id,
                             'node_amount' => $request->node_amount,
                             'max_depth' => $request->max_depth,
                             'referral_count' => $request->referral_count,
@@ -158,7 +126,7 @@ class PolicyController extends Controller
                     return response()->json([
                         'status' => 'success',
                         'message' => '정책이 추가되었습니다.',
-                        'url' => route('admin.income.policy', ['mode' => 'level_condition']),
+                        'url' => route('admin.marketing.policy', ['id' => $request->marketing_id, 'mode' => 'level_condition']),
                     ]);
 
                 default :
@@ -188,7 +156,8 @@ class PolicyController extends Controller
         try {
             switch ($request->mode) {
 
-                case 'referral' :
+                case 'referral_bonus' :
+
 
                     $referral_policy = ReferralPolicy::findOrFail($request->id);
                     $referral_policy->update($request->all());
@@ -202,21 +171,7 @@ class PolicyController extends Controller
 
                     break;
 
-                case 'rank' :
-
-                    $rank_policy = RankPolicy::findOrFail($request->id);
-
-                    $data = $request->all();
-                    $data['conditions'] = array_values($request->conditions ?? []);
-
-                    if (is_null($data['conditions'][0]['min_level']) || is_null($data['conditions'][0]['max_level']) || is_null($data['conditions'][0]['referral_count'])) {
-                        $data['conditions'] = null;
-                    }
-                    $rank_policy->update($data);
-
-                break;
-
-                case 'level' :
+                case 'level_bonus' :
 
                     $Level_policy = LevelPolicy::findOrFail($request->id);
                     $Level_policy->update($request->all());
@@ -236,7 +191,7 @@ class PolicyController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => '정책이 수정되었습니다.',
-                'url' => route('admin.income.policy', ['mode' => $request->mode]),
+                'url' => route('admin.marketing.policy', ['id' => $request->marketing_id, 'mode' => $request->mode]),
             ]);
 
 

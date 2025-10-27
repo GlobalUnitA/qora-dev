@@ -177,7 +177,9 @@ class UserProfile extends Model
 
                 if ($parent_profile->is_valid === 'n') continue;
 
-                $policy = ReferralPolicy::where('grade_id', $parent_profile->grade->id)->first();
+                $policy = ReferralPolicy::where('marketing_id', $mining->policy->marketing_id)
+                    ->where('grade_id', $parent_profile->grade->id)
+                    ->first();
 
                 if (!$policy) continue;
 
@@ -254,7 +256,9 @@ class UserProfile extends Model
 
             if ($parent_profile->is_valid === 'n') continue;
 
-            $policy = ReferralMatchingPolicy::where('grade_id', $parent_profile->grade->id)->first();
+            $policy = ReferralMatchingPolicy::where('marketing_id', $bonus->mining->policy->marketing_id)
+                ->where('grade_id', $parent_profile->grade->id)
+                ->first();
 
             if (!$policy) continue;
 
@@ -430,13 +434,15 @@ class UserProfile extends Model
             $user = $profit->user->profile;
             $parents = $user->getParentTree(20);
 
+            $marketing_id = $mining->policy->marketing_id;
+
             foreach ($parents as $level => $parent_profile) {
 
                 if ($parent_profile->is_valid === 'n') continue;
 
                 if (!$parent_profile->has_mining) continue;
 
-                $condition = $parent_profile->checkLevelCondition();
+                $condition = $parent_profile->checkLevelCondition($marketing_id);
 
                 if (!$condition) {
                     Log::channel('bonus')->warning('No Level Condition matched for level bonus', [
@@ -461,7 +467,9 @@ class UserProfile extends Model
                     continue;
                 }
 
-                $policy = LevelPolicy::where('depth', $level)->first();
+                $policy = LevelPolicy::where('marketing_id', $marketing_id)
+                    ->where('depth', $level)
+                    ->first();
 
                 $amount = $profit->reward->reward;
 
@@ -545,13 +553,15 @@ class UserProfile extends Model
         $user = $bonus->user->profile;
         $parents = $user->getParentTree(20);
 
+        $marketing_id = $mining->policy->marketing_id;
+
         foreach ($parents as $level => $parent_profile) {
 
             if ($parent_profile->is_valid === 'n') continue;
 
             if (!$parent_profile->has_mining) continue;
 
-            $condition = $parent_profile->checkLevelCondition();
+            $condition = $parent_profile->checkLevelCondition($marketing_id);
 
             if (!$condition) {
                 Log::channel('bonus')->warning('No Level Condition matched for level matching', [
@@ -575,7 +585,9 @@ class UserProfile extends Model
                 continue;
             }
 
-            $policy = LevelPolicy::where('depth', $level)->first();
+            $policy = LevelPolicy::where('marketing_id', $marketing_id)
+                ->where('depth', $level)
+                ->first();
 
             $matching = $bonus->bonus * $policy->matching / 100;
 
@@ -681,9 +693,12 @@ class UserProfile extends Model
     }
 
 
-    public function checkLevelCondition()
+    public function checkLevelCondition($marketing_id)
     {
-        $level_conditions = LevelConditionPolicy::orderBy('node_amount', 'desc')->get();
+        $level_conditions = LevelConditionPolicy::where('marketing_id', $marketing_id)
+            ->orderBy('node_amount', 'desc')
+            ->get();
+
         $user_referral_count = $this->referral_count;
         $total_node_amount = Mining::where('user_id', $this->user_id)->sum('node_amount');
 

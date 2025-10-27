@@ -14,6 +14,7 @@ class Marketing extends Model
     protected $fillable = [
         'image_urls',
         'benefit_rules',
+        'is_required',
     ];
 
     protected $casts = [

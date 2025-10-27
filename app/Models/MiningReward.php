@@ -115,6 +115,8 @@ class MiningReward extends Model
                 $rate = $mining_profit['rate'];
                 $profit = $mining_profit['profit'];
 
+                if ($profit <= 0) continue;
+
                 $income = $reward->mining->income;
 
                 $transfer = IncomeTransfer::create([

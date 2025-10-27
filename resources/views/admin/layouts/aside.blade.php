@@ -129,7 +129,7 @@
                     <span class="hide-menu">정책 관리</span>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="{{ route('admin.user.policy') }}" aria-expanded="false">
+                    <a class="sidebar-link" href="{{ route('admin.user.policy', ['mode' => 'grade']) }}" aria-expanded="false">
                         <span>
                             <i class="ti ti-user-off"></i>
                         </span>
@@ -142,14 +142,6 @@
                             <i class="ti ti-cash-banknote-off"></i>
                         </span>
                         <span class="hide-menu">자산 정책</span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="{{ route('admin.income.policy', ['mode' => 'rank']) }}" aria-expanded="false">
-                        <span>
-                            <i class="ti ti-gift-off"></i>
-                        </span>
-                        <span class="hide-menu">수익 정책</span>
                     </a>
                 </li>
                 <li class="sidebar-item">

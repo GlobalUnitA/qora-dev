@@ -20,6 +20,20 @@
                         </colgroup>
                         <tbody>
                             <tr>
+                                <th class="text-center align-middle">마케팅</th>
+                                <td class="align-middle" colspan="3">
+                                    <div class="d-flex ms-3">
+                                        <select name="marketing_id" id="marketingSelect" class="form-select w-25">
+                                            <option value="">마케팅 선택</option>
+                                            @foreach ($marketings as $marketing)
+                                                <option value="{{ $marketing->id }}">{{ $marketing->marketing_locale_name }}</option>
+                                            @endforeach
+                                        </select>
+                                        <div class="d-flex align-items-center ms-2" id="benefitRules"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
                                 <th class="text-center align-middle">참여 코인</th>
                                 <td class="align-middle">
                                     <select name="coin_id" class="form-select w-50">
@@ -152,5 +166,5 @@
 @endsection
 
 @push('script')
-<script src="{{ asset('js/admin/manager/create.js') }}"></script>
+<script src="{{ asset('js/admin/mining/policy.js') }}"></script>
 @endpush

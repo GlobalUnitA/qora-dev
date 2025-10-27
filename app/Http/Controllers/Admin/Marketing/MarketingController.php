@@ -7,6 +7,8 @@ use App\Models\LanguagePolicy;
 use App\Models\Marketing;
 use App\Models\MarketingTranslation;
 use App\Http\Controllers\Controller;
+use App\Models\ReferralPolicy;
+use App\Models\ReferralMatchingPolicy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
@@ -27,19 +29,17 @@ class MarketingController extends Controller
     {
         $locale = LanguagePolicy::where('type', 'locale')->first()->content;
 
-        switch ($request->mode) {
+        $view = Marketing::find($request->id);
+        $translations = MarketingTranslation::where('marketing_id', $view->id)->get();
 
-            case 'view' :
+        return view('admin.marketing.view', compact('locale','view', 'translations'));
+    }
 
-                $view = Marketing::find($request->id);
-                $translations = MarketingTranslation::where('marketing_id', $view->id)->get();
+    public function create(Request $request)
+    {
+        $locale = LanguagePolicy::where('type', 'locale')->first()->content;
 
-                return view('admin.marketing.view', compact('locale','view', 'translations'));
-
-            default :
-
-                return view('admin.marketing.create', compact('locale'));
-        }
+        return view('admin.marketing.create', compact('locale'));
     }
 
     public function store(Request $request)
@@ -86,6 +86,18 @@ class MarketingController extends Controller
                     ]);
                 }
 
+                for ($i=1; $i < 14; $i++) {
+                    ReferralPolicy::create([
+                       'marketing_id' => $marketing->id,
+                       'grade_id' => $i,
+                    ]);
+
+                    ReferralMatchingPolicy::create([
+                        'marketing_id' => $marketing->id,
+                        'grade_id' => $i,
+                    ]);
+                }
+
                 DB::commit();
 
                 return response()->json([
@@ -111,6 +123,7 @@ class MarketingController extends Controller
     {
         $marketing = Marketing::find($request->id);
 
+        $data['is_required'] = $request->is_required;
         $data['image_urls'] = $marketing->image_urls;
         $data['benefit_rules'] = $request->benefit_rules;
 

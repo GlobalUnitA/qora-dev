@@ -124,7 +124,8 @@ class Mining extends Model
         Log::channel('mining')->info('store mining rewards');
 
         $today = now();
-        $minings = self::whereColumn('reward_count', '<', 'split_period')
+        $minings = self::where('started_at', '<=', $today)
+            ->whereColumn('reward_count', '<', 'split_period')
             ->where('status','pending')
             ->get();
 

@@ -64,6 +64,15 @@
                                 </td>
                             </tr>
                             <tr>
+                                <th class="text-center align-middle">필수 참여 여부</th>
+                                <td class="align-middle">
+                                    <input type="radio" name="is_required" id="is_required" value="y" class="form-check-input" @if($view->is_required == 'y') checked @endif>
+                                    <label class="form-check-label me-3" for="is_required">활성</label>
+                                    <input type="radio" name="is_required" id="is_not_required" value="n" class="form-check-input" @if($view->is_required == 'n') checked @endif>
+                                    <label class="form-check-label" for="is_not_required">비활성</label>
+                                </td>
+                            </tr>
+                            <tr>
                                 <th class="text-center align-middle">추천 보너스</th>
                                 <td class="align-middle">
                                     <input type="radio" name="benefit_rules[referral_bonus]" id="is_referral_bonus" value="y" class="form-check-input" @if($view->benefit_rules['referral_bonus'] == 'y') checked @endif>
@@ -93,6 +102,16 @@
                                     <label class="form-check-label me-3" for="is_level_matching">활성</label>
                                     <input type="radio" name="benefit_rules[level_matching]" value="n" id="is_not_level_matching" class="form-check-input" @if($view->benefit_rules['level_matching'] == 'n') checked @endif>
                                     <label class="form-check-label" for="is_not_level_matching">비활성</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4">
+                                    <div class="d-flex justify-content-center">
+                                        <a href="{{ route('admin.marketing.policy', ['id' => $view->id, 'mode' => 'referral_bonus'])  }}">
+                                            <i class="ti ti-settings"></i>
+                                            수익 상세설정
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>

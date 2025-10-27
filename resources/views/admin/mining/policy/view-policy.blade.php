@@ -38,28 +38,12 @@
                             <col style="width: 35%;">
                         </colgroup>
                         <tbody>
-                            <tr>
-                                <th class="text-center align-middle">마케팅</th>
-                                <td class="align-middle" colspan="3">
-                                    <input type="hidden" id="beforeMarketingId" value="{{ $view->marketing_id  }}">
-                                    <select name="marketing_id" id="marketingSelect" class="form-select w-25">
-                                        <option value="">마케팅 선택</option>
-                                        @foreach ($marketings as $marketing)
-                                            <option value="{{ $marketing->id }}" @selected($view->marketing_id == $marketing->id)>{{ $marketing->marketing_locale_name }}</option>
-                                        @endforeach
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="align-middle" colspan="4">
-                                    <div class="d-flex ms-3">
-                                        <div id="beforeBenefitRules" class="me-2">
-                                            {{ $view->marketing->benefit_rules_text }}
-                                        </div>
-                                        <div id="afterBenefitRules"></div>
-                                    </div>
-                                </td>
-                            </tr>
+                        <tr>
+                            <th class="text-center align-middle">마케팅</th>
+                            <td class="align-middle" colspan="3">
+                                {{ $view->marketing->marketing_locale_name }}
+                            </td>
+                        </tr>
                             <tr>
                                 <th class="text-center align-middle">참여 코인</th>
                                 <td class="align-middle">

@@ -12,6 +12,7 @@ class LevelConditionPolicy extends Model
     use HasFactory, TruncatesDecimals;
 
     protected $fillable = [
+        'marketing_id',
         'node_amount',
         'max_depth',
         'referral_count',

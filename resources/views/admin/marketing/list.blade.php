@@ -20,7 +20,7 @@
                         <tbody class="table-group-divider">
                         @if($marketings->isNotEmpty())
                             @foreach($marketings as $key => $val)
-                            <tr class="staking_policy" style ="cursor:pointer;" onclick="window.location='{{ route('admin.marketing.view', ['mode' => 'view', 'id' => $val->id]) }}'">
+                            <tr class="staking_policy" style ="cursor:pointer;" onclick="window.location='{{ route('admin.marketing.view', ['id' => $val->id]) }}'">
                                 <td class="text-center">{{ $val->marketing_locale_name }}</td>
                                 <td class="text-center">{{ $val['updated_at'] }}</td>
                             </tr>
@@ -34,7 +34,7 @@
                     </table>
                     <hr>
                     <div class="d-flex mt-5">
-                        <a href="{{ route('admin.marketing.view', ['mode' => 'create']) }}" class="btn btn-info ms-auto">상품 추가</a>
+                        <a href="{{ route('admin.marketing.create') }}" class="btn btn-info ms-auto">상품 추가</a>
                     </div>
                 </div>
             </div>

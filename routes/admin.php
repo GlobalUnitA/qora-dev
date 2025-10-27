@@ -29,6 +29,7 @@ use App\Http\Controllers\Admin\Trading\TradingController;
 use App\Http\Controllers\Admin\Trading\PolicyController as TradingPolicyController;
 
 use App\Http\Controllers\Admin\Marketing\MarketingController;
+use App\Http\Controllers\Admin\Marketing\PolicyController as MarketingPolicyController;
 
 use App\Http\Controllers\Admin\Mining\MiningController;
 use App\Http\Controllers\Admin\Mining\PolicyController as MiningPolicyController;
@@ -69,9 +70,10 @@ Route::middleware(['admin.auth', 'otp'])->group(function () {
                 Route::post('delete', [GradeController::class, 'delete'])->name('admin.user.grade.delete');
             });
             Route::prefix('policy')->group(function () {
-                Route::get('/', [UserPolicyController::class, 'index'])->name('admin.user.policy');
+                Route::post('store', [UserPolicyController::class, 'store'])->name('admin.user.policy.store');
                 Route::post('update', [UserPolicyController::class, 'update'])->name('admin.user.policy.update');
                 Route::get('export', [UserPolicyController::class, 'export'])->name('admin.user.policy.export');
+                Route::get('{mode}', [UserPolicyController::class, 'index'])->name('admin.user.policy');
             });
         });
         Route::prefix('kyc')->group(function () {
@@ -129,21 +131,22 @@ Route::middleware(['admin.auth', 'otp'])->group(function () {
                 Route::post('update', [IncomeWithdrawalController::class, 'update'])->name('admin.income.withdrawal.update');
             });
         });
-
-        Route::middleware(['check_admin_level:3'])->group(function () {
-            Route::prefix('policy')->group(function () {
-                Route::get('/{mode}', [IncomePolicyController::class, 'index'])->name('admin.income.policy');
-                Route::post('store', [IncomePolicyController::class, 'store'])->name('admin.income.policy.store');
-                Route::post('update', [IncomePolicyController::class, 'update'])->name('admin.income.policy.update');
-            });
-        });
     });
 
     Route::prefix('marketing')->group(function () {
         Route::get('list', [MarketingController::class, 'list'])->name('admin.marketing.list');
-        Route::get('{mode}/{id?}', [MarketingController::class, 'view'])->name('admin.marketing.view');
+        Route::get('view/{id}', [MarketingController::class, 'view'])->name('admin.marketing.view');
+        Route::get('create', [MarketingController::class, 'create'])->name('admin.marketing.create');
         Route::post('store', [MarketingController::class, 'store'])->name('admin.marketing.store');
         Route::post('update', [MarketingController::class, 'update'])->name('admin.marketing.update');
+
+        Route::middleware(['check_admin_level:3'])->group(function () {
+            Route::prefix('policy')->group(function () {
+                Route::get('/{id}/{mode}', [MarketingPolicyController::class, 'index'])->name('admin.marketing.policy');
+                Route::post('store', [MarketingPolicyController::class, 'store'])->name('admin.marketing.policy.store');
+                Route::post('update', [MarketingPolicyController::class, 'update'])->name('admin.marketing.policy.update');
+            });
+        });
     });
 
     Route::middleware(['check_admin_level:2'])->group(function () {

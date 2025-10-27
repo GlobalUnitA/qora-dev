@@ -39,7 +39,9 @@ class PolicyController extends Controller
         switch ($request->mode) {
             case 'create' :
 
-                return view('admin.mining.policy.create', compact('coins', 'locale'));
+                $marketings = Marketing::all();
+
+                return view('admin.mining.policy.create', compact('marketings', 'coins', 'locale'));
 
             case 'translation' :
 
@@ -51,8 +53,6 @@ class PolicyController extends Controller
             case 'policy' :
 
                 $view = MiningPolicy::find($request->id);
-
-                $marketings = Marketing::all();
 
                 $all_days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 
@@ -67,7 +67,7 @@ class PolicyController extends Controller
                     ->orderBy('policy_modify_logs.created_at', 'desc')
                     ->get();
 
-                return view('admin.mining.policy.view-policy', compact('coins','marketings', 'view', 'all_days', 'selected_days', 'modify_logs'));
+                return view('admin.mining.policy.view-policy', compact('coins', 'view', 'all_days', 'selected_days', 'modify_logs'));
 
             default :
 

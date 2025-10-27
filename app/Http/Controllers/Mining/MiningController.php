@@ -7,6 +7,7 @@ use App\Models\Asset;
 use App\Models\AssetTransfer;
 use App\Models\Income;
 use App\Models\IncomeTransfer;
+use App\Models\Marketing;
 use App\Models\Mining;
 use App\Models\MiningPolicy;
 use App\Models\MiningReward;
@@ -80,6 +81,22 @@ class MiningController extends Controller
                 'status' => 'error',
                 'message' =>  __('asset.lack_balance_notice'),
             ]);
+        }
+
+        if ($policy->marketing->is_required == 'n') {
+
+            $marketing = Marketing::where('is_required', 'y')->first();
+
+            $sum_coin_amount = Mining::where('user_id', $user->id)
+                ->where('policy_id', $marketing->policy?->id)
+                ->sum('coin_amount');
+
+            if ($request->coin_amount < 0 && $request->coin_amount > $sum_coin_amount * 10) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' =>  __('마이닝 참여가 불가합니다.'),
+                ]);
+            }
         }
 
         DB::beginTransaction();
