@@ -48,4 +48,5 @@ return array (
   'dismiss_today' => 'Không hiển thị hôm nay',
   'close' => 'Đóng',
   'modify_notice' => 'Chỉnh sửa thành công.',
+  'maturity_at' => 'Ngày thanh toán',
 );

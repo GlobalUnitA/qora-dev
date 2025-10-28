@@ -21,4 +21,7 @@ return array (
   'mining_list' => 'Lịch sử tham gia',
   'mining_period' => 'Thời gian khai thác',
   'collateral_amount' => 'Số lượng tài sản đảm bảo',
+  'required_mining_notice' => 'Vui lòng đăng ký sản phẩm bắt buộc.',
+  'max_mining_amount_notice' => 'Bạn đã vượt quá số lượng tham gia tối đa.',
+  'reward_count' => 'Số lần khai thác',
 );

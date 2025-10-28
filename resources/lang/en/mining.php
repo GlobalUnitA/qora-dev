@@ -21,4 +21,7 @@ return array (
   'mining_list' => 'Participation History',
   'mining_period' => 'Mining Period',
   'collateral_amount' => 'Collateral amount',
+  'required_mining_notice' => 'Please subscribe to the required product.',
+  'max_mining_amount_notice' => 'You have exceeded the maximum participation limit.',
+  'reward_count' => 'Number of mining attempts',
 );

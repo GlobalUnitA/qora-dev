@@ -21,4 +21,7 @@ return array (
   'mining_list' => '参加履歴',
   'mining_period' => 'マイニング期間',
   'collateral_amount' => '担保数量',
+  'required_mining_notice' => '必須商品に加入してください。',
+  'max_mining_amount_notice' => '最大参加数量を超えました。',
+  'reward_count' => '採掘回数',
 );
