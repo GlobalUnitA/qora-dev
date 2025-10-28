@@ -2,8 +2,8 @@
 
 @section('content')
 <header class="p-4 w-100 border-top-title" style="background: url('../images/tit_bg_01.png') center right no-repeat, #1e1e1f;" >
-    <h2 class="text-white mb-1 px-1">Mining</h2>
-    <h6 class="text-white mb-4 px-1">{{ __('mining.mining') }}</h6>
+    <h2 class="text-white mb-1 px-1">{{ $marketing->translationForLocale('en')['name'] }}</h2>
+    <h6 class="text-white mb-4 px-1">{{ $marketing->marketing_locale_name }}</h6>
     <div class="m-0 px-1">
         <a href="{{ route('mining.list') }}">
             <h5 class="btn btn-header text-white border-0 m-0">{{ __('mining.mining_list') }}</h5>

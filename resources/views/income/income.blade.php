@@ -106,18 +106,27 @@
                     <td>{{ $val->amount }}</td>
                     <td>
                         @if ($val->type === 'referral_bonus')
-                            {{ $val->referralBonus ? 'C' . $val->referralBonus->referrer_id : '' }}
+                            {{ $val->referralBonus ? $val->referralBonus->referrer_id : '' }}
                         @elseif ($val->type === 'referral_matching')
-                            {{ $val->referralMatching ? 'C' . $val->referralMatching->referrer_id : '' }}
+                            {{ $val->referralMatching ? $val->referralMatching->referrer_id : '' }}
                         @elseif ($val->type === 'level_bonus')
-                            {{ $val->levelBonus ? 'C' . $val->levelBonus->referrer_id : '' }}
+                            {{ $val->levelBonus ? $val->levelBonus->referrer_id : '' }}
                         @elseif ($val->type === 'level_matching')
-                            {{ $val->levelMatching ? 'C' . $val->levelMatching->referrer_id : '' }}
-                        @else
-                            {{ '' }}
+                            {{ $val->levelMatching ? $val->levelMatching->referrer_id : '' }}
                         @endif
                     </td>
-                    <td>{{ $val->type_text }}</td>
+                    <td>
+                        {{ $val->type_text }}
+                        @if ($val->type === 'referral_bonus')
+                            {!! '<br>(' . ($val->referralBonus->mining->policy->mining_locale_name ?? '') . ')' !!}
+                        @elseif ($val->type === 'referral_matching')
+                            {!! '<br>(' . ($val->referralMatching->bonus->mining->policy->mining_locale_name ?? '') . ')' !!}
+                        @elseif ($val->type === 'level_bonus')
+                            {!! '<br>(' . ($val->levelBonus->mining->policy->mining_locale_name ?? '') . ')' !!}
+                        @elseif ($val->type === 'level_matching')
+                            {!! '<br>(' . ($val->levelMatching->bonus->mining->policy->mining_locale_name ?? '') . ')' !!}
+                        @endif
+                    </td>
                 </tr>
                 @endforeach
                 @else

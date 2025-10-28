@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Mining;
 use App\Models\Asset;
 use App\Models\AssetTransfer;
 use App\Models\Income;
+use App\Models\Marketing;
 use App\Models\Mining;
 use App\Models\MiningPolicy;
 use App\Http\Controllers\Controller;
@@ -22,13 +23,14 @@ class MiningController extends Controller
 
     public function index($id)
     {
+        $marketing = Marketing::find($id);
         $assets = Asset::where('user_id', auth()->id())
             ->whereHas('coin', function ($query) {
                 $query->where('is_mining', 'y');
             })
             ->get();
 
-        return view('mining.mining', compact('assets'));
+        return view('mining.mining', compact('marketing', 'assets'));
     }
 
     public function data(Request $request)
