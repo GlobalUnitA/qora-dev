@@ -6,15 +6,11 @@ namespace App\Http\Controllers\Mining;
 use App\Models\Asset;
 use App\Models\AssetTransfer;
 use App\Models\Income;
-use App\Models\IncomeTransfer;
-use App\Models\Marketing;
 use App\Models\Mining;
 use App\Models\MiningPolicy;
-use App\Models\MiningReward;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 
 class MiningController extends Controller
@@ -85,16 +81,19 @@ class MiningController extends Controller
 
         if ($policy->marketing->is_required === 'n') {
 
-            $marketing = Marketing::where('is_required', 'y')->first();
+            $required_amount = $user->profile->getRequiredMarketingAmount();
 
-            $sum_coin_amount = Mining::where('user_id', $user->id)
-                ->where('policy_id', $marketing->policy?->id)
-                ->sum('coin_amount');
-
-            if ($sum_coin_amount < 0 && $request->coin_amount > $sum_coin_amount * 10) {
+            if ($required_amount <= 0 ) {
                 return response()->json([
                     'status' => 'error',
-                    'message' =>  __('마이닝 참여가 불가합니다.'),
+                    'message' =>  __('mining.required_mining_notice'),
+                ]);
+            }
+
+            if ($request->coin_amount > $required_amount * 10) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' =>  __('mining.max_mining_amount_notice'),
                 ]);
             }
         }
@@ -117,8 +116,8 @@ class MiningController extends Controller
                 'exchange_rate' => $request->exchange_rate,
                 'split_period' => $policy->split_period,
                 'reward_count' => 0,
+                'reward_limit' => $policy->reward_limit,
                 'started_at' => $date['start'],
-                'ended_at' => $date['end'],
                 'maturity_at' => $date['maturity'],
             ]);
 
@@ -164,7 +163,6 @@ class MiningController extends Controller
         $start = Carbon::today()->addDays($policy->waiting_period+1);
         return [
             'start' => $start,
-            'end' => $start->copy()->addDays($policy->split_period-1),
             'maturity' => $start->copy()->addDays($policy->contract_period-1),
         ];
     }

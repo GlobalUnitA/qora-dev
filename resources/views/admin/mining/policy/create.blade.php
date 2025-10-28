@@ -95,7 +95,7 @@
                             </tr>
                             <tr>
                                 <th class="text-center align-middle">대기 기간</th>
-                                <td class="align-middle d-flex" colspan="3">
+                                <td class="align-middle d-flex">
                                     <input type="text" name="waiting_period" class="form-control w-25">
                                     <div class="px-2 d-flex align-items-center">일</div>
                                 </td>
@@ -107,9 +107,25 @@
                             </tr>
                             <tr>
                                 <th class="text-center align-middle">계약 기간</th>
-                                <td class="align-middle d-flex" colspan="3">
+                                <td class="align-middle d-flex">
                                     <input type="text" name="contract_period" class="form-control w-25">
                                     <div class="px-2 d-flex align-items-center">일</div>
+                                </td>
+                                <th class="text-center align-middle">채굴 제한</th>
+                                <td class="align-middle d-flex">
+                                    <input type="text" name="reward_limit" class="form-control w-25">
+                                    <div class="px-2 d-flex align-items-center">회</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-center align-middle">채굴 가능 요일</th>
+                                <td colspan="3" class="align-middle">
+                                    @foreach($all_days as $key => $label)
+                                        <label class="me-2">
+                                            <input type="checkbox" name="reward_days[]" value="{{ $label }}" class="form-check-input">
+                                            {{ $label }}
+                                        </label>
+                                    @endforeach
                                 </td>
                             </tr>
                         </tbody>

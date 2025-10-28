@@ -33,6 +33,11 @@ class Marketing extends Model
         return $this->hasMany(MarketingTranslation::class, 'marketing_id', 'id');
     }
 
+    public function policy()
+    {
+        return $this->hasMany(MiningPolicy::class, 'marketing_id', 'id');
+    }
+
     public function getBenefitRulesTextAttribute()
     {
         $rules = $this->benefit_rules ?? [];

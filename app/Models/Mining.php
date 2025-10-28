@@ -25,8 +25,8 @@ class Mining extends Model
         'exchange_rate',
         'split_period',
         'reward_count',
+        'reward_limit',
         'started_at',
-        'ended_at',
         'maturity_at',
     ];
 
@@ -36,7 +36,6 @@ class Mining extends Model
         'node_amount' => 'decimal:9',
         'exchange_rate' => 'decimal:9',
         'started_at' => 'datetime:Y-m-d',
-        'ended_at' => 'datetime:Y-m-d',
         'maturity_at' => 'datetime:Y-m-d',
     ];
 
@@ -125,7 +124,7 @@ class Mining extends Model
 
         $today = now();
         $minings = self::where('started_at', '<=', $today)
-            ->whereColumn('reward_count', '<', 'split_period')
+            ->whereColumn('reward_count', '<', 'reward_limit')
             ->where('status','pending')
             ->get();
 
@@ -173,7 +172,7 @@ class Mining extends Model
         $today = now()->toDateString();
 
         $minings = self::whereDate('maturity_at', '<', $today)
-            ->whereColumn('split_period', '=', 'reward_count')
+            ->whereColumn('reward_limit', '=', 'reward_count')
             ->where('status', 'pending')
             ->get();
 

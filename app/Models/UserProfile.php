@@ -31,7 +31,6 @@ class UserProfile extends Model
     protected $appends = [
         'referral_count',
         'is_referral',
-        'has_mining',
     ];
 
     public function user()
@@ -75,14 +74,6 @@ class UserProfile extends Model
         }
 
         return $is_valid;
-    }
-
-    public function getHasMiningAttribute()
-    {
-        return DB::table('minings')
-            ->where('user_id', $this->user_id)
-            ->where('status', 'pending')
-            ->exists();
     }
 
     public function getParentTree($max_level = 20)
@@ -159,10 +150,37 @@ class UserProfile extends Model
         return $group_sales;
     }
 
+    public function getRequiredMarketingAmount()
+    {
+        $marketing = Marketing::where('is_required', 'y')->first();
+
+        if (!$marketing) {
+            return 0;
+        }
+
+        $policy_ids = $marketing->policy->pluck('id')->toArray();
+
+        if (empty($policy_ids)) {
+            return 0;
+        }
+
+        return Mining::where('user_id', $this->user_id)
+            ->whereIn('policy_id', $policy_ids)
+            ->sum('coin_amount');
+    }
+
+    public function getHasMining($policy_id)
+    {
+        return Mining::where('user_id', $this->user_id)
+            ->where('policy_id', $policy_id)
+            ->where('status', 'pending')
+            ->exists();
+    }
+
     public function referralBonus($mining)
     {
 
-        if ( $mining->getBenefitRule('referral_bonus') === 'n' ){
+        if ($mining->getBenefitRule('referral_bonus') === 'n'){
             Log::channel('bonus')->warning('This marketing does not allow a referral bonus.', ['mining_id' => $mining->id, 'marketing_id' => $mining->policy->marketing_id]);
             return;
         }
@@ -176,6 +194,8 @@ class UserProfile extends Model
             foreach ($parents as $level => $parent_profile) {
 
                 if ($parent_profile->is_valid === 'n') continue;
+
+                if (!$parent_profile->getHasMining($mining->policy_id)) continue;
 
                 $policy = ReferralPolicy::where('marketing_id', $mining->policy->marketing_id)
                     ->where('grade_id', $parent_profile->grade->id)
@@ -244,7 +264,7 @@ class UserProfile extends Model
 
     public function referralMatching($bonus)
     {
-        if ( $bonus->mining->getBenefitRule('referral_matching') === 'n' ){
+        if ($bonus->mining->getBenefitRule('referral_matching') === 'n'){
             Log::channel('bonus')->warning('This marketing does not allow a referral matching.', ['bonus_id' => $bonus->id, 'marketing_id' => $bonus->mining->policy->marketing_id]);
             return;
         }
@@ -255,6 +275,8 @@ class UserProfile extends Model
         foreach ($parents as $level => $parent_profile) {
 
             if ($parent_profile->is_valid === 'n') continue;
+
+            if (!$parent_profile->getHasMining($bonus->mining->policy_id)) continue;
 
             $policy = ReferralMatchingPolicy::where('marketing_id', $bonus->mining->policy->marketing_id)
                 ->where('grade_id', $parent_profile->grade->id)
@@ -440,7 +462,7 @@ class UserProfile extends Model
 
                 if ($parent_profile->is_valid === 'n') continue;
 
-                if (!$parent_profile->has_mining) continue;
+                if (!$parent_profile->getHasMining($mining->policy_id)) continue;
 
                 $condition = $parent_profile->checkLevelCondition($marketing_id);
 
@@ -559,7 +581,7 @@ class UserProfile extends Model
 
             if ($parent_profile->is_valid === 'n') continue;
 
-            if (!$parent_profile->has_mining) continue;
+            if (!$parent_profile->getHasMining($mining->policy_id)) continue;
 
             $condition = $parent_profile->checkLevelCondition($marketing_id);
 

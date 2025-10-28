@@ -53,8 +53,6 @@
                         <tr>
                             <th class="text-center align-middle">시작일</th>
                             <td class="align-middle">{{ date_format($view->started_at, 'Y-m-d') }}</td>
-                            <th class="text-center align-middle">종료일</th>
-                            <td class="align-middle">{{ date_format($view->ended_at, 'Y-m-d') }}</td>
                         </tr>
                     </tbody>
                 </table>

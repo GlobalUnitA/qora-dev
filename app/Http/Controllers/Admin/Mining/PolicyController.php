@@ -36,12 +36,14 @@ class PolicyController extends Controller
         $coins = Coin::all();
         $locale = LanguagePolicy::where('type', 'locale')->first()->content;
 
+        $all_days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+
         switch ($request->mode) {
             case 'create' :
 
                 $marketings = Marketing::all();
 
-                return view('admin.mining.policy.create', compact('marketings', 'coins', 'locale'));
+                return view('admin.mining.policy.create', compact('marketings', 'coins', 'locale', 'all_days'));
 
             case 'translation' :
 
@@ -53,8 +55,6 @@ class PolicyController extends Controller
             case 'policy' :
 
                 $view = MiningPolicy::find($request->id);
-
-                $all_days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 
                 $selected_days = explode(',', $view->reward_days ?? '');
 
@@ -106,7 +106,10 @@ class PolicyController extends Controller
 
         try {
 
-            $data = $request->except('translation');
+            $days = $request->input('reward_days', []);
+            $data = $request->except('translation', 'reward_days');
+
+            $data['reward_days'] = implode(',', $days);
             $mining_policy = MiningPolicy::create($data);
 
             MiningDailyStat::updateOrCreate([
