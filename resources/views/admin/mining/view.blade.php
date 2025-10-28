@@ -47,8 +47,8 @@
                                     {{ __('오류') }}
                                 @endif
                             </td>
-                            <th class="text-center align-middle">계약날짜</th>
-                            <td class="align-middle">{{ date_format($view->maturity_at, 'Y-m-d') }}</td>
+                            <th class="text-center align-middle">채굴 횟수</th>
+                            <td class="align-middle">{{ $view->reward_count }}</td>
                         </tr>
                         <tr>
                             <th class="text-center align-middle">시작일</th>

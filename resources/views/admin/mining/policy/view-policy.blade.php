@@ -105,13 +105,8 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th class="text-center align-middle">계약 기간</th>
-                                <td class="align-middle d-flex">
-                                    <input type="text" name="contract_period" value="{{ $view->contract_period }}" class="form-control w-25">
-                                    <div class="px-2 d-flex align-items-center">일</div>
-                                </td>
                                 <th class="text-center align-middle">채굴 제한</th>
-                                <td class="align-middle d-flex">
+                                <td class="align-middle d-flex" colspan="3">
                                     <input type="text" name="reward_limit" value="{{ $view->reward_limit }}" class="form-control w-25">
                                     <div class="px-2 d-flex align-items-center">회</div>
                                 </td>

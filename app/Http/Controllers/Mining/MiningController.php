@@ -118,7 +118,6 @@ class MiningController extends Controller
                 'reward_count' => 0,
                 'reward_limit' => $policy->reward_limit,
                 'started_at' => $date['start'],
-                'maturity_at' => $date['maturity'],
             ]);
 
             AssetTransfer::create([
@@ -163,7 +162,6 @@ class MiningController extends Controller
         $start = Carbon::today()->addDays($policy->waiting_period+1);
         return [
             'start' => $start,
-            'maturity' => $start->copy()->addDays($policy->contract_period-1),
         ];
     }
 

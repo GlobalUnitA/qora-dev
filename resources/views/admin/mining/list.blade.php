@@ -77,7 +77,6 @@
                                         <th scope="col" class="text-center">상품이름</th>
                                         <th scope="col" class="text-center">분할기간</th>
                                         <th scope="col" class="text-center">상태</th>
-                                        <th scope="col" class="text-center">상환 예정일</th>
                                         <th scope="col" class="text-center">일자</th>
                                     </tr>
                                 </thead>
@@ -102,7 +101,6 @@
                                                     {{ __('만료') }}
                                             @endswitch
                                         </td>
-                                        <td scope="col" class="text-center">{{ $value->maturity_at->format('Y-m-d') }}</td>
                                         <td scope="col" class="text-center">{{ $value->created_at }}</td>
                                     </tr>
                                     @endforeach

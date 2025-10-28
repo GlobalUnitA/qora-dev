@@ -31,7 +31,7 @@ return new class extends Migration
 
             $table->timestamp('started_at')->nullable()->comment('시작일');
             $table->timestamp('ended_at')->nullable()->comment('종료일');
-            $table->timestamp('maturity_at')->nullable()->comment('상환 예정일');
+            $table->timestamp('maturity_at')->nullable()->comment('상환일');
 
             $table->timestamps();
         });

@@ -147,7 +147,13 @@ class Mining extends Model
                     'ended_at' => $today->copy()->addDays($mining->split_period-1),
                 ]);
 
-                $mining->increment('reward_count');
+                $mining->reward_count += 1;
+
+                if ($mining->reward_count >= $mining->reward_limit) {
+                    $mining->maturity_at = now()->addDay();
+                }
+
+                $mining->save();
 
                 DB::commit();
 

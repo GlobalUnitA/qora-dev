@@ -11,14 +11,12 @@
             <label class="form-label">{{ __('mining.max_node_amount') }}</label>
             <input type="text" value="{{ $mining->node_limit }}" class="form-control mb-3" readonly>
         </div>
+        {{--
         <div class="my-4">
             <label class="form-label">{{ __('system.period') }}</label>
             <input type="text" value="{{ $mining->split_period }}" class="form-control mb-3" readonly>
         </div>
-        <div class="my-4 mb-5">
-            <label class="form-label">{{ __('mining.reward_count') }}</label>
-            <input type="text" value="{{ $mining->reward_limit }}" class="form-control mb-3" readonly>
-        </div>
+        --}}
         <div class="p-4 rounded bg-light text-black mb-2">
             <div class="row g-3">
                 <div class="col-6">
@@ -26,8 +24,8 @@
                     <h3 class="text-primary fs-6 mb-1">{{ date_format($date['start'], 'Y-m-d') }}</h3>
                 </div>
                 <div class="col-6">
-                    <p class="text-body fs-4 m-0">{{ __('system.maturity_at') }}</p>
-                    <h3 class="text-primary fs-6 mb-1">{{ date_format($date['maturity'], 'Y-m-d') }}</h3>
+                    <p class="text-body fs-4 m-0">{{ __('mining.reward_count') }}</p>
+                    <h3 class="text-primary fs-6 mb-1">{{ $mining->reward_limit }}</h3>
                 </div>
             </div>
         </div>
