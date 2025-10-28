@@ -48,15 +48,15 @@
                         @endif
                     </td>
                     <td>
-                        {{ $val->type_text }}
-                        @if ($val->type === 'referral_bonus')
-                            {!! '<br>(' . ($val->referralBonus->mining->policy->mining_locale_name ?? '') . ')' !!}
-                        @elseif ($val->type === 'referral_matching')
-                            {!! '<br>(' . ($val->referralMatching->bonus->mining->policy->mining_locale_name ?? '') . ')' !!}
-                        @elseif ($val->type === 'level_bonus')
-                            {!! '<br>(' . ($val->levelBonus->mining->policy->mining_locale_name ?? '') . ')' !!}
-                        @elseif ($val->type === 'level_matching')
-                            {!! '<br>(' . ($val->levelMatching->bonus->mining->policy->mining_locale_name ?? '') . ')' !!}
+                        {{ $value->type_text }}
+                        @if ($value->type === 'referral_bonus')
+                            {!! '<br>(' . ($value->referralBonus->mining->policy->mining_locale_name ?? '') . ')' !!}
+                        @elseif ($value->type === 'referral_matching')
+                            {!! '<br>(' . ($value->referralMatching->bonus->mining->policy->mining_locale_name ?? '') . ')' !!}
+                        @elseif ($value->type === 'level_bonus')
+                            {!! '<br>(' . ($value->levelBonus->mining->policy->mining_locale_name ?? '') . ')' !!}
+                        @elseif ($value->type === 'level_matching')
+                            {!! '<br>(' . ($value->levelMatching->bonus->mining->policy->mining_locale_name ?? '') . ')' !!}
                         @endif
                     </td>
                 </tr>
