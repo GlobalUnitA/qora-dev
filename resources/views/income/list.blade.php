@@ -47,7 +47,18 @@
                             {{ '' }}
                         @endif
                     </td>
-                    <td>{{ $value->type_text }}</td>
+                    <td>
+                        {{ $val->type_text }}
+                        @if ($val->type === 'referral_bonus')
+                            {!! '<br>(' . ($val->referralBonus->mining->policy->mining_locale_name ?? '') . ')' !!}
+                        @elseif ($val->type === 'referral_matching')
+                            {!! '<br>(' . ($val->referralMatching->bonus->mining->policy->mining_locale_name ?? '') . ')' !!}
+                        @elseif ($val->type === 'level_bonus')
+                            {!! '<br>(' . ($val->levelBonus->mining->policy->mining_locale_name ?? '') . ')' !!}
+                        @elseif ($val->type === 'level_matching')
+                            {!! '<br>(' . ($val->levelMatching->bonus->mining->policy->mining_locale_name ?? '') . ')' !!}
+                        @endif
+                    </td>
                 </tr>
                 @endforeach
                 @else
