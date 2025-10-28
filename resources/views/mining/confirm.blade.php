@@ -29,7 +29,7 @@
                 </div>
             </div>
         </div>
-        <p class="mb-5">{!! nl2br(e($mining->mining_locale_memo)) !!}</p>
+        <p class="mb-5 mt-4 fs-4">{!! nl2br(e($mining->mining_locale_memo)) !!}</p>
         <form method="post" action="{{ route('mining.store') }}" id="ajaxForm">
             @csrf
             <input type="hidden" name="policy" value="{{ $mining->id }}">
