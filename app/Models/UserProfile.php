@@ -741,7 +741,7 @@ class UserProfile extends Model
 
             Log::channel('user')->info("User ID {$this->user_id} level up: {$current_level} → {$next_level}, self_sales : {$self_sales}, group_sales : {$group_sales}");
 
-            $this->checkLevelUp($next_level, $self_sales, $group_sales);
+            $this->checkLevelUp($next_level, $referral_count, $self_sales, $group_sales);
         }
 
         return;
