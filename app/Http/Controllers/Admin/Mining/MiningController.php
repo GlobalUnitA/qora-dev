@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin\Mining;
 use App\Models\Mining;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 
 class MiningController extends Controller
@@ -59,8 +58,13 @@ class MiningController extends Controller
 
     public function view(Request $request)
     {
-        $start_date = $request->start_date ?? today()->startOfDay();
-        $end_date = $request->end_date ?? today()->endOfDay();
+        $start_date = $request->start_date
+            ? Carbon::parse($request->start_date)->startOfDay()
+            : today()->startOfDay();
+
+        $end_date = $request->end_date
+            ? Carbon::parse($request->end_date)->endOfDay()
+            : today()->endOfDay();
 
         $view = Mining::find($request->id);
 
