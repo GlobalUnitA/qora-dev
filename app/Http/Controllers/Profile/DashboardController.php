@@ -39,24 +39,19 @@ class DashboardController extends Controller
         $minings = Mining::where('user_id', auth()->id())->get();
         $coins = Coin::all();
 
-        $total_node_amount = [];
+        $total_node_amount = $minings->sum('node_amount');
         $total_staking = [];
         $total_reward = [];
 
         foreach ($coins as $coin) {
-            $total_node_amount[$coin->code] = 0;
             $total_staking[$coin->code] = 0;
             $total_reward[$coin->code] = 0;
         }
 
         foreach ($minings as $mining) {
-            $asset = Asset::find($mining->asset_id);
             $refund = Asset::find($mining->refund_id);
             $income = Income::find($mining->reward_id);
             foreach ($coins as $coin) {
-                if ($asset->coin_id === $coin->id) {
-                    $total_node_amount[$coin->code] += $mining->node_amount;
-                }
                 if ($refund->coin_id === $coin->id) {
                     $total_staking[$coin->code] += $mining->refund_coin_amount;
                 }
@@ -66,10 +61,8 @@ class DashboardController extends Controller
             }
         }
 
-        $total_node_amount = array_filter($total_node_amount, fn($v) => $v != 0);
         $total_staking = array_filter($total_staking, fn($v) => $v != 0);
         $total_reward = array_filter($total_reward, fn($v) => $v != 0);
-
 
         return [
             'grade' => $grade,

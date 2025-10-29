@@ -22,14 +22,12 @@
                     {{ __('user.level') }}<span class="text-body fw-semibold ps-2 d-inline-block">{{ $data['grade'] }}</span>
                 </p>
                 <div class="p-4 rounded bg-light text-body mb-4">
-                    @foreach ($data['total_node_amount'] as $coin => $node_amount)
                     <div class="row g-3 mb-3">
                         <div class="col-12 col-sm-6">
-                            <p class="text-body fs-4 m-0">{{ __('mining.total_node').' ('.$coin.')' }}</p>
-                            <h3 class="text-primary fs-6 mb-1">{{ $node_amount }}</h3>
+                            <p class="text-body fs-4 m-0">{{ __('mining.total_node') }}</p>
+                            <h3 class="text-primary fs-6 mb-1">{{ $data['total_node_amount'] }}</h3>
                         </div>
                     </div>
-                    @endforeach
                     @foreach ($data['total_staking'] as $coin => $staking)
                         <div class="row g-3 mb-3">
                             <div class="col-12 col-sm-6">
