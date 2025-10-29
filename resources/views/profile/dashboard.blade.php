@@ -22,24 +22,30 @@
                     {{ __('user.level') }}<span class="text-body fw-semibold ps-2 d-inline-block">{{ $data['grade'] }}</span>
                 </p>
                 <div class="p-4 rounded bg-light text-body mb-4">
+                    @foreach ($data['total_node_amount'] as $coin => $node_amount)
                     <div class="row g-3 mb-3">
                         <div class="col-12 col-sm-6">
-                            <p class="text-body fs-4 m-0">{{ __('mining.total_node') }}</p>
-                            <h3 class="text-primary fs-6 mb-1">{{ $data['total_node_amount'] }}</h3>
+                            <p class="text-body fs-4 m-0">{{ __('mining.total_node').' ('.$coin.')' }}</p>
+                            <h3 class="text-primary fs-6 mb-1">{{ $node_amount }}</h3>
                         </div>
                     </div>
-                    <div class="row g-3 mb-3">
-                        <div class="col-12 col-sm-6">
-                            <p class="text-body fs-4 m-0">{{ __('mining.total_staking') }}</p>
-                            <h3 class="text-primary fs-6 mb-1">{{ $data['total_staking'] }}</h3>
+                    @endforeach
+                    @foreach ($data['total_staking'] as $coin => $staking)
+                        <div class="row g-3 mb-3">
+                            <div class="col-12 col-sm-6">
+                                <p class="text-body fs-4 m-0">{{ __('mining.total_staking').' ('.$coin.')' }}</p>
+                                <h3 class="text-primary fs-6 mb-1">{{ $staking }}</h3>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row g-3 mb-3">
-                        <div class="col-12 col-sm-6">
-                            <p class="text-body fs-4 m-0">{{ __('mining.total_mining') }}</p>
-                            <h3 class="text-primary fs-6 mb-1">0</h3>
+                    @endforeach
+                    @foreach ($data['total_reward'] as $coin => $reward)
+                        <div class="row g-3 mb-3">
+                            <div class="col-12 col-sm-6">
+                                <p class="text-body fs-4 m-0">{{ __('mining.total_mining').' ('.$coin.')' }}</p>
+                                <h3 class="text-primary fs-6 mb-1">{{ $reward }}</h3>
+                            </div>
                         </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
             <div class="tab-pane fade show @if(request()->has('team')) active @endif" id="dashboard-myteam" role="tabpanel" aria-labelledby="dashboard-myteam-tab" tabindex="0">
