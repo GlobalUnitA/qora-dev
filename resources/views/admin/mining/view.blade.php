@@ -64,7 +64,7 @@
                 </div>
             </div>
         </div>
-        @if(!$view->rewards)
+        @if ($view->rewards->isNotEmpty())
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
@@ -111,7 +111,7 @@
                 </div>
             </div>
         @endif
-        @if(!$level_bonus)
+        @if ($level_bonus->isNotEmpty())
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
