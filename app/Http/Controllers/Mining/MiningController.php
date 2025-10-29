@@ -85,16 +85,16 @@ class MiningController extends Controller
 
         if ($policy->marketing->is_required === 'n') {
 
-            $required_amount = $user->profile->getRequiredMarketingAmount();
+            $coin_amount = $user->profile->getMarketingAmount();
 
-            if ($required_amount <= 0 ) {
+            if ($coin_amount['required'] <= 0 ) {
                 return response()->json([
                     'status' => 'error',
                     'message' =>  __('mining.required_mining_notice'),
                 ]);
             }
 
-            if ($request->coin_amount > $required_amount * 10) {
+            if ($request->coin_amount + $coin_amount['other'] > $coin_amount['required'] * 10) {
                 return response()->json([
                     'status' => 'error',
                     'message' =>  __('mining.max_mining_amount_notice'),

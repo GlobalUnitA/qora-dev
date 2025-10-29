@@ -150,23 +150,25 @@ class UserProfile extends Model
         return $group_sales;
     }
 
-    public function getRequiredMarketingAmount()
+    public function getMarketingAmount()
     {
-        $marketing = Marketing::where('is_required', 'y')->first();
+        $amount = ['required' => 0, 'other' => 0];
 
-        if (!$marketing) {
-            return 0;
-        }
+        $marketing = Marketing::where('is_required', 'y')->first();
+        if (!$marketing) return $amount;
 
         $policy_ids = $marketing->policy->pluck('id')->toArray();
+        if (empty($policy_ids)) return $amount;
 
-        if (empty($policy_ids)) {
-            return 0;
-        }
-
-        return Mining::where('user_id', $this->user_id)
+        $amount['required'] = Mining::where('user_id', $this->user_id)
             ->whereIn('policy_id', $policy_ids)
             ->sum('coin_amount');
+
+        $amount['other'] = Mining::where('user_id', $this->user_id)
+            ->whereNotIn('policy_id', $policy_ids)
+            ->sum('coin_amount');
+
+        return $amount;
     }
 
     public function getHasMining($policy_id)
