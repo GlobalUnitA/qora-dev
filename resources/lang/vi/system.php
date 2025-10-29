@@ -49,4 +49,6 @@ return array (
   'close' => 'Đóng',
   'modify_notice' => 'Chỉnh sửa thành công.',
   'maturity_at' => 'Ngày thanh toán',
+  'instant' => 'Trả',
+  'split' => 'Trả',
 );

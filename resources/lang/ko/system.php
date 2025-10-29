@@ -49,4 +49,6 @@ return array (
   'close' => '닫기',
   'modify_notice' => '수정되었습니다.',
   'maturity_at' => '상환일',
+  'instant' => '즉시',
+  'split' => '분할',
 );

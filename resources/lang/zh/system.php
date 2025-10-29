@@ -50,4 +50,6 @@ return array (
   'close' => '关闭',
   'modify_notice' => '修改成功。',
   'maturity_at' => '返还日期',
+  'instant' => '立即',
+  'split' => '分期',
 );

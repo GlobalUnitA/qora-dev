@@ -49,4 +49,6 @@ return array (
   'close' => '閉じる',
   'modify_notice' => '修正済みです。',
   'maturity_at' => '返済日',
+  'instant' => 'すぐに',
+  'split' => '分割',
 );
