@@ -15,10 +15,6 @@ use App\Models\AssetPolicy;
 use App\Models\AssetTransfer;
 use App\Models\Income;
 use App\Models\IncomeTransfer;
-use App\Models\StakingPolicy;
-use App\Models\StakingProfit;
-use App\Models\StakingRefund;
-use App\Models\StakingReward;
 use App\Models\ReferralMatchingPolicy;
 use App\Models\Staking;
 use Illuminate\Http\Request;
@@ -40,16 +36,16 @@ class TestController extends Controller
     }
    public function index()
     {
-/*
+
         $policies = MiningPolicy::all();
 
         foreach ($policies as $policy) {
             $policy->setDailyStat();
         }
-*/
-        
-        //Mining::storeMiningReward();
+
+
+        Mining::storeMiningReward();
         MiningReward::distributeProfit();
-  
+
     }
 }

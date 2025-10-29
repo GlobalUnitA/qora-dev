@@ -17,9 +17,9 @@ class MiningReward extends Model
         'mining_id',
         'reward',
         'reward_date',
+        'start_date',
+        'end_date',
         'profit_count',
-        'started_at',
-        'ended_at',
     ];
 
     protected $casts = [
@@ -99,8 +99,8 @@ class MiningReward extends Model
         Log::channel('mining')->info('distribute Daily Mining Profit');
 
         $today = now();
-        $rewards = self::whereDate('started_at', '<=', $today)
-            ->whereDate('ended_at', '>=', $today)
+        $rewards = self::whereDate('start_date', '<=', $today)
+            ->whereDate('end_date', '>=', $today)
             ->get();
 
         foreach ($rewards as $reward) {

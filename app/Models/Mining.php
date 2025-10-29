@@ -143,8 +143,8 @@ class Mining extends Model
                     'mining_id' => $mining->id,
                     'reward' => $reward,
                     'reward_date' => $today,
-                    'started_at' => $today,
-                    'ended_at' => $today->copy()->addDays($mining->split_period-1),
+                    'start_date' => $today,
+                    'end_date' => $today->copy()->addDays($mining->split_period),
                 ]);
 
                 $mining->reward_count += 1;
