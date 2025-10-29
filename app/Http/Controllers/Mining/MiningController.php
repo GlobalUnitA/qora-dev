@@ -53,6 +53,8 @@ class MiningController extends Controller
     {
         $mining = MiningPolicy::find($id);
 
+        $marketing = Marketing::find($mining->marketing_id);
+
         $asset = Asset::where('user_id', auth()->id())
             ->where('coin_id', $mining->coin_id)
             ->first();
@@ -61,7 +63,7 @@ class MiningController extends Controller
 
         $date = $this->getMiningDate($mining);
 
-        return view('mining.confirm', compact('mining', 'date', 'balance'));
+        return view('mining.confirm', compact('marketing', 'mining', 'date', 'balance'));
     }
 
     public function store(Request $request)

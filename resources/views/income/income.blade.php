@@ -117,7 +117,13 @@
                     </td>
                     <td>
                         {{ $val->type_text }}
-                        @if ($val->type === 'referral_bonus')
+                        @if ($val->type === 'mining_profit')
+                            @if ($val->miningProfit->type == 'instant')
+                                {{ '('.__('system.instant').')' }}
+                            @else
+                                {{ '('.__('system.split').')' }}
+                            @endif
+                        @elseif ($val->type === 'referral_bonus')
                             {!! '<br>(' . ($val->referralBonus->mining->policy->mining_locale_name ?? '') . ')' !!}
                         @elseif ($val->type === 'referral_matching')
                             {!! '<br>(' . ($val->referralMatching->bonus->mining->policy->mining_locale_name ?? '') . ')' !!}

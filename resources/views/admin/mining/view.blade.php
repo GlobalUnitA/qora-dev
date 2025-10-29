@@ -59,29 +59,54 @@
                 <hr>
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <a href="{{ route('admin.asset.list') }}" class="btn btn-secondary">목록</a>
+                        <a href="{{ route('admin.mining.list', ['status' => 'pending']) }}" class="btn btn-secondary">목록</a>
                     </div>
                 </div>
             </div>
         </div>
-        @if ($view->rewards->isNotEmpty())
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="card-title">마이닝 수익 목록</h5>
+        <div class="card">
+            <div class="card-body">
+                <form action="{{ route('admin.mining.view', ['id' => $view->id]) }}" method="GET">
+                    <div class="row align-items-center">
+                        <div class="col-12 col-md-3 mb-2">
+                            <label for="start_date" class="sr-only">Start Date</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-calendar"></i></span>
+                                <input type="date" name="start_date" id="start_date" class="form-control" value="{{ request()->get('start_date') ?? today()->toDateString() }}">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-3 mb-2">
+                            <label for="end_date" class="sr-only">End Date</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-calendar"></i></span>
+                                <input type="date" name="end_date" id="end_date" class="form-control" value="{{ request()->get('end_date') ?? today()->toDateString() }}">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-2 text-center mt-2">
+                            <button type="submit" class="btn btn-primary">Search</button>
+                        </div>
                     </div>
-                    <div class="table-responsive">
-                        <table class="table text-nowrap align-middle mb-0 table-striped table-hover">
-                            <thead>
-                            <tr class="border-2 border-bottom border-primary border-0">
-                                <th scope="col" class="text-center">채굴날짜</th>
-                                <th scope="col" class="text-center">채굴량/수익</th>
-                                <th scope="col" class="text-center">타입</th>
-                                <th scope="col" class="text-center">일자</th>
-                            </tr>
-                            </thead>
-                            <tbody class="table-group-divider">
-                            @foreach ($view->rewards as $reward)
+                </form>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="card-title">마이닝 수익 목록</h5>
+                </div>
+                <div class="table-responsive">
+                    <table class="table text-nowrap align-middle mb-0 table-striped table-hover">
+                        <thead>
+                        <tr class="border-2 border-bottom border-primary border-0">
+                            <th scope="col" class="text-center">채굴날짜</th>
+                            <th scope="col" class="text-center">채굴량/수익</th>
+                            <th scope="col" class="text-center">타입</th>
+                            <th scope="col" class="text-center">일자</th>
+                        </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                        @if($rewards->isNotEmpty())
+                            @foreach($rewards as $reward)
                                 <tr>
                                     <td class="text-center">{{ $reward->reward_date }}</td>
                                     <td class="text-center">{{ $reward->reward }}</td>
@@ -105,36 +130,40 @@
                                     </tr>
                                 @endforeach
                             @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                        @else
+                            <tr>
+                                <td class="text-center" colspan="4">No Data.</td>
+                            </tr>
+                        @endif
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        @endif
-        @if ($level_bonus->isNotEmpty())
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="card-title">레벨 보너스 목록</h5>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table text-nowrap align-middle mb-0 table-striped table-hover">
-                            <thead>
-                            <tr class="border-2 border-bottom border-primary border-0">
-                                <th scope="col" class="text-center">번호</th>
-                                <th scope="col" class="text-center">UID</th>
-                                <th scope="col" class="text-center">이름</th>
-                                <th scope="col" class="text-center">등급</th>
-                                <th scope="col" class="text-center">종류</th>
-                                <th scope="col" class="text-center">보너스 / 매칭</th>
-                                <th scope="col" class="text-center">상태</th>
-                                <th scope="col" class="text-center">산하ID</th>
-                                <th scope="col" class="text-center">데일리 / 보너스</th>
-                                <th scope="col" class="text-center">일자</th>
-                            </tr>
-                            </thead>
-                            <tbody class="table-group-divider">
-                            @foreach ($level_bonus as $bonus )
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="card-title">레벨 보너스 목록</h5>
+                </div>
+                <div class="table-responsive">
+                    <table class="table text-nowrap align-middle mb-0 table-striped table-hover">
+                        <thead>
+                        <tr class="border-2 border-bottom border-primary border-0">
+                            <th scope="col" class="text-center">번호</th>
+                            <th scope="col" class="text-center">UID</th>
+                            <th scope="col" class="text-center">이름</th>
+                            <th scope="col" class="text-center">등급</th>
+                            <th scope="col" class="text-center">종류</th>
+                            <th scope="col" class="text-center">보너스 / 매칭</th>
+                            <th scope="col" class="text-center">상태</th>
+                            <th scope="col" class="text-center">산하ID</th>
+                            <th scope="col" class="text-center">데일리 / 보너스</th>
+                            <th scope="col" class="text-center">일자</th>
+                        </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                        @if($level_bonuses->isNotEmpty())
+                            @foreach($level_bonuses as $bonus)
                                 <tr>
                                     <td class="text-center">{{ $loop->iteration }}</td>
                                     <td class="text-center">{{ $bonus->user_id }}</td>
@@ -196,36 +225,40 @@
                                     </tr>
                                 @endforeach
                             @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                        @else
+                            <tr>
+                                <td class="text-center" colspan="10">No Data.</td>
+                            </tr>
+                        @endif
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        @endif
-        @if ($view->referralBonus->isNotEmpty())
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="card-title">추천 보너스 목록</h5>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table text-nowrap align-middle mb-0 table-striped table-hover">
-                            <thead>
-                            <tr class="border-2 border-bottom border-primary border-0">
-                                <th scope="col" class="text-center">번호</th>
-                                <th scope="col" class="text-center">UID</th>
-                                <th scope="col" class="text-center">이름</th>
-                                <th scope="col" class="text-center">등급</th>
-                                <th scope="col" class="text-center">종류</th>
-                                <th scope="col" class="text-center">보너스 / 매칭</th>
-                                <th scope="col" class="text-center">상태</th>
-                                <th scope="col" class="text-center">산하ID</th>
-                                <th scope="col" class="text-center">참여금액 / 보너스</th>
-                                <th scope="col" class="text-center">일자</th>
-                            </tr>
-                            </thead>
-                            <tbody class="table-group-divider">
-                            @foreach ($view->referralBonus as $bonus )
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="card-title">추천 보너스 목록</h5>
+                </div>
+                <div class="table-responsive">
+                    <table class="table text-nowrap align-middle mb-0 table-striped table-hover">
+                        <thead>
+                        <tr class="border-2 border-bottom border-primary border-0">
+                            <th scope="col" class="text-center">번호</th>
+                            <th scope="col" class="text-center">UID</th>
+                            <th scope="col" class="text-center">이름</th>
+                            <th scope="col" class="text-center">등급</th>
+                            <th scope="col" class="text-center">종류</th>
+                            <th scope="col" class="text-center">보너스 / 매칭</th>
+                            <th scope="col" class="text-center">상태</th>
+                            <th scope="col" class="text-center">산하ID</th>
+                            <th scope="col" class="text-center">참여금액 / 보너스</th>
+                            <th scope="col" class="text-center">일자</th>
+                        </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                        @if ($referral_bonuses->isNotEmpty())
+                            @foreach ($referral_bonuses as $bonus)
                                 <tr>
                                     <td class="text-center">{{ $loop->iteration }}</td>
                                     <td class="text-center">{{ $bonus->user_id }}</td>
@@ -287,12 +320,16 @@
                                     </tr>
                                 @endforeach
                             @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                        @else
+                            <tr>
+                                <td class="text-center" colspan="10">No Data.</td>
+                            </tr>
+                        @endif
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        @endif
+        </div>
     </div>
 </div>
 @endsection
