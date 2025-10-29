@@ -237,7 +237,7 @@
             <h3 class="text-white pb-4">Innovation<br>Together</h3>
         </div>
         <video class="bg-video__content" autoplay="" muted="" loop="" playsinline="">
-            <source src="{{ asset('images/main_video.mp4') }}" type="video/mp4" />
+            <source src="{{ asset('images/main_bg_video.mp4') }}" type="video/mp4" />
         </video>
     </div>
 </main>
