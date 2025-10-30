@@ -130,7 +130,7 @@
                             {!! !empty($name) ? '<br>(' . e($name) . ')' : '' !!}
                         @elseif ($val->type === 'referral_matching')
                             @php
-                                $name = optional(optional(optional($val->referralMatching)->bonus)->mining)->policy->mining_locale_name;
+                                $name = optional(optional(optional(optional($val->referralMatching)->bonus)->mining)->policy)->mining_locale_name;
                             @endphp
                             {!! !empty($name) ? '<br>(' . e($name) . ')' : '' !!}
                         @elseif ($val->type === 'level_bonus')
@@ -140,7 +140,7 @@
                             {!! !empty($name) ? '<br>(' . e($name) . ')' : '' !!}
                         @elseif ($val->type === 'level_matching')
                             @php
-                                $name = optional(optional(optional($val->levelMatching)->bonus)->mining)->policy->mining_locale_name;
+                                $name = optional(optional(optional(optional($val->levelMatching)->bonus)->mining)->policy)->mining_locale_name;
                             @endphp
                             {!! !empty($name) ? '<br>(' . e($name) . ')' : '' !!}
                         @endif
