@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('mining_rewards', function (Blueprint $table) {
             $table->date('start_date')->nullable()->comment('시작일')->after('reward_date');
-            $table->date('end_date')->nullable()->comment('종료일')->after('started_at');
+            $table->date('end_date')->nullable()->comment('종료일')->after('start_date');
             $table->unsignedInteger('profit_count')->default(0)->comment('분할 수익 지급 횟수')->after('end_date');
 
         });
