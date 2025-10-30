@@ -103,7 +103,7 @@
                                             @endswitch
                                         </td>
                                         <td scope="col" class="text-center">{{ $value->referralBonus->referrer_id }}</td>
-                                        <td scope="col" class="text-center">{{ $value->referralBonus->mining->coin_amount }}</td>
+                                        <td scope="col" class="text-center">{{ optional(optional($value->referralBonus)->mining)->coin_amount ?? '-' }}</td>
                                         <td scope="col" class="text-center">{{ $value->created_at }}</td>
                                     </tr>
                                     @endforeach
