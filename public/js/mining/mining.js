@@ -47,7 +47,7 @@ $(document).ready(function() {
         const inputValue = $(this).val().trim();
         const exchangeRate = parseFloat($("#exchangeRate").val());
 
-        const isNumeric = /^(\d+(\.\d+)?)$/.test(inputValue);
+        const isNumeric = /^(\d+(\.\d*)?)?$/.test(inputValue);
 
         if (!isNumeric || parseFloat(inputValue) < 1) {
             $(this).val('');
