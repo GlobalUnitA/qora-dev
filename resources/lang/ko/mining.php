@@ -9,7 +9,7 @@ return array (
   'total_mining_matching_bonus' => '채굴 매칭 보너스 합계',
   'total_node' => '가입 상품 수량',
   'total_staking' => '스테이킹 합계',
-  'total_mining' => '채굴수량 합계 (DOBUY)',
+  'total_mining' => '데일리수익 합계',
   'mining' => '노드 마이닝',
   'max_node_amount' => '최대 수량',
   'node_amount' => '수량',
