@@ -122,10 +122,26 @@ class IncomeController extends Controller
                     default => null,
                 },
                 'type_text' => match ($item->type) {
-                    'referral_bonus' => $item->type_text . '<br>(' . ($item->referralBonus->mining->policy->mining_locale_name ?? '') . ')',
-                    'referral_matching' => $item->type_text . '<br>(' . ($item->referralMatching->bonus->mining->policy->mining_locale_name ?? '') . ')',
-                    'level_bonus' => $item->type_text . '<br>(' . ($item->levelBonus->mining->policy->mining_locale_name ?? '') . ')',
-                    'level_matching' => $item->type_text . '<br>(' . ($item->levelMatching->bonus->mining->policy->mining_locale_name ?? '') . ')',
+                    'referral_bonus' => $item->type_text . (
+                        !empty(optional(optional(optional($item->referralBonus)->mining)->policy)->mining_locale_name)
+                            ? '<br>(' . $item->referralBonus->mining->policy->mining_locale_name . ')'
+                            : ''
+                        ),
+                    'referral_matching' => $item->type_text . (
+                        !empty(optional(optional(optional($item->referralMatching)->bonus)->mining)->policy->mining_locale_name)
+                            ? '<br>(' . $item->referralMatching->bonus->mining->policy->mining_locale_name . ')'
+                            : ''
+                        ),
+                    'level_bonus' => $item->type_text . (
+                        !empty(optional(optional(optional($item->levelBonus)->mining)->policy)->mining_locale_name)
+                            ? '<br>(' . $item->levelBonus->mining->policy->mining_locale_name . ')'
+                            : ''
+                        ),
+                    'level_matching' => $item->type_text . (
+                        !empty(optional(optional(optional($item->levelMatching)->bonus)->mining)->policy->mining_locale_name)
+                            ? '<br>(' . $item->levelMatching->bonus->mining->policy->mining_locale_name . ')'
+                            : ''
+                        ),
                     default => $item->type_text,
                 },
             ];

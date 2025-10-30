@@ -124,13 +124,25 @@
                                 {{ '('.__('system.split').')' }}
                             @endif
                         @elseif ($val->type === 'referral_bonus')
-                            {!! '<br>(' . ($val->referralBonus->mining->policy->mining_locale_name ?? '') . ')' !!}
+                            @php
+                                $name = optional(optional(optional($val->referralBonus)->mining)->policy)->mining_locale_name;
+                            @endphp
+                            {!! !empty($name) ? '<br>(' . e($name) . ')' : '' !!}
                         @elseif ($val->type === 'referral_matching')
-                            {!! '<br>(' . ($val->referralMatching->bonus->mining->policy->mining_locale_name ?? '') . ')' !!}
+                            @php
+                                $name = optional(optional(optional($val->referralMatching)->bonus)->mining)->policy->mining_locale_name;
+                            @endphp
+                            {!! !empty($name) ? '<br>(' . e($name) . ')' : '' !!}
                         @elseif ($val->type === 'level_bonus')
-                            {!! '<br>(' . ($val->levelBonus->mining->policy->mining_locale_name ?? '') . ')' !!}
+                            @php
+                                $name = optional(optional(optional($val->levelBonus)->mining)->policy)->mining_locale_name;
+                            @endphp
+                            {!! !empty($name) ? '<br>(' . e($name) . ')' : '' !!}
                         @elseif ($val->type === 'level_matching')
-                            {!! '<br>(' . ($val->levelMatching->bonus->mining->policy->mining_locale_name ?? '') . ')' !!}
+                            @php
+                                $name = optional(optional(optional($val->levelMatching)->bonus)->mining)->policy->mining_locale_name;
+                            @endphp
+                            {!! !empty($name) ? '<br>(' . e($name) . ')' : '' !!}
                         @endif
                     </td>
                 </tr>
