@@ -44,9 +44,19 @@ $(document).ready(function() {
 
     $("#nodeAmount").on("input", function() {
 
-        const nodeAmount =parseFloat($(this).val());
+        const inputValue = $(this).val().trim();
         const exchangeRate = parseFloat($("#exchangeRate").val());
 
+        const isNumeric = /^(\d+(\.\d+)?)$/.test(inputValue);
+
+        if (!isNumeric || parseFloat(inputValue) < 1) {
+            $(this).val('');
+            $('#coinAmount').val('');
+            $('#refundCoinAmount').val('');
+            return;
+        }
+
+        const nodeAmount = parseFloat(inputValue);
         const coinAmount = 1000 * nodeAmount;
         const refundCoinAmount = coinAmount / exchangeRate;
 
