@@ -49,14 +49,26 @@
                     </td>
                     <td>
                         {{ $value->type_text }}
-                        @if ($value->type === 'referral_bonus')
-                            {!! '<br>(' . ($value->referralBonus->mining->policy->mining_locale_name ?? '') . ')' !!}
-                        @elseif ($value->type === 'referral_matching')
-                            {!! '<br>(' . ($value->referralMatching->bonus->mining->policy->mining_locale_name ?? '') . ')' !!}
-                        @elseif ($value->type === 'level_bonus')
-                            {!! '<br>(' . ($value->levelBonus->mining->policy->mining_locale_name ?? '') . ')' !!}
-                        @elseif ($value->type === 'level_matching')
-                            {!! '<br>(' . ($value->levelMatching->bonus->mining->policy->mining_locale_name ?? '') . ')' !!}
+                        @if ($val->type === 'referral_bonus')
+                            @php
+                                $name = optional(optional(optional($val->referralBonus)->mining)->policy)->mining_locale_name;
+                            @endphp
+                            {!! !empty($name) ? '<br>(' . e($name) . ')' : '' !!}
+                        @elseif ($val->type === 'referral_matching')
+                            @php
+                                $name = optional(optional(optional(optional($val->referralMatching)->bonus)->mining)->policy)->mining_locale_name;
+                            @endphp
+                            {!! !empty($name) ? '<br>(' . e($name) . ')' : '' !!}
+                        @elseif ($val->type === 'level_bonus')
+                            @php
+                                $name = optional(optional(optional($val->levelBonus)->mining)->policy)->mining_locale_name;
+                            @endphp
+                            {!! !empty($name) ? '<br>(' . e($name) . ')' : '' !!}
+                        @elseif ($val->type === 'level_matching')
+                            @php
+                                $name = optional(optional(optional(optional($val->levelMatching)->bonus)->mining)->policy)->mining_locale_name;
+                            @endphp
+                            {!! !empty($name) ? '<br>(' . e($name) . ')' : '' !!}
                         @endif
                     </td>
                 </tr>
