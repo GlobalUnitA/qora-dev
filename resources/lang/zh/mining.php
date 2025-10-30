@@ -9,7 +9,7 @@ return array (
   'total_mining_matching_bonus' => '挖矿间接奖励合计',
   'total_node' => '参与产品数量',
   'total_staking' => '锁仓合计',
-  'total_mining' => '挖矿数量合计',
+  'total_mining' => '静态收益合计',
   'mining' => '节点挖矿',
   'max_node_amount' => '总数量',
   'node_amount' => '数量',

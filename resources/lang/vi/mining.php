@@ -9,7 +9,7 @@ return array (
   'total_mining_matching_bonus' => 'Tổng thưởng matching mining',
   'total_node' => 'Số lượng sản phẩm đăng ký',
   'total_staking' => 'Tổng Staking',
-  'total_mining' => 'Tổng số lượng mining (DOBUY)',
+  'total_mining' => 'Tổng thu nhập hàng ngày',
   'mining' => 'Node Mining',
   'max_node_amount' => 'Số lượng tối đa',
   'node_amount' => 'Quantity',

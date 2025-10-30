@@ -9,7 +9,7 @@ return array (
   'total_mining_matching_bonus' => 'Total Mining Matching Bonus',
   'total_node' => 'Number Of Subscribed Products',
   'total_staking' => 'Total Staking',
-  'total_mining' => 'Total Mining Amount (DOBUY)',
+  'total_mining' => 'Daily Earnings Total',
   'mining' => 'Node Mining',
   'max_node_amount' => 'Maximum Quantity',
   'node_amount' => 'Quantity',

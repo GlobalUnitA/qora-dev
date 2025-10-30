@@ -9,7 +9,7 @@ return array (
   'total_mining_matching_bonus' => 'マイニングマッチングボーナス合計',
   'total_node' => '加入商品数量',
   'total_staking' => 'ステーキング合計',
-  'total_mining' => 'マイニング合計量（DOBUY）',
+  'total_mining' => 'デイリー収益合計',
   'mining' => 'ノードマイニング',
   'max_node_amount' => '最大数量',
   'node_amount' => '数量',
