@@ -56,7 +56,9 @@ class DashboardController extends Controller
                     $total_staking[$coin->code] += $mining->refund_coin_amount;
                 }
                 if ($income->coin_id === $coin->id) {
-                    $total_reward[$coin->code] += $mining->rewards->sum('reward');
+                    foreach ($mining->rewards as $reward) {
+                        $total_reward[$coin->code] += $reward->profits->sum('profit');
+                    }
                 }
             }
         }
