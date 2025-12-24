@@ -32,20 +32,11 @@ class TestController extends Controller
 
     public function __construct()
     {
-        $this->kakaoApi = new KakaoApi();
+
     }
    public function index()
     {
 
-        $policies = MiningPolicy::all();
-
-        foreach ($policies as $policy) {
-            $policy->setDailyStat();
-        }
-
-
-        Mining::storeMiningReward();
-        MiningReward::distributeProfit();
 
     }
 }

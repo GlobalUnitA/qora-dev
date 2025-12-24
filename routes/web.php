@@ -42,7 +42,7 @@ use App\Http\Controllers\Proc\LanguageController;
 use App\Http\Controllers\Proc\PopupController;
 use App\Http\Controllers\Proc\FileUploadController;
 
-Route::get('test', [TestController::class, 'index'])->name('test');
+//Route::get('test', [TestController::class, 'index'])->name('test');
 
 Route::get('register/terms', [RegisterController::class, 'terms'])->name('register.terms');
 Route::get('register/{mid?}', [RegisterController::class, 'index'])->name('register');
