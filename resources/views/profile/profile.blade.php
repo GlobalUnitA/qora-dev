@@ -3,7 +3,7 @@
 @section('content')
 <main class="container-fluid py-5 mb-5">
     <div class="d-flex justify-content-between align-items-center">
-        <h3>{{ __('user.user_info') }}</h3>    
+        <h3>{{ __('user.user_info') }}</h3>
     </div>
     <form method="POST" action="{{ route('profile.update') }}" id="ajaxForm" class="mb-5">
         @csrf
@@ -44,7 +44,7 @@
                             @elseif ($view->user->kyc->status === 'rejected')
                             {{ __('auth.verified_failed') }} <a class="btn btn-info btn-sm px-4 m-0 ms-2" href="{{ route('kyc') }}">{{ __('auth.verify') }}</a>
                             <p class="m-0 mt-2 text-danger fw-semibold">{{ $view->user->kyc->memo }}</p>
-                            @else 
+                            @else
                             {{ __('auth.verified_success') }}
                             @endif
                         </td>
@@ -54,7 +54,7 @@
                         <td class="align-middle text-body">
                             @if (!$view->user->otp || !$view->user->otp->secret_key)
                             {{ __('user.connect_unlinked') }}
-                            @else 
+                            @else
                             {{ __('user.connect_linked') }}
                             @endif
                         </td>
@@ -62,7 +62,7 @@
                     <tr>
                         <th class="text-center text-body align-middle">{{ __('user.meta_id') }}</th>
                         <td class="align-middle text-body">
-                            <input type="text" name="meta_uid" value="{{ $view->meta_uid }}" class="form-control"  {{ $view->meta_uid ? 'readonly' : '' }}>
+                            <input type="text" name="meta_uid" value="{{ $view->meta_uid }}" class="form-control">
                             <div class="alert alert-danger mt-4 mb-2" role="alert">
                                 <h6 class="text-danger text-center fw-bold fs-4 m-0 lh-base">{{ __('user.meta_id_guide_1') }}</h6>
                             </div>
@@ -72,7 +72,7 @@
                         </td>
                     </tr>
                     <!--tr>
-                        <th class="text-center text-body align-middle">{{ __('messages.member.address') }}</th>           
+                        <th class="text-center text-body align-middle">{{ __('messages.member.address') }}</th>
                         <td>
                             <div class="d-flex mb-3 align-middle text-body">
                                 <div class="col-6 me-2">
