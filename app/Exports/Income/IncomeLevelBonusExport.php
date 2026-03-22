@@ -16,7 +16,7 @@ class IncomeLevelBonusExport extends BaseIncomeExport
             ->leftJoin('user_profiles', 'income_transfers.user_id', '=', 'user_profiles.user_id')
             ->leftJoin('user_grades', 'user_profiles.grade_id', '=', 'user_grades.id')
             ->leftJoin('level_bonuses', 'income_transfers.id', '=', 'level_bonuses.transfer_id')
-            ->leftJoin('mining_rewards', 'level_bonuses.reward_id', '=', 'mining_rewards.id')
+            ->leftJoin('mining_profits', 'level_bonuses.profit_id', '=', 'mining_profits.id')
             ->select(
                 'users.id',
                 'users.name',
@@ -25,7 +25,7 @@ class IncomeLevelBonusExport extends BaseIncomeExport
                 'income_transfers.amount as bonus',
                 'income_transfers.status',
                 'level_bonuses.referrer_id',
-                'mining_rewards.reward',
+                'mining_profits.profit',
                 'income_transfers.created_at',
             )
             ->orderBy('income_transfers.created_at', 'asc');
