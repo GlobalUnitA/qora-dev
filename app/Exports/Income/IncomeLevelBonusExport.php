@@ -2,12 +2,60 @@
 
 namespace App\Exports\Income;
 
-use App\Exports\BaseIncomeExport;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Concerns\FromQuery;
+use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class IncomeLevelBonusExport extends BaseIncomeExport
+class IncomeLevelBonusExport implements FromQuery, WithMapping, WithHeadings
 {
-    public function collection()
+    protected $filters;
+
+    public function __construct($filters = [])
+    {
+        $this->filters = $filters;
+    }
+
+    protected function applyCommonFilters($query)
+    {
+        if (!empty($this->filters['type'])) {
+            $query->where('income_transfers.type', $this->filters['type']);
+        }
+
+        if (!empty($this->filters['status'])) {
+            $query->where('income_transfers.status', $this->filters['status']);
+        }
+
+        if (!empty($this->filters['keyword']) && $this->filters['category'] == 'mid') {
+            $query->where('users.id', $this->filters['keyword']);
+        }
+
+        if (!empty($this->filters['keyword']) && $this->filters['category'] == 'account') {
+            $query->where('users.account', $this->filters['keyword']);
+        }
+
+        if (!empty($this->filters['start_date']) && !empty($this->filters['end_date'])) {
+            $query->whereBetween('income_transfers.created_at', [
+                $this->filters['start_date'] . ' 00:00:00',
+                $this->filters['end_date'] . ' 23:59:59'
+            ]);
+        }
+
+        return $query;
+    }
+
+    protected function getStatusMap(): array
+    {
+        return [
+            'pending'   => '신청',
+            'waiting'   => '대기',
+            'completed' => '완료',
+            'canceled'  => '취소',
+            'refunded'  => '환불',
+        ];
+    }
+
+    public function query()
     {
         $query = DB::table('income_transfers')
             ->leftJoin('incomes', 'income_transfers.income_id', '=', 'incomes.id')
@@ -26,15 +74,32 @@ class IncomeLevelBonusExport extends BaseIncomeExport
                 'income_transfers.status',
                 'level_bonuses.referrer_id',
                 'mining_profits.profit',
-                'income_transfers.created_at',
+                'income_transfers.created_at'
             )
             ->orderBy('income_transfers.created_at', 'asc');
 
+        return $this->applyCommonFilters($query);
+    }
+
+    public function map($row): array
+    {
+        static $i = 0;
+        $i++;
+
         $statusMap = $this->getStatusMap();
 
-        $results = $this->applyCommonFilters($query)->get();
-
-        return $this->formatExportRows($results);
+        return [
+            $i,
+            $row->id,
+            $row->name,
+            $row->grade_name,
+            $row->coin_name,
+            $row->bonus,
+            $statusMap[$row->status] ?? $row->status,
+            $row->referrer_id,
+            $row->profit,
+            $row->created_at,
+        ];
     }
 
     public function headings(): array
