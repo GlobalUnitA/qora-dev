@@ -49,7 +49,7 @@ $(document).ready(function() {
 
         const isNumeric = /^(\d+(\.\d*)?)?$/.test(inputValue);
 
-        if (!isNumeric || parseFloat(inputValue) < 1) {
+        if (!isNumeric || parseFloat(inputValue) < 0) {
             $(this).val('');
             $('#coinAmount').val('');
             $('#refundCoinAmount').val('');
