@@ -506,10 +506,10 @@ class UserProfile extends Model
 
                 $bonus = $base_bonus * $payout_rate / 100 / $split_days;
 
-                $income = $mining->income;
+                $income = Income::where('user_id', $parent_profile->user_id)->where('coin_id', $mining->income->coin_id)->first();
 
                 $transfer = IncomeTransfer::create([
-                    'user_id' => $parent_profile->user_id,
+                    'user_id' => $income->user_id,
                     'income_id' => $income->id,
                     'type' => 'level_bonus',
                     'status' => 'completed',
@@ -617,10 +617,10 @@ class UserProfile extends Model
 
             if ($matching <= 0) continue;
 
-            $income = $mining->income;
+            $income = Income::where('user_id', $parent_profile->user_id)->where('coin_id', $mining->income->coin_id)->first();
 
             $transfer = IncomeTransfer::create([
-                'user_id'   => $parent_profile->user_id,
+                'user_id'   => $income->user_id,
                 'income_id'  => $income->id,
                 'type' => 'level_matching',
                 'status' => 'completed',
