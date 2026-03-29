@@ -21,10 +21,13 @@ class MiningPolicy extends Model
         'exchange_rate',
         'node_amount',
         'node_limit',
+        'node_min_limit',
         'reward_days',
         'reward_limit',
         'split_period',
         'waiting_period',
+        'is_hidden',
+        'is_refundable',
     ];
 
     protected $casts = [
@@ -102,8 +105,11 @@ class MiningPolicy extends Model
         'reward_days' => '채굴 가능 요일',
         'reward_limit' => '채굴 제한',
         'node_limit' => '최대 노드 수량',
+        'node_min_limit' => '최소 노드 수량', 
         'split_period' => '분할기간',
         'waiting_period' => '대기기간',
+        'is_hidden' => '상품 숨김 여부',
+        'is_refundable' => '코인 반환 여부',  
     ];
 
     public function getColumnComment($column)

@@ -35,18 +35,13 @@
                             </tr>
                             <tr>
                                 <th class="text-center align-middle">참여 코인</th>
-                                <td class="align-middle">
-                                    <select name="coin_id" class="form-select w-50">
+                                <td class="align-middle" colspan="3"> 
+                                    <select name="coin_id" class="form-select w-25">
                                         <option value="">코인 선택</option>
                                         @foreach ($coins as $coin)
                                         <option value="{{ $coin->id }}">{{ $coin->name }}</option>
                                         @endforeach
                                     </select>
-                                </td>
-                                <th class="text-center align-middle">최대 노드 수량</th>
-                                <td class="align-middle d-flex" colspan="3">
-                                    <input type="text" name="node_limit" class="form-control w-25">
-                                    <div class="px-2 d-flex align-items-center">개</div>
                                 </td>
                             </tr>
                             <tr>
@@ -79,6 +74,18 @@
                                 <td class="align-middle d-flex">
                                     <input type="text" name="split_rate" class="form-control w-25">
                                     <div class="px-2 d-flex align-items-center">%</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-center align-middle">최대 노드 수량</th>
+                                <td class="align-middle d-flex" colspan="3">
+                                    <input type="text" name="node_limit" class="form-control w-25">
+                                    <div class="px-2 d-flex align-items-center">개</div>
+                                </td>
+                                <th class="text-center align-middle">최소 노드 수량</th>
+                                <td class="align-middle d-flex" colspan="3">
+                                    <input type="text" name="node_min_limit" class="form-control w-25">
+                                    <div class="px-2 d-flex align-items-center">개</div>
                                 </td>
                             </tr>
                             <tr>
@@ -121,6 +128,30 @@
                                             {{ $label }}
                                         </label>
                                     @endforeach
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-center align-middle">상품 숨김 여부</th>
+                                <td class="align-middle d-flex" colspan="3">
+                                    <label class="me-2">
+                                        <input type="radio" name="is_hidden" value="y" class="form-check-input">
+                                        활성
+                                    </label>
+                                    <label class="me-2">
+                                        <input type="radio" name="is_hidden" value="n" class="form-check-input">
+                                        비활성
+                                    </label>
+                                </td>
+                                <th class="text-center align-middle">코인 반환 여부</th>
+                                <td class="align-middle d-flex">
+                                <label class="me-2">
+                                        <input type="radio" name="is_refundable" value="y" class="form-check-input">
+                                        활성
+                                    </label>
+                                    <label class="me-2">
+                                        <input type="radio" name="is_refundable" value="n" class="form-check-input">
+                                        비활성
+                                    </label>
                                 </td>
                             </tr>
                         </tbody>

@@ -63,4 +63,21 @@ $(document).ready(function() {
         $('#coinAmount').val(coinAmount);
         $('#refundCoinAmount').val(refundCoinAmount);
     });
+
+    
+    $("#nodeAmount").on("focusout", function() {
+        
+        const minAmount = $(this).attr('min');
+        const maxAmount = $(this).attr('max');
+
+        const inputValue = $(this).val().trim();
+        const isNumeric = /^(\d+(\.\d*)?)?$/.test(inputValue);
+
+        if (!isNumeric || parseFloat(inputValue) < minAmount || parseFloat(inputValue) > maxAmount) {
+            $(this).val('');
+            $('#coinAmount').val('');
+            $('#refundCoinAmount').val('');
+            return;
+        }
+    });
 });

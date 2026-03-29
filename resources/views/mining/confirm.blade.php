@@ -37,7 +37,7 @@
             <input type="hidden" name="coin_amount" id="coinAmount" value="">
             <div class="mb-3">
                 <label class="form-label fs-4 text-body">{{ __('mining.participation_node_guide') }}</label>
-                <input type="text" name="node_amount" id="nodeAmount" class="form-control" placeholder=0 min="0" max="{{ $mining->max_quantity }}">
+                <input type="text" name="node_amount" id="nodeAmount" class="form-control" placeholder=0 min="{{ $mining->node_min_limit }}" max="{{ $mining->node_limit }}">
             </div>
             <div class="mb-3">
                 <label class="form-label fs-4 text-body">{{ $mining->refundCoin->name }} {{ __('system.amount') }}</label>

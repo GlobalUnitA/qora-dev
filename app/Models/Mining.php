@@ -184,12 +184,17 @@ class Mining extends Model
 
         foreach ($minings as $mining) {
 
+            if ($mining->policy->is_refundable === 'n') {
+                $mining->update(['status' => 'completed']);
+                continue;
+            }
+
             DB::beginTransaction();
 
             try {
 
                 $asset = $mining->asset;
-
+               
                 $transfer = AssetTransfer::create([
                     'user_id' => $mining->user_id,
                     'asset_id' => $asset->id,

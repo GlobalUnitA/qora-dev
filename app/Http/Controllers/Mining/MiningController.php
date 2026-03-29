@@ -37,6 +37,7 @@ class MiningController extends Controller
     {
         $Mining = MiningPolicy::where('coin_id', $request->coin)
             ->where('marketing_id', $request->marketing)
+            ->where('is_hidden', 'n')
             ->get();
 
         return response()->json($Mining->toArray());
