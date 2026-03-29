@@ -77,6 +77,13 @@ class MiningController extends Controller
         $refund = Asset::where('user_id', auth()->id())->where('coin_id', $policy->refund_coin_id)->first();
         $reward = Income::where('user_id', auth()->id())->where('coin_id', $policy->reward_coin_id)->first();
 
+        if ($request->node_amount > $policy->node_limit || $request->node_amount < $policy->node_min_limit) {
+            return response()->json([
+                'status' => 'error',
+                'message' =>  __('asset.lack_balance_notice'),
+            ]);
+        }
+
         if ($asset->balance < $request->coin_amount) {
             return response()->json([
                 'status' => 'error',
