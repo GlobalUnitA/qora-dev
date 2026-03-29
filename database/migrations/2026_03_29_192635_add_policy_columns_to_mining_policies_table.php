@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('mining_policies', function (Blueprint $table) {
-            $table->unsignedInteger('node_min_limit')->default(0)->after('node_limit')->comment('최소 노드 수량');
+            $table->decimal('node_min_limit', 20, 9)->default(0)->after('node_limit')->comment('최소 노드 수량');
             $table->enum('is_hidden', ['n','y'])->default('n')->after('waiting_period')->comment('상품 숨김 여부');
             $table->enum('is_refundable', ['n','y'])->default('n')->after('is_hidden')->comment('코인 반환 여부');
         });
