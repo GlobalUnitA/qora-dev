@@ -38,7 +38,7 @@ $(document).ready(function() {
     $('#verifyCode').click(function() {
 
         const email = $('#inputEmail').val();
-        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        const emailRegex = /^[a-zA-Z0-9._\-+]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
         if (!emailRegex.test(email)) {
             alertModal($('#msg_email_invalid').data('label'));
