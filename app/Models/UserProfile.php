@@ -171,12 +171,17 @@ class UserProfile extends Model
         return $amount;
     }
 
-    public function getHasMining($policy_id)
+    public function getHasMarketing($marketing_id)
     {
+
         return Mining::where('user_id', $this->user_id)
-            ->where('policy_id', $policy_id)
-            ->where('status', 'pending')
-            ->exists();
+        ->where('status', 'pending')
+        ->whereIn('policy_id', function ($query) use ($marketing_id) {
+            $query->select('id')
+                ->from('mining_policies')
+                ->where('marketing_id', $marketing_id);
+        })
+        ->exists();
     }
 
     public function referralBonus($mining)
@@ -193,13 +198,16 @@ class UserProfile extends Model
 
             $parents = $this->getParentTree(20);
 
+            $marketing_id = $mining->policy->marketing_id;
+
+
             foreach ($parents as $level => $parent_profile) {
 
                 if ($parent_profile->is_valid === 'n') continue;
 
-                if (!$parent_profile->getHasMining($mining->policy_id)) continue;
+                if (!$parent_profile->getHasMarketing($marketing_id)) continue;
 
-                $policy = ReferralPolicy::where('marketing_id', $mining->policy->marketing_id)
+                $policy = ReferralPolicy::where('marketing_id', $marketing_id)
                     ->where('grade_id', $parent_profile->grade->id)
                     ->first();
 
@@ -274,13 +282,15 @@ class UserProfile extends Model
         $user = $bonus->user->profile;
         $parents = $user->getParentTree(20);
 
+        $marketing_id = $bonus->mining->policy->marketing_id;
+
         foreach ($parents as $level => $parent_profile) {
 
             if ($parent_profile->is_valid === 'n') continue;
 
-            if (!$parent_profile->getHasMining($bonus->mining->policy_id)) continue;
+            if (!$parent_profile->getHasMarketing($marketing_id)) continue;
 
-            $policy = ReferralMatchingPolicy::where('marketing_id', $bonus->mining->policy->marketing_id)
+            $policy = ReferralMatchingPolicy::where('marketing_id', $marketing_id)
                 ->where('grade_id', $parent_profile->grade->id)
                 ->first();
 
@@ -464,7 +474,7 @@ class UserProfile extends Model
 
                 if ($parent_profile->is_valid === 'n') continue;
 
-                if (!$parent_profile->getHasMining($mining->policy_id)) continue;
+                if (!$parent_profile->getHasMarketing($marketing_id)) continue;
 
                 $condition = $parent_profile->checkLevelCondition($marketing_id);
 
@@ -583,7 +593,7 @@ class UserProfile extends Model
 
             if ($parent_profile->is_valid === 'n') continue;
 
-            if (!$parent_profile->getHasMining($mining->policy_id)) continue;
+            if (!$parent_profile->getHasMarketing($marketing_id)) continue;
 
             $condition = $parent_profile->checkLevelCondition($marketing_id);
 
