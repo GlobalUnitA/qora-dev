@@ -192,84 +192,67 @@ class UserProfile extends Model
             return;
         }
 
-        try {
+        $parents = $this->getParentTree(20);
 
-            DB::beginTransaction();
-
-            $parents = $this->getParentTree(20);
-
-            $marketing_id = $mining->policy->marketing_id;
+        $marketing_id = $mining->policy->marketing_id;
 
 
-            foreach ($parents as $level => $parent_profile) {
+        foreach ($parents as $level => $parent_profile) {
 
-                if ($parent_profile->is_valid === 'n') continue;
+            if ($parent_profile->is_valid === 'n') continue;
 
-                if (!$parent_profile->getHasMarketing($marketing_id)) continue;
+            if (!$parent_profile->getHasMarketing($marketing_id)) continue;
 
-                $policy = ReferralPolicy::where('marketing_id', $marketing_id)
-                    ->where('grade_id', $parent_profile->grade->id)
-                    ->first();
+            $policy = ReferralPolicy::where('marketing_id', $marketing_id)
+                ->where('grade_id', $parent_profile->grade->id)
+                ->first();
 
-                if (!$policy) continue;
+            if (!$policy) continue;
 
-                $rate_key = "level_{$level}_rate";
+            $rate_key = "level_{$level}_rate";
 
-                $bonus = $mining->coin_amount * $policy->$rate_key / 100;
+            $bonus = $mining->coin_amount * $policy->$rate_key / 100;
 
-                if ($bonus <= 0) continue;
+            if ($bonus <= 0) continue;
 
-                $income = Income::where('user_id', $parent_profile->user_id)->where('coin_id', 1)->first();
+            $income = Income::where('user_id', $parent_profile->user_id)->where('coin_id', 1)->first();
 
-                $transfer = IncomeTransfer::create([
-                    'user_id'   => $parent_profile->user_id,
-                    'income_id'  => $income->id,
-                    'type' => 'referral_bonus',
-                    'status' => 'completed',
-                    'amount'    => $bonus,
-                    'actual_amount' => $bonus,
-                    'before_balance' => $income->balance,
-                    'after_balance' => $income->balance + $bonus,
-                ]);
-
-                $referral_bonus = ReferralBonus::create([
-                    'user_id'   => $parent_profile->user_id,
-                    'referrer_id' => $this->user_id,
-                    'mining_id'   => $mining->id,
-                    'transfer_id'  => $transfer->id,
-                    'bonus' => $bonus,
-                ]);
-
-                $income->increment('balance', $bonus);
-
-                Log::channel('bonus')->info('Success referral bonus', [
-                    'user_id' => $parent_profile->user_id,
-                    'referrer_id' => $this->user_id,
-                    'level' => $level,
-                    'mining_id' => $mining->id,
-                    'bonus_id' => $referral_bonus->id,
-                    'transfer_id' => $transfer->id,
-                    'bonus' => $bonus,
-                    'before_balance' => $transfer->before_balance,
-                    'after_balance' => $transfer->after_balance,
-                ]);
-
-                $this->referralMatching($referral_bonus);
-            }
-
-            DB::commit();
-
-        }  catch (\Exception $e) {
-
-            DB::rollBack();
-
-            Log::channel('bonus')->error('Referral bonus transaction failed', [
-                'mining_id' => $mining->id,
-                'user_id' => $this->user_id,
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
+            $transfer = IncomeTransfer::create([
+                'user_id'   => $parent_profile->user_id,
+                'income_id'  => $income->id,
+                'type' => 'referral_bonus',
+                'status' => 'completed',
+                'amount'    => $bonus,
+                'actual_amount' => $bonus,
+                'before_balance' => $income->balance,
+                'after_balance' => $income->balance + $bonus,
             ]);
+
+            $referral_bonus = ReferralBonus::create([
+                'user_id'   => $parent_profile->user_id,
+                'referrer_id' => $this->user_id,
+                'mining_id'   => $mining->id,
+                'transfer_id'  => $transfer->id,
+                'bonus' => $bonus,
+            ]);
+
+            $income->increment('balance', $bonus);
+
+            Log::channel('bonus')->info('Success referral bonus', [
+                'user_id' => $parent_profile->user_id,
+                'referrer_id' => $this->user_id,
+                'level' => $level,
+                'mining_id' => $mining->id,
+                'bonus_id' => $referral_bonus->id,
+                'transfer_id' => $transfer->id,
+                'bonus' => $bonus,
+                'before_balance' => $transfer->before_balance,
+                'after_balance' => $transfer->after_balance,
+            ]);
+
+            $this->referralMatching($referral_bonus);
         }
+
     }
 
     public function referralMatching($bonus)
@@ -452,156 +435,64 @@ class UserProfile extends Model
         $mining = $profit->reward->mining;
 
         if (!$mining) {
-            Log::channel('bonus')->warning('Missing mining for profit', ['profit_id' => $profit->id]);
+            Log::channel('bonus')->warning('Level bonus failed: Missing mining', ['profit_id' => $profit->id]);
             return;
         }
 
-        if ( $mining->getBenefitRule('level_bonus') === 'n' ){
-            Log::channel('bonus')->warning('This marketing does not allow a level bonus.', ['profit_id' => $profit->id, 'marketing_id' => $mining->policy->marketing_id]);
-            return;
-        }
-
-        try {
-
-            DB::beginTransaction();
-
-            $user = $profit->user->profile;
-            $parents = $user->getParentTree(20);
-
-            $marketing_id = $mining->policy->marketing_id;
-
-            foreach ($parents as $level => $parent_profile) {
-
-                if ($parent_profile->is_valid === 'n') continue;
-
-                if (!$parent_profile->getHasMarketing($marketing_id)) continue;
-
-                $condition = $parent_profile->checkLevelCondition($marketing_id);
-
-                if (!$condition) {
-                    Log::channel('bonus')->warning('No Level Condition matched for level bonus', [
-                        'profit_id' => $profit->id,
-                        'user_id'   => $parent_profile->user_id,
-                        'level'     => $level,
-                    ]);
-                    continue;
-                }
-
-                $max_depth = $condition->max_depth;
-
-                if ($max_depth < $level) {
-                    Log::channel('bonus')->warning('Not Condition for level bonus', [
-                        'profit_id' => $profit->id,
-                        'parent_id' => $parent_profile->id,
-                        'referrer_id' => $profit->user->id,
-                        'parent_level' => $level,
-                        'max_depth' => $max_depth,
-                    ]);
-
-                    continue;
-                }
-
-                $policy = LevelPolicy::where('marketing_id', $marketing_id)
-                    ->where('depth', $level)
-                    ->first();
-
-                $amount = $profit->reward->reward;
-
-                $base_bonus = $amount * $policy->bonus / 100;
-
-                if ($base_bonus <= 0) continue;
-
-                $payout_rate = $profit->reward_rate;
-                $split_days = $profit->type === 'daily' ? $mining->split_period : 1;
-
-                $bonus = $base_bonus * $payout_rate / 100 / $split_days;
-
-                $income = Income::where('user_id', $parent_profile->user_id)->where('coin_id', $mining->income->coin_id)->first();
-
-                $transfer = IncomeTransfer::create([
-                    'user_id' => $income->user_id,
-                    'income_id' => $income->id,
-                    'type' => 'level_bonus',
-                    'status' => 'completed',
-                    'amount' => $bonus,
-                    'actual_amount' => $bonus,
-                    'before_balance' => $income->balance,
-                    'after_balance' => $income->balance + $bonus,
-                ]);
-
-                $level_bonus = LevelBonus::create([
-                    'user_id' => $parent_profile->user_id,
-                    'referrer_id' => $this->user_id,
-                    'transfer_id' => $transfer->id,
-                    'profit_id' => $profit->id,
-                    'bonus' => $bonus,
-                ]);
-
-                $income->increment('balance', $bonus);
-
-                Log::channel('bonus')->info('Success level bonus', [
-                    'user_id' => $parent_profile->user_id,
-                    'referrer_id' => $this->user_id,
-                    'level' => $level,
-                    'max_depth' => $max_depth,
-                    'profit_id' => $profit->id,
-                    'bonus_id' => $level_bonus->id,
-                    'transfer_id' => $transfer->id,
-                    'bonus' => $bonus,
-                    'before_balance' => $transfer->before_balance,
-                    'after_balance' => $transfer->after_balance,
-                ]);
-
-                $this->levelMatching($level_bonus);
-            }
-
-            DB::commit();
-
-        }  catch (\Exception $e) {
-
-            DB::rollBack();
-
-            Log::channel('bonus')->error('Level bonus transaction failed', [
+        if (!$mining->policy) {
+            Log::channel('bonus')->error('Level bonus failed: mining policy not found', [
                 'profit_id' => $profit->id,
-                'user_id' => $this->user_id,
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
+                'mining_id' => $mining->id,
             ]);
-        }
-    }
-
-    public function levelMatching($bonus)
-    {
-        $mining = $bonus->profit->reward->mining;
-
-        if ( $mining->getBenefitRule('level_matching') === 'n' ){
-            Log::channel('bonus')->warning('This marketing does not allow a level matching.', ['bonus_id' => $bonus->id, 'marketing_id' => $mining->policy->marketing_id]);
             return;
         }
 
-        if (!$mining) {
-            Log::channel('bonus')->warning('Missing mining for bonus', ['bonus_id' => $bonus->id]);
+        if ($mining->getBenefitRule('level_bonus') === 'n' ){
+            Log::channel('bonus')->warning('Level bonus failed: disabled by marketing rule', ['profit_id' => $profit->id, 'marketing_id' => $mining->policy->marketing_id]);
             return;
         }
 
-        $user = $bonus->user->profile;
+        $user = $profit->user->profile;
+
+        if (!$user) {
+            Log::channel('bonus')->error('Level bonus failed: user profile not found', [
+                'profit_id' => $profit->id,
+                'user_id'   => $profit->user_id,
+            ]);
+            return;
+        }
+
         $parents = $user->getParentTree(20);
 
         $marketing_id = $mining->policy->marketing_id;
 
         foreach ($parents as $level => $parent_profile) {
 
-            if ($parent_profile->is_valid === 'n') continue;
+            if ($parent_profile->is_valid === 'n') {
+                Log::channel('bonus')->warning('Level bonus skipped: invalid parent profile', [
+                    'profit_id' => $profit->id,
+                    'parent_id'   => $parent_profile->user_id,
+                    'parent_level'     => $level,
+                ]);
+                continue;
+            }
 
-            if (!$parent_profile->getHasMarketing($marketing_id)) continue;
+            if (!$parent_profile->getHasMarketing($marketing_id)) {
+                Log::channel('bonus')->warning('Level bonus skipped: marketing not found', [
+                    'profit_id' => $profit->id,
+                    'parent_id'   => $parent_profile->user_id,
+                    'parent_level'     => $level,
+                ]);
+                continue;
+            }
 
             $condition = $parent_profile->checkLevelCondition($marketing_id);
 
             if (!$condition) {
-                Log::channel('bonus')->warning('No Level Condition matched for level matching', [
-                    'bonus_id' => $bonus->id,
-                    'user_id'   => $parent_profile->user_id,
-                    'level'     => $level,
+                Log::channel('bonus')->warning('Level bonus skipped: No Level Condition matched', [
+                    'profit_id' => $profit->id,
+                    'parent_id'   => $parent_profile->user_id,
+                    'parent_level'     => $level,
                 ]);
                 continue;
             }
@@ -609,7 +500,193 @@ class UserProfile extends Model
             $max_depth = $condition->max_depth;
 
             if ($max_depth < $level) {
-                Log::channel('bonus')->warning('Not Condition for level matching', [
+                Log::channel('bonus')->warning('Level bonus skipped: condition not met', [
+                    'profit_id' => $profit->id,
+                    'parent_id' => $parent_profile->id,
+                    'referrer_id' => $profit->user->id,
+                    'parent_level' => $level,
+                    'max_depth' => $max_depth,
+                ]);
+                continue;
+            }
+
+            $policy = LevelPolicy::where('marketing_id', $marketing_id)
+                ->where('depth', $level)
+                ->first();
+
+            if (!$policy) {
+                Log::channel('bonus')->error('Level bonus skipped: policy not found', [
+                    'profit_id' => $profit->id,
+                    'parent_id'   => $parent_profile->user_id,
+                    'parent_level'     => $level,
+                ]);
+                continue;
+            }
+
+            $amount = $profit->reward->reward;
+
+            $base_bonus = $amount * $policy->bonus / 100;
+
+            if ($base_bonus <= 0) {
+                Log::channel('bonus')->warning('Level bonus skipped: base bonus is zero', [
+                    'profit_id' => $profit->id,
+                    'parent_id'   => $parent_profile->user_id,
+                    'parent_level'     => $level,
+                ]);
+                continue;
+            }
+
+            $payout_rate = $profit->reward_rate;
+            $split_days = $profit->type === 'daily' ? $mining->split_period : 1;
+
+            $bonus = $base_bonus * $payout_rate / 100 / $split_days;
+
+            if (!$mining->income) {
+                Log::channel('bonus')->error('Level bonus skipped: mining income missing', [
+                    'profit_id' => $profit->id,
+                    'parent_id'   => $parent_profile->user_id,
+                    'parent_level'     => $level,
+                ]);
+                continue;
+            }
+
+            $income = Income::where('user_id', $parent_profile->user_id)->where('coin_id', $mining->income->coin_id)->first();
+            
+            if (!$income) {
+                Log::channel('bonus')->error('Level bonus skipped: income not found', [
+                    'profit_id' => $profit->id,
+                    'parent_id'   => $parent_profile->user_id,
+                    'parent_level'     => $level,
+                ]);
+                continue;
+            }
+
+            $transfer = IncomeTransfer::create([
+                'user_id' => $income->user_id,
+                'income_id' => $income->id,
+                'type' => 'level_bonus',
+                'status' => 'completed',
+                'amount' => $bonus,
+                'actual_amount' => $bonus,
+                'before_balance' => $income->balance,
+                'after_balance' => $income->balance + $bonus,
+            ]);
+
+            $level_bonus = LevelBonus::create([
+                'user_id' => $parent_profile->user_id,
+                'referrer_id' => $this->user_id,
+                'transfer_id' => $transfer->id,
+                'profit_id' => $profit->id,
+                'bonus' => $bonus,
+            ]);
+
+            $income->increment('balance', $bonus);
+
+            Log::channel('bonus')->info('Level bonus success', [
+                'user_id' => $parent_profile->user_id,
+                'referrer_id' => $this->user_id,
+                'level' => $level,
+                'max_depth' => $max_depth,
+                'profit_id' => $profit->id,
+                'bonus_id' => $level_bonus->id,
+                'transfer_id' => $transfer->id,
+                'bonus' => $bonus,
+                'before_balance' => $transfer->before_balance,
+                'after_balance' => $transfer->after_balance,
+            ]);
+
+            try {
+                $this->levelMatching($level_bonus);
+            } catch (\Throwable $e) {
+                Log::channel('bonus')->error('Level matching failed', [
+                    'bonus_id' => $level_bonus->id,
+                    'error' => $e->getMessage(),
+                ]);
+            }
+        }
+    }
+
+    public function levelMatching($bonus)
+    {
+        if (!$bonus->profit || !$bonus->profit->reward || !$bonus->profit->reward->mining) {
+            Log::channel('bonus')->error('Level matching failed: invalid bonus relation', [
+                'bonus_id' => $bonus->id,
+            ]);
+            return;
+        }
+
+        $mining = $bonus->profit->reward->mining;
+
+        if (!$mining) {
+            Log::channel('bonus')->warning('Level matching failed: missing mining', ['bonus_id' => $bonus->id]);
+            return;
+        }
+
+        if (!$mining->policy) {
+            Log::channel('bonus')->error('Level matching failed: mining policy missing', [
+                'bonus_id' => $bonus->id,
+                'mining_id' => $mining->id,
+            ]);
+            return;
+        }        
+
+        if ($mining->getBenefitRule('level_matching') === 'n' ){
+            Log::channel('bonus')->warning('Level matching failed: this marketing does not allow a level matching.', ['bonus_id' => $bonus->id, 'marketing_id' => $mining->policy->marketing_id]);
+            return;
+        }
+
+        $user = $bonus->user->profile;
+
+        if (!$user) {
+            Log::channel('bonus')->error('Level matching failed: user profile missing', [
+                'bonus_id' => $bonus->id,
+                'user_id' => $bonus->user_id,
+            ]);
+            return;
+        }
+
+        $parents = $user->getParentTree(20);
+
+        $marketing_id = $mining->policy->marketing_id;
+
+        foreach ($parents as $level => $parent_profile) {
+
+            if ($parent_profile->is_valid === 'n') {
+                Log::channel('bonus')->warning('Level matching skipped: invalid parent profile', [
+                    'bonus_id' => $bonus->id,
+                    'parent_id'   => $parent_profile->user_id,
+                    'parent_level'     => $level,
+                ]);
+
+                continue;
+            }
+           
+
+            if (!$parent_profile->getHasMarketing($marketing_id)) {
+
+                Log::channel('bonus')->warning('Level matching skipped: marketing not found', [
+                    'bonus_id' => $bonus->id,
+                    'parent_id'   => $parent_profile->user_id,
+                    'parent_level'     => $level,
+                ]);
+                continue;
+            }
+
+            $condition = $parent_profile->checkLevelCondition($marketing_id);
+
+            if (!$condition) {
+                Log::channel('bonus')->warning('Level matching skipped: no matching level condition', [
+                    'bonus_id' => $bonus->id,
+                    'parent_id'   => $parent_profile->user_id,
+                    'parent_level'     => $level,
+                ]);
+                continue;
+            }
+
+            $max_depth = $condition->max_depth;
+
+            if ($max_depth < $level) {
+                Log::channel('bonus')->warning('Level matching skipped: condition not met', [
                     'bonus_id' => $bonus->id,
                     'parent_id' => $parent_profile->id,
                     'parent_level' => $level,
@@ -623,11 +700,45 @@ class UserProfile extends Model
                 ->where('depth', $level)
                 ->first();
 
+            if (!$policy) {
+                Log::channel('bonus')->error('Level matching skipped: matching policy not found', [
+                    'bonus_id' => $bonus->id,
+                    'parent_id' => $parent_profile->id,
+                    'parent_level' => $level,
+                ]);
+                continue;
+            }
+
             $matching = $bonus->bonus * $policy->matching / 100;
 
-            if ($matching <= 0) continue;
+            if ($matching <= 0) {
+                Log::channel('bonus')->warning('Level matching skipped: matching amount is zero', [
+                    'bonus_id' => $bonus->id,
+                    'parent_id' => $parent_profile->id,
+                    'parent_level' => $level,
+                ]);
+                continue;
+            }
+
+            if (!$mining->income) {
+                Log::channel('bonus')->error('Level matching skipped: mining income missing', [
+                    'bonus_id' => $bonus->id,
+                    'parent_id' => $parent_profile->id,
+                    'parent_level' => $level,
+                ]);
+                continue;
+            }
 
             $income = Income::where('user_id', $parent_profile->user_id)->where('coin_id', $mining->income->coin_id)->first();
+
+            if (!$income) {
+                Log::channel('bonus')->error('Level matching skipped: Matching income not found', [
+                    'bonus_id' => $bonus->id,
+                    'parent_id' => $parent_profile->id,
+                    'parent_level' => $level,
+                ]);
+                continue;
+            }
 
             $transfer = IncomeTransfer::create([
                 'user_id'   => $income->user_id,
@@ -650,7 +761,7 @@ class UserProfile extends Model
 
             $income->increment('balance', $matching);
 
-            Log::channel('bonus')->info('Success level matching', [
+            Log::channel('bonus')->info('Level matching success', [
                 'user_id' => $parent_profile->user_id,
                 'referrer_id' => $user->user_id,
                 'level' => $level,
