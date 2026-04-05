@@ -384,7 +384,7 @@ class UserProfile extends Model
                 $self_sales = $this->getSelfSales();
                 $group_sales = $this->getGroupSales();
 
-                $income = Income::where('user_id', $this->user_id)->where('coin_id', 1)->first();
+                $income = Income::where('user_id', $this->user_id)->where('coin_id', 1)->lockForUpdate()->first();
 
                 $transfer = IncomeTransfer::create([
                     'user_id'        => $this->user_id,
@@ -467,7 +467,7 @@ class UserProfile extends Model
         $marketing_id = $mining->policy->marketing_id;
 
         foreach ($parents as $level => $parent_profile) {
-
+            
             if ($parent_profile->is_valid === 'n') {
                 Log::channel('bonus')->warning('Level bonus skipped: invalid parent profile', [
                     'profit_id' => $profit->id,
@@ -556,44 +556,78 @@ class UserProfile extends Model
                 Log::channel('bonus')->error('Level bonus skipped: income not found', [
                     'profit_id' => $profit->id,
                     'parent_id'   => $parent_profile->user_id,
-                    'parent_level'     => $level,
+                    'parent_level' => $level,
                 ]);
                 continue;
             }
 
-            $transfer = IncomeTransfer::create([
-                'user_id' => $income->user_id,
-                'income_id' => $income->id,
-                'type' => 'level_bonus',
-                'status' => 'completed',
-                'amount' => $bonus,
-                'actual_amount' => $bonus,
-                'before_balance' => $income->balance,
-                'after_balance' => $income->balance + $bonus,
-            ]);
+            $exists = LevelBonus::where('profit_id', $profit->id)
+                ->where('user_id', $parent_profile->user_id)
+                ->exists();
 
-            $level_bonus = LevelBonus::create([
-                'user_id' => $parent_profile->user_id,
-                'referrer_id' => $this->user_id,
-                'transfer_id' => $transfer->id,
-                'profit_id' => $profit->id,
-                'bonus' => $bonus,
-            ]);
+            if ($exists) {
+                Log::channel('bonus')->warning('Level bonus skipped: already exists', [
+                    'profit_id' => $profit->id,
+                    'parent_id' => $parent_profile->user_id,
+                    'parent_level' => $level,
+                ]);
+                continue;
+            }
 
-            $income->increment('balance', $bonus);
+            DB::beginTransaction();
 
-            Log::channel('bonus')->info('Level bonus success', [
-                'user_id' => $parent_profile->user_id,
-                'referrer_id' => $this->user_id,
-                'level' => $level,
-                'max_depth' => $max_depth,
-                'profit_id' => $profit->id,
-                'bonus_id' => $level_bonus->id,
-                'transfer_id' => $transfer->id,
-                'bonus' => $bonus,
-                'before_balance' => $transfer->before_balance,
-                'after_balance' => $transfer->after_balance,
-            ]);
+            try {
+
+                $transfer = IncomeTransfer::create([
+                    'user_id' => $income->user_id,
+                    'income_id' => $income->id,
+                    'type' => 'level_bonus',
+                    'status' => 'completed',
+                    'amount' => $bonus,
+                    'actual_amount' => $bonus,
+                    'before_balance' => $income->balance,
+                    'after_balance' => $income->balance + $bonus,
+                ]);
+
+                $level_bonus = LevelBonus::create([
+                    'user_id' => $parent_profile->user_id,
+                    'referrer_id' => $this->user_id,
+                    'transfer_id' => $transfer->id,
+                    'profit_id' => $profit->id,
+                    'bonus' => $bonus,
+                ]);
+
+                $income->increment('balance', $bonus);
+
+                Log::channel('bonus')->info('Level bonus success', [
+                    'user_id' => $parent_profile->user_id,
+                    'referrer_id' => $this->user_id,
+                    'level' => $level,
+                    'max_depth' => $max_depth,
+                    'profit_id' => $profit->id,
+                    'bonus_id' => $level_bonus->id,
+                    'transfer_id' => $transfer->id,
+                    'bonus' => $bonus,
+                    'before_balance' => $transfer->before_balance,
+                    'after_balance' => $transfer->after_balance,
+                ]);
+
+                DB::commit();              
+                
+            
+            } catch (\Throwable $e) {
+            
+                DB::rollBack();
+        
+                Log::channel('bonus')->error('Level bonus failed', [
+                    'profit_id' => $profit->id,
+                    'parent_id'   => $parent_profile->user_id,
+                    'parent_level'     => $level,
+                    'error' => $e->getMessage(),
+                ]);
+        
+                continue;
+            }
 
             try {
                 $this->levelMatching($level_bonus);
@@ -740,39 +774,72 @@ class UserProfile extends Model
                 continue;
             }
 
-            $transfer = IncomeTransfer::create([
-                'user_id'   => $income->user_id,
-                'income_id'  => $income->id,
-                'type' => 'level_matching',
-                'status' => 'completed',
-                'amount'    => $matching,
-                'actual_amount' => $matching,
-                'before_balance' => $income->balance,
-                'after_balance' => $income->balance + $matching,
-            ]);
+            $exists = LevelMatching::where('bonus_id', $bonus->id)
+                ->where('user_id', $parent_profile->user_id)
+                ->exists();
 
-            $level_matching = LevelMatching::create([
-                'user_id'   => $parent_profile->user_id,
-                'referrer_id' => $user->user_id,
-                'bonus_id'   => $bonus->id,
-                'transfer_id'  => $transfer->id,
-                'matching' => $matching,
-            ]);
+            if ($exists) {
+                Log::channel('bonus')->warning('Level matching skipped: already exists', [
+                    'bonus_id' => $bonus->id,
+                    'parent_id' => $parent_profile->user_id,
+                    'parent_level' => $level,
+                ]);
+                continue;
+            }
 
-            $income->increment('balance', $matching);
+            DB::beginTransaction();
 
-            Log::channel('bonus')->info('Level matching success', [
-                'user_id' => $parent_profile->user_id,
-                'referrer_id' => $user->user_id,
-                'level' => $level,
-                'max_depth' => $max_depth,
-                'bonus_id' => $bonus->id,
-                'matching_id' => $level_matching->id,
-                'transfer_id' => $transfer->id,
-                'matching' => $matching,
-                'before_balance' => $transfer->before_balance,
-                'after_balance' => $transfer->after_balance,
-            ]);
+            try {
+
+                $transfer = IncomeTransfer::create([
+                    'user_id'   => $income->user_id,
+                    'income_id'  => $income->id,
+                    'type' => 'level_matching',
+                    'status' => 'completed',
+                    'amount'    => $matching,
+                    'actual_amount' => $matching,
+                    'before_balance' => $income->balance,
+                    'after_balance' => $income->balance + $matching,
+                ]);
+
+                $level_matching = LevelMatching::create([
+                    'user_id'   => $parent_profile->user_id,
+                    'referrer_id' => $user->user_id,
+                    'bonus_id'   => $bonus->id,
+                    'transfer_id'  => $transfer->id,
+                    'matching' => $matching,
+                ]);
+
+                $income->increment('balance', $matching);
+
+                Log::channel('bonus')->info('Level matching success', [
+                    'user_id' => $parent_profile->user_id,
+                    'referrer_id' => $user->user_id,
+                    'level' => $level,
+                    'max_depth' => $max_depth,
+                    'bonus_id' => $bonus->id,
+                    'matching_id' => $level_matching->id,
+                    'transfer_id' => $transfer->id,
+                    'matching' => $matching,
+                    'before_balance' => $transfer->before_balance,
+                    'after_balance' => $transfer->after_balance,
+                ]);
+
+                DB::commit();              
+                
+            } catch (\Throwable $e) {
+            
+                DB::rollBack();
+        
+                Log::channel('bonus')->error('Level matching failed', [
+                    'bonus_id' => $bonus->id,
+                    'parent_id' => $parent_profile->user_id,
+                    'parent_level' => $level,
+                    'error' => $e->getMessage(),
+                ]);
+        
+                continue;
+            }
         }
     }
 

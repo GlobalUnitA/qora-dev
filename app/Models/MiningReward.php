@@ -75,7 +75,7 @@ class MiningReward extends Model
         return $split_profit;
     }
 
-    public function getMiningProfit()
+    public function getMiningProfitData()
     {
         if ($this->hasInstantProfit()) {
             $type = 'daily';
@@ -105,20 +105,20 @@ class MiningReward extends Model
 
         foreach ($rewards as $reward) {
 
+            $mining_profit_data = $reward->getMiningProfitData();
+        
+            if ($mining_profit_data['profit'] <= 0) continue;
+        
             DB::beginTransaction();
-
+        
             try {
-
-                $mining_profit = $reward->getMiningProfit();
-
-                $type = $mining_profit['type'];
-                $rate = $mining_profit['rate'];
-                $profit = $mining_profit['profit'];
-
-                if ($profit <= 0) continue;
-
+        
+                $type   = $mining_profit_data['type'];
+                $rate   = $mining_profit_data['rate'];
+                $profit = $mining_profit_data['profit'];
+        
                 $income = $reward->mining->income;
-
+        
                 $transfer = IncomeTransfer::create([
                     'user_id' => $reward->user_id,
                     'income_id' => $income->id,
@@ -129,9 +129,9 @@ class MiningReward extends Model
                     'before_balance' => $income->balance,
                     'after_balance' => $income->balance + $profit,
                 ]);
-
+        
                 $income->increment('balance', $profit);
-
+        
                 $mining_profit = MiningProfit::create([
                     'user_id' => $reward->user_id,
                     'reward_id' => $reward->id,
@@ -141,43 +141,60 @@ class MiningReward extends Model
                     'node_amount' => $reward->mining->policy->node_amount,
                     'reward_rate' => $rate,
                 ]);
-
-                if ($type === 'daily') $reward->increment('profit_count');
-
-                Log::channel('mining')->info('daily mining distributed', [
+        
+                if ($type === 'daily') {
+                    $reward->increment('profit_count');
+                }
+        
+                DB::commit();
+        
+            } catch (\Throwable $e) {
+        
+                DB::rollBack();
+        
+                Log::channel('mining')->error('Failed to distribute daily mining', [
                     'user_id' => $reward->user_id,
                     'reward_id' => $reward->id,
-                    'transfer_id' => $transfer->id,
-                    'type' => $type,
-                    'profit' => $profit,
-                    'timestamp' => now(),
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString(),
                 ]);
+        
+                continue;
+            }
 
+            Log::channel('mining')->info('daily mining distributed', [
+                'user_id' => $reward->user_id,
+                'reward_id' => $reward->id,
+                'transfer_id' => $transfer->id,
+                'type' => $type,
+                'profit' => $profit,
+                'timestamp' => now(),
+            ]);
+        
+            try {
+        
                 $user = $reward->user;
                 $profile = $user->profile;
-
+        
                 if (!$profile) {
                     Log::channel('mining')->warning('Missing profile for level bonus', [
                         'reward_id' => $reward->id,
                         'user_id' => $reward->user_id,
                     ]);
-                    return;
+                    continue;
                 }
-
+        
                 $profile->levelBonus($mining_profit);
-
-                DB::commit();
-
+        
+        
             } catch (\Throwable $e) {
-
-                DB::rollBack();
-
-                Log::channel('mining')->error('Failed to distribute daily mining', [
+        
+                Log::channel('bonus')->error('Level bonus failed (after commit)', [
                     'user_id' => $reward->user_id,
                     'reward_id' => $reward->id,
+                    'profit_id' => $mining_profit->id ?? null,
                     'error' => $e->getMessage(),
                 ]);
-
             }
         }
     }
